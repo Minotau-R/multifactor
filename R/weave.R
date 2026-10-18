@@ -32,7 +32,7 @@ S7::method(weave, multifactor) <- function(
   pf <- as_path_frame(.path)
   .path_check_valid_weave(pf)
 
-  pf <- .enframe_path(x, pf)
+  pf <- .select_enframe_path(x, pf)
 
   full_path <- .pf_as_full_path_list(pf)
   res <- lapply(full_path, .weave_full_path, x = x, out.format = "linkmap")

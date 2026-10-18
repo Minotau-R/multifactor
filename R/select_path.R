@@ -31,8 +31,8 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
   pf <- as_path_frame(.path)
   .path_check_valid_select(pf)
 
-  paths <- .enframe_path(x, pf)
-  return(paths)
+  paths <- .select_enframe_path(x, pf)
+  path_frame(paths)
 }
 
 .path_check_valid_select <- function(x) {
@@ -46,7 +46,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 
 
 #' @importFrom dplyr bind_rows
-.enframe_path <- function(x, pf) {
+.select_enframe_path <- function(x, pf) {
   from_to <- terms(pf)
   include <- from_to[-c(1L, length(from_to))]
   from_to <- from_to[c(1L, length(from_to))]

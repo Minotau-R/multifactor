@@ -30,6 +30,7 @@ export(poker_scores)
 export(quickbrownfox)
 export(random_linkmap)
 export(random_multifactor)
+export(random_path_frame)
 export(read_adjacency_list)
 export(select_path)
 export(test_enrichment)
@@ -92,7 +93,8 @@ importFrom(stats,
   formula,
   p.adjust,
   phyper,
-  reformulate
+  reformulate,
+  runif
 )
 importFrom(utils,
   count.fields,

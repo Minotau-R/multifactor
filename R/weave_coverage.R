@@ -54,7 +54,7 @@ weave_coverage <- function(
     pf <- as_path_frame(.path)
     .path_check_valid_coverage(pf)
 
-    pf <- .enframe_path(x, pf)
+    pf <- .select_enframe_path(x, pf)
 
     full_path <- .pf_as_full_path_list(pf)
 
@@ -88,7 +88,7 @@ weave_coverage <- function(
   pf <- as_path_frame(.path)
   .path_check_valid_coverage(pf)
 
-  pf <- path_frame(.enframe_path(x, pf))
+  pf <- path_frame(.select_enframe_path(x, pf))
 
   # check path length:
   if (NROW(pf) == 1) {

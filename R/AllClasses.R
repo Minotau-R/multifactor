@@ -227,10 +227,7 @@ path_frame <- S7::new_class(
     )
   ),
   constructor = function(x, call = character()) {
-    stopifnot(
-      "path_frame input must be formula, character or data.frame." =
-        is.data.frame(x)
-    )
+    stopifnot("path_frame input must be a data.frame." = is.data.frame(x))
     S7::new_object(.parent = x, call = call)
   },
   validator = function(self) {

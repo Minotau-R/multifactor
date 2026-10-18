@@ -45,7 +45,7 @@ S7::method(weave_apply, multifactor) <- function(.x, .path, .data, .fun = NULL, 
   path_list <- terms(pf)
 
   # TODO confirm below lines commented out lines can be deleted
-  # pf <- .enframe_path(.x, pf)
+  # pf <- .select_enframe_path(.x, pf)
   #
   # path_list <- tapply(pf, ~components, terms, simplify = FALSE) |> unname()
 
