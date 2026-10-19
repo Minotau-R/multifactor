@@ -21,7 +21,7 @@ jobs:
           cont: ghcr.io/bioconductor/bioconductor_docker:devel
           rspm: ~
     steps:
-    - uses: neurogenomics/rworkflows@master
+    - uses: minotau-r/multifactor@devel
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ false }}
