@@ -61,10 +61,11 @@ require(generics)
 x <- random_multifactor()
 
 # Use augment to chain together operations like weave and stack, in order.
-augment(x,
-    weave(x, a ~ c),
-    stack(x, a + b ~ c + d),
-    weave(x, d ~ f)
+augment(
+  x,
+  weave(x, a ~ c),
+  stack(x, a + b ~ c + d),
+  weave(x, d ~ f)
 )
 #> A multifactor::multifactor list S7_object,
 #>     8 feature types across 8 linkmaps.
@@ -92,7 +93,7 @@ augment(x,
 #>  $ c.d : 20 Levels: c_001 c_002 ... d_010 
 
 # Setting a linkmap to NULL by name deletes it from the multifactor
-augment(x, a2b = NULL )
+augment(x, a2b = NULL)
 #> A multifactor::multifactor list S7_object,
 #>     5 feature types across 4 linkmaps.
 #> 

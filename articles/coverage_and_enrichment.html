@@ -177,40 +177,32 @@ input letters:</p>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter  word observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       t   the     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 2       h   the    FALSE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 3       e   the     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 4       q quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       u quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       i quick     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       c quick     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       k quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       b brown    FALSE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      r brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      o brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 12      w brown    FALSE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 13      n brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 14      f   fox     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 15      o   fox     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 16      x   fox    FALSE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 17      j jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 18      u jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 19      m jumps     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 20      p jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 21      s jumps     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 22      o  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 23      v  over    FALSE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 24      e  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 25      r  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 26      l  lazy     TRUE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 27      a  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 28      z  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 29      y  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 30      d   dog    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 31      o   dog     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 32      g   dog    FALSE         1        3 0.3333333    FALSE</span></span></code></pre></div>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 32 rows.</span></span>
+<span><span class="co">#&gt;    letter  word</span></span>
+<span><span class="co">#&gt; 1       t   the</span></span>
+<span><span class="co">#&gt; 2       h   the</span></span>
+<span><span class="co">#&gt; 3       e   the</span></span>
+<span><span class="co">#&gt; 4       q quick</span></span>
+<span><span class="co">#&gt; 5       u quick</span></span>
+<span><span class="co">#&gt; 6       i quick</span></span>
+<span><span class="co">#&gt; 7       c quick</span></span>
+<span><span class="co">#&gt; 8       k quick</span></span>
+<span><span class="co">#&gt; 9       b brown</span></span>
+<span><span class="co">#&gt; 10      r brown</span></span>
+<span><span class="co">#&gt;  + 22 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
+<span><span class="co">#&gt;  $ letter : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ word   :  8 Levels: brown ... the </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ observed : logi  TRUE FALSE TRUE FALSE FALSE TRUE ...</span></span>
+<span><span class="co">#&gt;  $ set_count: int  2 2 2 2 2 2 2 2 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ set_size : int  3 3 3 5 5 5 5 5 5 5 ...</span></span>
+<span><span class="co">#&gt;  $ coverage : num  0.667 0.667 0.667 0.4 0.4 ...</span></span>
+<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span></code></pre></div>
 <p>Now, let’s use a second set of letters that are explicitly part of
 the sentence:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -223,42 +215,34 @@ the sentence:</p>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter  word observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       t   the    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 2       h   the    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 3       e   the     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 4       q quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       u quick     TRUE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       i quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       c quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       k quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       b brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      r brown     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      o brown     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 12      w brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 13      n brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 14      f   fox    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 15      o   fox     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 16      x   fox    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 17      j jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 18      u jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 19      m jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 20      p jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 21      s jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 22      o  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 23      v  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 24      e  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 25      r  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 26      l  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 27      a  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 28      z  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 29      y  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 30      d   dog    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 31      o   dog     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 32      g   dog    FALSE         1        3 0.3333333    FALSE</span></span></code></pre></div>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 32 rows.</span></span>
+<span><span class="co">#&gt;    letter  word</span></span>
+<span><span class="co">#&gt; 1       t   the</span></span>
+<span><span class="co">#&gt; 2       h   the</span></span>
+<span><span class="co">#&gt; 3       e   the</span></span>
+<span><span class="co">#&gt; 4       q quick</span></span>
+<span><span class="co">#&gt; 5       u quick</span></span>
+<span><span class="co">#&gt; 6       i quick</span></span>
+<span><span class="co">#&gt; 7       c quick</span></span>
+<span><span class="co">#&gt; 8       k quick</span></span>
+<span><span class="co">#&gt; 9       b brown</span></span>
+<span><span class="co">#&gt; 10      r brown</span></span>
+<span><span class="co">#&gt;  + 22 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
+<span><span class="co">#&gt;  $ letter : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ word   :  8 Levels: brown ... the </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...</span></span>
+<span><span class="co">#&gt;  $ set_count: int  1 1 1 1 1 1 1 1 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ set_size : int  3 3 3 5 5 5 5 5 5 5 ...</span></span>
+<span><span class="co">#&gt;  $ coverage : num  0.333 0.333 0.333 0.2 0.2 ...</span></span>
+<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span></code></pre></div>
 <p>Notice that the column named <code>"complete"</code> marks two
-partcular words as complete now.</p>
+particular words as complete now.</p>
 <p>We can use the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method for <code>linkmap</code>
 to automatically filter for complete cases:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">

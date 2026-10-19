@@ -292,15 +292,15 @@ included into one `linkmap`.
 `` #>   A path from `fruit` to `clothing` with 2 sub-paths: ``\
 `#> fruit ~ instruments ~ books ~ furniture ~ clothing`\
 `#> `\
-`#>          from          to stack use_cov cov_req components`\
-`#> 1       fruit instruments FALSE   FALSE    >= 0          1`\
-`#> 2 instruments       books FALSE   FALSE    >= 0          1`\
-`#> 3       books   furniture FALSE   FALSE    >= 0          1`\
-`#> 4   furniture    clothing FALSE   FALSE    >= 0          1`\
-`#> 5       fruit instruments FALSE   FALSE    >= 0          2`\
-`#> 6 instruments     marbles FALSE   FALSE    >= 0          2`\
-`#> 7     marbles   furniture FALSE   FALSE    >= 0          2`\
-`#> 8   furniture    clothing FALSE   FALSE    >= 0          2`
+`#>          from          to cov_operator cov_value stack components`\
+`#> 1       fruit instruments           >=         0 FALSE          1`\
+`#> 2 instruments       books           >=         0 FALSE          1`\
+`#> 3       books   furniture           >=         0 FALSE          1`\
+`#> 4   furniture    clothing           >=         0 FALSE          1`\
+`#> 5       fruit instruments           >=         0 FALSE          2`\
+`#> 6 instruments     marbles           >=         0 FALSE          2`\
+`#> 7     marbles   furniture           >=         0 FALSE          2`\
+`#> 8   furniture    clothing           >=         0 FALSE          2`
 
 ## Compatibility with `igraph` and `Matrix`
 
@@ -329,11 +329,11 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `g`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``tp``)`\
 `g`\
-`#> IGRAPH c546d9d UN-- 6 6 -- `\
+`#> IGRAPH 68a29ff UN-- 6 6 -- `\
 `#> + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji`\
 `#> | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji`\
 `#> | (e/n), fruit_emoji (e/n)`\
-`#> + edges from c546d9d (vertex names):`\
+`#> + edges from 68a29ff (vertex names):`\
 `#> [1] books      --furniture   clothing   --furniture   books      --instruments`\
 `#> [4] fruit      --instruments furniture  --marbles     instruments--marbles`\
 `# Plot graph across data types`\
@@ -347,9 +347,9 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `lg`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)`\
 `lg`\
-`#> IGRAPH 92c3b46 UN-B 12 18 -- `\
+`#> IGRAPH 11b3baf UN-B 12 18 -- `\
 `#> + attr: type (v/l), name (v/c)`\
-`#> + edges from 92c3b46 (vertex names):`\
+`#> + edges from 11b3baf (vertex names):`\
 `#>  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  `\
 `#>  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves `\
 `#>  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    `\
@@ -648,7 +648,7 @@ If stored in a file in adjacency list format, it may look like this:
 [`sessionInfo`](https://rdrr.io/r/utils/sessionInfo.html)`(``)`\
 `#> R version 4.6.1 (2026-06-24)`\
 `#> Platform: x86_64-pc-linux-gnu`\
-`#> Running under: Ubuntu 24.04.4 LTS`\
+`#> Running under: Ubuntu 24.04.5 LTS`\
 `#> `\
 `#> Matrix products: default`\
 `#> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 `\
@@ -678,7 +678,7 @@ If stored in a file in adjacency list format, it may look like this:
 `#>  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.23-1     R6_2.6.1          `\
 `#> [13] generics_0.1.4     knitr_1.52         htmlwidgets_1.6.4  forcats_1.0.1     `\
 `#> [17] tibble_3.3.1       desc_1.4.3         RColorBrewer_1.1-3 bslib_0.12.0      `\
-`#> [21] pillar_1.11.1      rlang_1.3.0        cachem_1.1.0       xfun_0.61         `\
+`#> [21] pillar_1.11.1      rlang_1.3.0        cachem_1.1.0       xfun_0.62         `\
 `#> [25] fs_2.1.0           sass_0.4.10        S7_0.2.2           otel_0.2.0        `\
 `#> [29] cli_3.6.6          withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5    `\
 `#> [33] digest_0.6.39      grid_4.6.1         lifecycle_1.0.5    vctrs_0.7.3       `\

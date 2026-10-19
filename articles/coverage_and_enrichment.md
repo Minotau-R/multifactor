@@ -101,40 +101,32 @@ our input letters:
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
 `)`\
 \
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res``)`\
-`#>    letter  word observed set_count set_size  coverage complete`\
-`#> 1       t   the     TRUE         2        3 0.6666667    FALSE`\
-`#> 2       h   the    FALSE         2        3 0.6666667    FALSE`\
-`#> 3       e   the     TRUE         2        3 0.6666667    FALSE`\
-`#> 4       q quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 5       u quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 6       i quick     TRUE         2        5 0.4000000    FALSE`\
-`#> 7       c quick     TRUE         2        5 0.4000000    FALSE`\
-`#> 8       k quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 9       b brown    FALSE         3        5 0.6000000    FALSE`\
-`#> 10      r brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 11      o brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 12      w brown    FALSE         3        5 0.6000000    FALSE`\
-`#> 13      n brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 14      f   fox     TRUE         2        3 0.6666667    FALSE`\
-`#> 15      o   fox     TRUE         2        3 0.6666667    FALSE`\
-`#> 16      x   fox    FALSE         2        3 0.6666667    FALSE`\
-`#> 17      j jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 18      u jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 19      m jumps     TRUE         2        5 0.4000000    FALSE`\
-`#> 20      p jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 21      s jumps     TRUE         2        5 0.4000000    FALSE`\
-`#> 22      o  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 23      v  over    FALSE         3        4 0.7500000    FALSE`\
-`#> 24      e  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 25      r  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 26      l  lazy     TRUE         1        4 0.2500000    FALSE`\
-`#> 27      a  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 28      z  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 29      y  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 30      d   dog    FALSE         1        3 0.3333333    FALSE`\
-`#> 31      o   dog     TRUE         1        3 0.3333333    FALSE`\
-`#> 32      g   dog    FALSE         1        3 0.3333333    FALSE`
+`res`\
+`#> A multifactor::linkmap data.frame S7_object: 32 rows.`\
+`#>    letter  word`\
+`#> 1       t   the`\
+`#> 2       h   the`\
+`#> 3       e   the`\
+`#> 4       q quick`\
+`#> 5       u quick`\
+`#> 6       i quick`\
+`#> 7       c quick`\
+`#> 8       k quick`\
+`#> 9       b brown`\
+`#> 10      r brown`\
+`` #>  + 22 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> `\
+`#> @ levels:   2 variables: `\
+`#>  $ letter : 26 Levels: a ... z `\
+`#>  $ word   :  8 Levels: brown ... the `\
+`#> `\
+`#> @ metadata: 5 variables: `\
+`#> List of 5`\
+`#>  $ observed : logi  TRUE FALSE TRUE FALSE FALSE TRUE ...`\
+`#>  $ set_count: int  2 2 2 2 2 2 2 2 3 3 ...`\
+`#>  $ set_size : int  3 3 3 5 5 5 5 5 5 5 ...`\
+`#>  $ coverage : num  0.667 0.667 0.667 0.4 0.4 ...`\
+`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`
 
 Now, let’s use a second set of letters that are explicitly part of the
 sentence:
@@ -150,42 +142,34 @@ sentence:
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
 `)`\
 \
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res``)`\
-`#>    letter  word observed set_count set_size  coverage complete`\
-`#> 1       t   the    FALSE         1        3 0.3333333    FALSE`\
-`#> 2       h   the    FALSE         1        3 0.3333333    FALSE`\
-`#> 3       e   the     TRUE         1        3 0.3333333    FALSE`\
-`#> 4       q quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 5       u quick     TRUE         1        5 0.2000000    FALSE`\
-`#> 6       i quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 7       c quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 8       k quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 9       b brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 10      r brown     TRUE         2        5 0.4000000    FALSE`\
-`#> 11      o brown     TRUE         2        5 0.4000000    FALSE`\
-`#> 12      w brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 13      n brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 14      f   fox    FALSE         1        3 0.3333333    FALSE`\
-`#> 15      o   fox     TRUE         1        3 0.3333333    FALSE`\
-`#> 16      x   fox    FALSE         1        3 0.3333333    FALSE`\
-`#> 17      j jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 18      u jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 19      m jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 20      p jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 21      s jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 22      o  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 23      v  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 24      e  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 25      r  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 26      l  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 27      a  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 28      z  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 29      y  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 30      d   dog    FALSE         1        3 0.3333333    FALSE`\
-`#> 31      o   dog     TRUE         1        3 0.3333333    FALSE`\
-`#> 32      g   dog    FALSE         1        3 0.3333333    FALSE`
+`res`\
+`#> A multifactor::linkmap data.frame S7_object: 32 rows.`\
+`#>    letter  word`\
+`#> 1       t   the`\
+`#> 2       h   the`\
+`#> 3       e   the`\
+`#> 4       q quick`\
+`#> 5       u quick`\
+`#> 6       i quick`\
+`#> 7       c quick`\
+`#> 8       k quick`\
+`#> 9       b brown`\
+`#> 10      r brown`\
+`` #>  + 22 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> `\
+`#> @ levels:   2 variables: `\
+`#>  $ letter : 26 Levels: a ... z `\
+`#>  $ word   :  8 Levels: brown ... the `\
+`#> `\
+`#> @ metadata: 5 variables: `\
+`#> List of 5`\
+`#>  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...`\
+`#>  $ set_count: int  1 1 1 1 1 1 1 1 2 2 ...`\
+`#>  $ set_size : int  3 3 3 5 5 5 5 5 5 5 ...`\
+`#>  $ coverage : num  0.333 0.333 0.333 0.2 0.2 ...`\
+`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`
 
-Notice that the column named `"complete"` marks two partcular words as
+Notice that the column named `"complete"` marks two particular words as
 complete now.
 
 We can use the [`subset()`](https://rdrr.io/r/base/subset.html) method

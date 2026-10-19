@@ -59,33 +59,33 @@ df <- as.data.frame(df, row.names = levels(x)$clothing)
 
 # Apply arbitrary code to x based on group membership
 weave_apply(
-    x,
-    .path = fruit ~ clothing,
-    .data = df,
-    .fun = function(x) colSums(x)
+  x,
+  .path = fruit ~ clothing,
+  .data = df,
+  .fun = function(x) colSums(x)
 )
 #> $apples
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  54 104  72 114   3  20 109  20  82  53 
+#>  13  28  69   5   6  13   0   0   7  29 
 #> 
 #> $pears
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  55  76 150 138  72 178 190  96  80  91 
+#>  23  10  32  12  14  17  15  94  56   7 
 #> 
 #> $cherries
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  25  32  77  75  14  93 102  10  32  77 
+#>   1  17   4   6  55  13  22   7   8  10 
 #> 
 #> $oranges
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  54 104  72 114   3  20 109  20  82  53 
+#>  24  27  36  18  69  30  37 101  64  17 
 #> 
 #> $melons
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#> 148 132 164 166  81 183 242 110  97 104 
+#>  24  27  36  18  69  30  37 101  64  17 
 #> 
 #> $grapes
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#> 145 100  95 106  80 167 175 108  67  71 
+#>  14  45  73  11  61  26  22   7  15  39 
 #> 
 ```

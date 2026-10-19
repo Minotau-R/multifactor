@@ -22,12 +22,12 @@ a `factor_path` object.
 ``` r
 # Generate pair of random linkage input
 a2b <- data.frame(
-   a = sample(letters[seq(3)], 10, replace = TRUE),
-   b = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  b = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 a2c <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    c = sample(c("x", "y", "z"), 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  c = sample(c("x", "y", "z"), 10, replace = TRUE)
 )
 
 # Create multifactor
@@ -39,7 +39,7 @@ select_path(x, b ~ c)
 #>   A path from `b` to `c`:
 #> b ~ a ~ c
 #> 
-#>   from to stack use_cov cov_req components
-#> 1    b  a FALSE   FALSE    >= 0          1
-#> 2    a  c FALSE   FALSE    >= 0          1
+#>   from to cov_operator cov_value stack components
+#> 1    b  a           >=         0 FALSE          1
+#> 2    a  c           >=         0 FALSE          1
 ```

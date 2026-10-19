@@ -7,7 +7,7 @@ is mostly for internal use.
 ## Usage
 
 ``` r
-path_frame(x)
+path_frame(x, call = character())
 ```
 
 ## Arguments
@@ -16,6 +16,11 @@ path_frame(x)
 
   `data.frame` with the first two columns named `"from"` and `"to"`.
   Optionally, additional columns (see Details)
+
+- call:
+
+  `character` (Default: empty). If Input is a formula, captures the
+  literal content as a character string. Optionally,
 
 ## Value
 
@@ -38,7 +43,8 @@ information about the edges:
 path_frame
 #> <multifactor::path_frame> class
 #> @ parent     : S3<data.frame>
-#> @ constructor: function(x) {...}
+#> @ constructor: function(x, call) {...}
 #> @ validator  : function(self) {...}
 #> @ properties :
+#>  $ call: <character>
 ```

@@ -19,6 +19,14 @@ random_multifactor(layout = NULL, n_features = 10, sparseness = 0.75)
 trade_posts(raw.data = FALSE)
 
 random_linkmap(x = list(lower = letters, UPPER = LETTERS), sparseness = 0.5)
+
+random_path_frame(
+  n = 1L,
+  n_steps = 2L,
+  x = random_multifactor(),
+  repeats = FALSE,
+  p_cov = 0.5
+)
 ```
 
 ## Arguments
@@ -47,8 +55,29 @@ random_linkmap(x = list(lower = letters, UPPER = LETTERS), sparseness = 0.5)
 
 - x:
 
-  optional list of two named vectors of features to use. Default is
-  `list(lower = letters, UPPER = LETTERS)`.
+  `multifactor` to generate random paths through. Default is the result
+  of `random_multifactor()`
+
+- n:
+
+  `Numeric scalar`, Integer: How many paths should be generated. Default
+  is `1`.
+
+- n_steps:
+
+  `Numeric scalar`, Integer: How many steps should be generated. Note
+  that actual path lengths are likely longer than the number of explicit
+  nodes. Default is `2`.
+
+- repeats:
+
+  `Logical scalar`, Whether the same term can appear in `n_steps`.
+  (Default: `FALSE`)
+
+- p_cov:
+
+  `Numeric scalar`, Proportion (between 0-1) of steps that should use
+  coverage. (Default: 0.5).
 
 ## Value
 
@@ -66,7 +95,8 @@ a randomly generated object of the specified class.
 
 ``` r
 # Make a random multifactor object
-random_multifactor()
+x <- random_multifactor()
+x
 #> A multifactor::multifactor list S7_object,
 #>     6 feature types across 5 linkmaps.
 #> 
@@ -87,23 +117,47 @@ random_multifactor()
 #>  $ e : 10 Levels: e_001 e_002 ... e_010 
 #>  $ f : 10 Levels: f_001 f_002 ... f_010 
 
+# Generate random paths through this multifactor
+random_path_frame(n = 3, x = x)
+#> [[1]]
+#> A multifactor::path_frame S7_object.
+#>   A path from `d` to `e`:
+#> d ~ e
+#> 
+#>   from to cov_operator cov_value stack components
+#> 1    d  e           >=         0 FALSE          1
+#> 
+#> [[2]]
+#> A multifactor::path_frame S7_object.
+#>   A path from `a` to `b`:
+#> a ~ b
+#> 
+#>   from to cov_operator cov_value stack components
+#> 1    a  b           >=         0 FALSE          1
+#> 
+#> [[3]]
+#> A multifactor::path_frame S7_object.
+#>   A path from `d` to `b`:
+#> d ~ c ~ b
+#> 
+#>   from to cov_operator cov_value stack components
+#> 1    d  c           >=         0 FALSE          1
+#> 2    c  b           >=         0 FALSE          1
+#> 
+
 # Use a (possibly random) igraph as input:
-random_multifactor( igraph::sample_gnp(6, 2/3) )
+random_multifactor(igraph::sample_gnp(6, 2 / 3))
 #> A multifactor::multifactor list S7_object,
-#>     6 feature types across 12 linkmaps.
+#>     6 feature types across 8 linkmaps.
 #> 
 #>       v1 v2 v4 v3 v5 v6
 #> v12v2 10 10  .  .  .  .
-#> v12v4 10  .  9  .  .  .
-#> v22v4  .  9  9  .  .  .
-#> v32v4  .  . 10 10  .  .
-#> v12v5  9  .  .  . 10  .
+#> v12v4 10  . 10  .  .  .
+#> v22v4  .  9 10  .  .  .
+#> v32v5  .  .  . 10 10  .
 #> v22v5  . 10  .  . 10  .
-#> v32v5  .  .  .  9  9  .
-#> v42v5  .  .  9  .  9  .
-#> v12v6  9  .  .  .  .  9
-#> v22v6  .  9  .  .  .  8
-#> v42v6  .  . 10  .  .  9
+#> v42v5  .  . 10  . 10  .
+#> v32v6  .  .  .  9  .  9
 #> v52v6  .  .  .  .  9  9
 #> 
 #> Values represent unique feature names in that linkmap.
@@ -120,20 +174,20 @@ random_multifactor( igraph::sample_gnp(6, 2/3) )
 random_linkmap()
 #> A multifactor::linkmap data.frame S7_object: 338 rows.
 #>    lower UPPER
-#> 1      i     A
-#> 2      j     A
-#> 3      k     A
-#> 4      n     A
-#> 5      o     A
-#> 6      p     A
-#> 7      r     A
-#> 8      u     A
-#> 9      z     A
-#> 10     a     B
+#> 1      j     A
+#> 2      k     A
+#> 3      n     A
+#> 4      o     A
+#> 5      p     A
+#> 6      u     A
+#> 7      w     A
+#> 8      c     B
+#> 9      e     B
+#> 10     f     B
 #>  + 328 more rows. Use `print(n = ...)` to see more rows.
 #> 
 #> @ levels:   2 variables: 
-#>  $ lower : 26 Levels: i ... q 
+#>  $ lower : 26 Levels: j ... q 
 #>  $ UPPER : 26 Levels: A ... Z 
 
 # Make a random multifactor with the trading goods from the vignettes
@@ -142,12 +196,12 @@ trade_posts()
 #>     6 feature types across 6 linkmaps.
 #> 
 #>                      books clothing fruit furniture instruments marbles
-#> books2clothing           4        6     .         .           .       .
-#> books2fruit              6        .     3         .           .       .
-#> books2furniture          5        .     .         4           .       .
-#> clothing2instruments     .        6     .         .           5       .
-#> clothing2marbles         .        6     .         .           .       5
-#> furniture2marbles        .        .     .         6           .       4
+#> books2clothing           6        5     .         .           .       .
+#> books2fruit              5        .     5         .           .       .
+#> fruit2furniture          .        .     5         5           .       .
+#> books2instruments        5        .     .         .           5       .
+#> clothing2instruments     .        5     .         .           6       .
+#> clothing2marbles         .        4     .         .           .       4
 #> 
 #> Values represent unique feature names in that linkmap.
 #> 
@@ -161,7 +215,7 @@ trade_posts()
 
 # Playing cards
 draw_cards(5)
-#> [1] "6♠️"    "7♠️"    "3♦️"    "Jack♥️" "Jack♣️"
+#> [1] "10♣️" "8♥️"  "3♦️"  "6♥️"  "7♣️" 
 poker_scores()
 #> A multifactor::multifactor list S7_object,
 #>     4 feature types across 3 linkmaps.

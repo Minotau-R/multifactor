@@ -61,7 +61,7 @@ a `linkmap` or `matrix` with the desired coverage information in the
 ``` r
 set.seed(2612)
 # Draw five cards from a deck
-drawn  <- draw_cards(5)
+drawn <- draw_cards(5)
 drawn
 #> [1] "Jack♦️" "5♥️"    "King♠️" "7♥️"    "6♦️"   
 scores <- poker_scores()
@@ -84,7 +84,7 @@ scores
 
 # Now enrich input
 result <- weave_coverage(
-x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
+  x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
 )
 
 result
@@ -116,22 +116,22 @@ cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
 cheat
 #> [1] "10♥️"    "Jack♥️"  "Queen♥️" "King♥️"  "Ace♥️"  
 
-.path = card ~ straight
-result <- weave_coverage(scores, card ~ straight, .data = cheat)
+.path = card ~ rank ~ straight > 0.2
+result <- weave_coverage(scores, .path, .data = cheat)
 result
-#> A multifactor::linkmap data.frame S7_object: 200 rows.
-#>    card straight
-#> 1  Ace♥️ Ace to 5
-#> 2    2♥️ Ace to 5
-#> 3    3♥️ Ace to 5
-#> 4    4♥️ Ace to 5
-#> 5    5♥️ Ace to 5
-#> 6  Ace♠️ Ace to 5
-#> 7    2♠️ Ace to 5
-#> 8    3♠️ Ace to 5
-#> 9    4♠️ Ace to 5
-#> 10   5♠️ Ace to 5
-#>  + 190 more rows. Use `print(n = ...)` to see more rows.
+#> A multifactor::linkmap data.frame S7_object: 20 rows.
+#>      card       straight
+#> 1    Ace♥️ Royal straight
+#> 2     10♥️ Royal straight
+#> 3   Jack♥️ Royal straight
+#> 4  Queen♥️ Royal straight
+#> 5   King♥️ Royal straight
+#> 6    Ace♠️ Royal straight
+#> 7     10♠️ Royal straight
+#> 8   Jack♠️ Royal straight
+#> 9  Queen♠️ Royal straight
+#> 10  King♠️ Royal straight
+#>  + 10 more rows. Use `print(n = ...)` to see more rows.
 #> 
 #> @ levels:   2 variables: 
 #>  $ card     : 52 Levels: Ace♥️ ... King♣️ 
@@ -139,21 +139,21 @@ result
 #> 
 #> @ metadata: 5 variables: 
 #> List of 5
-#>  $ observed : logi  TRUE FALSE FALSE FALSE FALSE FALSE ...
-#>  $ set_count: int  1 1 1 1 1 1 1 1 1 1 ...
+#>  $ observed : logi  TRUE TRUE TRUE TRUE TRUE FALSE ...
+#>  $ set_count: int  5 5 5 5 5 5 5 5 5 5 ...
 #>  $ set_size : int  20 20 20 20 20 20 20 20 20 20 ...
-#>  $ coverage : num  0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 ...
+#>  $ coverage : num  0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 ...
 #>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
 test_enrichment(result)
-#>                  expected observed fold    log_fold     p.value      p.adj
-#> Ace to 5       0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000
-#> 2 to 6         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000
-#> 3 to 7         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000
-#> 4 to 8         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000
-#> 5 to 9         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000
-#> 6 to 10        0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000
-#> 7 to Jack      0.09615385     0.10 1.04  0.05658353 0.645790624 1.00000000
-#> 8 to Queen     0.09615385     0.15 1.56  0.64154603 0.283184043 0.94394681
-#> 9 to King      0.09615385     0.20 2.08  1.05658353 0.065620094 0.32810047
-#> Royal straight 0.09615385     0.25 2.60  1.37851162 0.005965463 0.05965463
+#>                  expected observed fold log_fold     p.value      p.adj
+#> Ace to 5       0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 2 to 6         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 3 to 7         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 4 to 8         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 5 to 9         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 6 to 10        0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 7 to Jack      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 8 to Queen     0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 9 to King      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> Royal straight 0.09615385     0.25  2.6 1.378512 0.005965463 0.05965463
 ```

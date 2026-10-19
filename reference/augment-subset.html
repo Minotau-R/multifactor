@@ -115,10 +115,11 @@ If <code>NULL</code> (Default), subsets based on complete coverage if available.
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">random_multifactor</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use augment to chain together operations like weave and stack, in order.</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">x</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="weave-generic.html">weave</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">~</span> <span class="va">c</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">~</span> <span class="va">c</span> <span class="op">+</span> <span class="va">d</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="weave-generic.html">weave</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">d</span> <span class="op">~</span> <span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="weave-generic.html">weave</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">~</span> <span class="va">c</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">~</span> <span class="va">c</span> <span class="op">+</span> <span class="va">d</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="weave-generic.html">weave</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">d</span> <span class="op">~</span> <span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::multifactor list S7_object,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     8 feature types across 8 linkmaps.</span>
@@ -146,7 +147,7 @@ If <code>NULL</code> (Default), subsets based on complete coverage if available.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ c.d : 20 Levels: c_001 c_002 ... d_010 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Setting a linkmap to NULL by name deletes it from the multifactor</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">x</span>, a2b <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">x</span>, a2b <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::multifactor list S7_object,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     5 feature types across 4 linkmaps.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

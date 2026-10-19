@@ -51,6 +51,9 @@
 - [`as_linkmap()`](https://minotau-r.github.io/multifactor/reference/as_linkmap.md)
   : Convert common classes to linkmap
 
+- [`as_path_frame()`](https://minotau-r.github.io/multifactor/reference/as_path_frame.md)
+  : Convert common classes to path_frame
+
 - [`as_linkmap-methods`](https://minotau-r.github.io/multifactor/reference/as_linkmap-methods.md)
   : Convert common classes to linkmap or multifactor
 
@@ -80,6 +83,7 @@
   [`random_multifactor()`](https://minotau-r.github.io/multifactor/reference/random_multifactor.md)
   [`trade_posts()`](https://minotau-r.github.io/multifactor/reference/random_multifactor.md)
   [`random_linkmap()`](https://minotau-r.github.io/multifactor/reference/random_multifactor.md)
+  [`random_path_frame()`](https://minotau-r.github.io/multifactor/reference/random_multifactor.md)
   : Generate and optionally draw from a poker deck.
 - [`trade_goods`](https://minotau-r.github.io/multifactor/reference/trade_goods.md)
   : Small data set of six types of goods.

@@ -17,12 +17,12 @@ A `multifactor`
 ``` r
 # Setup
 a2b <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    b = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  b = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 a2c <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    c = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  c = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 
 # Create multifactor

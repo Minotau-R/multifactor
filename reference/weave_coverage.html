@@ -115,7 +115,7 @@ the @metadata slot.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2612</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Draw five cards from a deck</span></span></span>
-<span class="r-in"><span><span class="va">drawn</span>  <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">draw_cards</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">drawn</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">draw_cards</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">drawn</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Jack♦️" "5♥️"    "King♠️" "7♥️"    "6♦️"   </span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">poker_scores</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -138,7 +138,7 @@ the @metadata slot.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now enrich input</span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">weave_coverage</span><span class="op">(</span></span></span>
-<span class="r-in"><span>x <span class="op">=</span> <span class="va">scores</span>, .path <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">suit</span>, .data <span class="op">=</span> <span class="va">drawn</span>, metric <span class="op">=</span> <span class="st">"set_count"</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">scores</span>, .path <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">suit</span>, .data <span class="op">=</span> <span class="va">drawn</span>, metric <span class="op">=</span> <span class="st">"set_count"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">result</span></span></span>
@@ -170,22 +170,22 @@ the @metadata slot.</p>
 <span class="r-in"><span><span class="va">cheat</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10♥️"    "Jack♥️"  "Queen♥️" "King♥️"  "Ace♥️"  </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">.path</span> <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">straight</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">weave_coverage</span><span class="op">(</span><span class="va">scores</span>, <span class="va">card</span> <span class="op">~</span> <span class="va">straight</span>, .data <span class="op">=</span> <span class="va">cheat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">.path</span> <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">rank</span> <span class="op">~</span> <span class="va">straight</span> <span class="op">&gt;</span> <span class="fl">0.2</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">weave_coverage</span><span class="op">(</span><span class="va">scores</span>, <span class="va">.path</span>, .data <span class="op">=</span> <span class="va">cheat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">result</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 200 rows.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    card straight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Ace♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    4♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    5♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Ace♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    2♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    3♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    4♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   5♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + 190 more rows. Use `print(n = ...)` to see more rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 20 rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      card       straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Ace♥️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     10♥️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Jack♥️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Queen♥️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   King♥️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    Ace♠️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     10♠️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   Jack♠️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Queen♠️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  King♠️ Royal straight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  + 10 more rows. Use `print(n = ...)` to see more rows.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ card     : 52 Levels: Ace♥️ ... King♣️ </span>
@@ -193,23 +193,23 @@ the @metadata slot.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ metadata: 5 variables: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ observed : logi  TRUE FALSE FALSE FALSE FALSE FALSE ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ set_count: int  1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ observed : logi  TRUE TRUE TRUE TRUE TRUE FALSE ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ set_count: int  5 5 5 5 5 5 5 5 5 5 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ set_size : int  20 20 20 20 20 20 20 20 20 20 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ coverage : num  0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ coverage : num  0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
 <span class="r-in"><span><span class="fu">test_enrichment</span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  expected observed fold    log_fold     p.value      p.adj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Ace to 5       0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 to 6         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 to 7         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 to 8         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 to 9         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 to 10        0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 to Jack      0.09615385     0.10 1.04  0.05658353 0.645790624 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 to Queen     0.09615385     0.15 1.56  0.64154603 0.283184043 0.94394681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 to King      0.09615385     0.20 2.08  1.05658353 0.065620094 0.32810047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Royal straight 0.09615385     0.25 2.60  1.37851162 0.005965463 0.05965463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  expected observed fold log_fold     p.value      p.adj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ace to 5       0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 to 6         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 to 7         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 to 8         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 to 9         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 to 10        0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 to Jack      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 to Queen     0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9 to King      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Royal straight 0.09615385     0.25  2.6 1.378512 0.005965463 0.05965463</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
