@@ -31,7 +31,7 @@ jobs:
           cont: ~
           rspm: ~
     steps:
-    - uses: neurogenomics/rworkflows@master
+    - uses: minotau-R/multifactor@devel
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
