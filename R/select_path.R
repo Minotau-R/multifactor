@@ -46,23 +46,60 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 
 
 #' @importFrom dplyr bind_rows
+#' @importFrom utils tail
 .select_enframe_path <- function(x, pf) {
-  from_to <- terms(pf)
-  include <- from_to[-c(1L, length(from_to))]
-  from_to <- from_to[c(1L, length(from_to))]
+  terms_pf <- terms(pf)
+  include <- terms_pf[-c(1L, length(terms_pf))]
+  from_to <- terms_pf[c(1L, length(terms_pf))]
 
   if (!length(include)) {
     include <- NULL
   }
-  full_path <- .select_path(x, terms = from_to, include)
+  full_path <- .select_path(x, from_to, include)
+
   i <- lapply(full_path, .path_to_path_frame_df)
+
+
+  if(any(cov_i <- .check_pf_cov_bool(pf))) {
+    cov_exprs <- .get_coverage_exprs(pf)
+
+    cov_vars <- vapply(
+      .coverage_get_terms_list(terms_pf, cov_i), tail, 1L,
+      FUN.VALUE = character(1L)
+    )
+
+    i <- lapply(i, .restore_coverage, cov_vars, cov_exprs)
+  }
+
 
   res <- dplyr::bind_rows(i, .id = "components")
   col_order <- c(seq.int(from = 2L, to = NCOL(res)), 1L)
 
-  res[, col_order, drop = FALSE]
+  res <- res[, col_order, drop = FALSE]
+
+  res
 }
 
+.restore_coverage <- function(x, cov_vars, cov_exprs) {
+  inds <- lapply(cov_vars, match, x[["to"]])
+
+  if(any(lengths(inds) > 1L)) {
+    inds[[1L]] <- min(inds[[1L]])
+    for(i in seq.int(2L, length(inds))) {
+      inds[[i]] <- min(inds[[i]][inds[[i]] > inds[[i-1]]])
+    }
+  }
+
+  inds <- unlist(inds, FALSE, FALSE)
+  ops <- unlist(strsplit(cov_exprs, " ", fixed = TRUE))
+  vals <- as.numeric(ops[seq_along(ops) %% 2L == 0L])
+  ops  <- ops[seq_along(ops) %% 2L == 1L]
+
+  x <- `[<-`(x, inds, match("cov_value", colnames(x)), vals)
+  x <- `[<-`(x, inds, match("cov_operator", colnames(x)), ops)
+
+  x
+}
 
 .select_path <- function(x, terms, include = NULL, exclude = NULL, exact = NULL) {
   g <- `as.igraph.multifactor::multifactor`(x)

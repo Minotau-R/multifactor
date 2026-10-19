@@ -63,8 +63,8 @@ result
 cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
 cheat
 
-.path = card ~ straight
-result <- weave_coverage(scores, card ~ straight, .data = cheat)
+.path = card ~ rank ~ straight > 0.2
+result <- weave_coverage(scores, .path, .data = cheat)
 result
 test_enrichment(result)
 

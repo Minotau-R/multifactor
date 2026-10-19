@@ -60,7 +60,8 @@ importFrom(S7,
   new_class,
   new_generic,
   new_object,
-  new_property
+  new_property,
+  prop
 )
 importFrom(dplyr,bind_rows)
 importFrom(forcats,
@@ -100,6 +101,7 @@ importFrom(utils,
   count.fields,
   data,
   download.file,
-  stack
+  stack,
+  tail
 )
 importMethodsFrom(Matrix,"%&%")

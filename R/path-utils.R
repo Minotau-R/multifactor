@@ -13,9 +13,9 @@ NULL
 
 .check_path_frame_uses_stack <- function(.pf) any(.pf[["stack"]])
 
-.check_path_frame_uses_coverage <- function(.pf) any(.uses_coverage_bool(.pf))
+.check_path_frame_uses_coverage <- function(.pf) any(.check_pf_cov_bool(.pf))
 
-.uses_coverage_bool <-
+.check_pf_cov_bool <-
   function(x) !(x[["cov_operator"]] == ">=" & x[["cov_value"]] == 0)
 
 .is_colon_shorthand <-

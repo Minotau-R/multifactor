@@ -33,46 +33,12 @@
 #' cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
 #' cheat
 #'
-#' .path = card ~ straight
-#' result <- weave_coverage(scores, card ~ straight, .data = cheat)
+#' .path = card ~ rank ~ straight > 0.2
+#' result <- weave_coverage(scores, .path, .data = cheat)
 #' result
 #' test_enrichment(result)
 #'
 weave_coverage <- function(
-        x, .path, .data = NULL,
-        metric = c("set_count", "set_size", "coverage", "complete"),
-        out.format = c("linkmap", "matrix"), .data_column = "row.names"
-) {
-    metric <- match.arg(
-        metric, c("set_count", "set_size", "coverage", "complete"),
-        several.ok = TRUE
-    )
-    out.format <- match.arg(out.format, c("linkmap", "matrix"))
-    .data <- .data_coverage_to_vector(.data, .data_column)
-
-    .valid_path_input(.path)
-    pf <- as_path_frame(.path)
-    .path_check_valid_coverage(pf)
-
-    pf <- .select_enframe_path(x, pf)
-
-    full_path <- .pf_as_full_path_list(pf)
-
-    res <- lapply(
-        full_path, .weave_coverage_factor_path,
-        x = x, .data = .data, metric = metric
-    )
-
-    res <- do.call(rbind.data.frame, res)
-    res <- as_linkmap(res)
-    if (out.format == "matrix") {
-        res <- `as.matrix.multifactor::linkmap`(res)
-    }
-    res
-}
-
-
-.weave_coverage_simple <- function(
     x, .path, .data = NULL,
     metric = c("set_count", "set_size", "coverage", "complete"),
     out.format = c("linkmap", "matrix"), .data_column = "row.names"
@@ -89,23 +55,144 @@ weave_coverage <- function(
   .path_check_valid_coverage(pf)
 
   pf <- path_frame(.select_enframe_path(x, pf))
+  terms_pf <- terms(pf)
 
   # check path length:
   if (NROW(pf) == 1) {
-  res <- .weave_coverage_two(x, terms(pf), .data, metric)
+    res <- .coverage_single_step(x, pf, terms_pf, .data, metric)
   } else {
-    # We weave() from 'from' to the first instance of coverage:
-    # a ~ <....> : c. so we weave(a ~ c)
-    # Then we compute coverage on a ~ c and optionally filter.
-    #
-    # From there, proceed to weave to the next instance of coverage.
-    # weave(a  ~ c+1 ~ .... : c2)
-    # etc.
-    #
-    stop("TO DO")
+    if(!.check_path_frame_uses_coverage(pf)) {
+      stop(
+        "Final path has more than two steps.\n",
+        "Please indicate which step(s) should consider coverage."
+      )
+    }
+    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
   }
-  as_linkmap(res)
 
+  if (out.format == "matrix") {
+    res <- `as.matrix.multifactor::linkmap`(res)
+  }
+
+  res
+}
+
+
+
+.coverage_single_step <- function(x, pf, terms_pf, .data, metric) {
+  res <- .weave_coverage_two(
+    x[[.rows_with_col(x@map, terms_pf)]],
+    terms_pf, .data, metric
+  )
+  res <- as_linkmap(res)
+  res
+}
+
+.weave_coverage_old <- function(
+    x, .path, .data = NULL,
+    metric = c("set_count", "set_size", "coverage", "complete"),
+    out.format = c("linkmap", "matrix"), .data_column = "row.names"
+) {
+  metric <- match.arg(
+    metric, c("set_count", "set_size", "coverage", "complete"),
+    several.ok = TRUE
+  )
+  out.format <- match.arg(out.format, c("linkmap", "matrix"))
+  .data <- .data_coverage_to_vector(.data, .data_column)
+
+  .valid_path_input(.path)
+  pf <- as_path_frame(.path)
+  .path_check_valid_coverage(pf)
+
+  pf <- .select_enframe_path(x, pf)
+
+  full_path <- .pf_as_full_path_list(pf)
+
+  res <- lapply(
+    full_path, .weave_coverage_factor_path,
+    x = x, .data = .data, metric = metric
+  )
+
+  res <- do.call(rbind.data.frame, res)
+  res <- as_linkmap(res)
+  if (out.format == "matrix") {
+    res <- `as.matrix.multifactor::linkmap`(res)
+  }
+  res
+}
+
+#' @importFrom S7 prop prop<-
+.coverage_reduce_loop <- function(x, pf, terms_pf, .data, metric) {
+  terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
+  cov_exprs <- .get_coverage_exprs(pf)
+  res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
+
+  for(i in seq_along(terms_list)) {
+    x <- .weave_coverage_by_args(x, terms_list[[i]], cov_exprs[[i]], .data)
+  }
+
+  res <- x[[res_name]]
+  drop_cols <- setdiff(
+    c("set_count", "set_size",  "coverage", "complete"), metric
+    )
+
+  if(length(drop_cols)) {
+    res <- as.data.frame(res)
+    res[drop_cols] <- NULL
+    res <- as_linkmap(res)
+  }
+  res
+}
+
+.get_coverage_exprs <- function(pf) {
+  cov_i <- .check_pf_cov_bool(pf)
+  stopifnot("No coverage in path_frame input" = any(cov_i))
+
+  res <- paste(pf[["cov_operator"]], pf[["cov_value"]])[cov_i]
+  if(!tail(cov_i, 1L)) {
+    res <- c(res, ">= 0")
+  }
+  res
+}
+
+.weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data) {
+
+  lm <- .weave_full_path(x, terms_list, "linkmap")
+  from_to <- terms_list[c(1, length(terms_list))]
+  lm <- .weave_coverage_two(
+    lm, from_to, .data, c("set_count", "set_size", "coverage", "complete")
+  )
+  lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
+
+  # Add to multifactor x
+  x <- augment(x, as_linkmap(lm))
+
+  return(x)
+}
+
+
+
+
+.coverage_get_terms_list <- function(x, cov_i) {
+  which_cov <- which(cov_i)
+  if(max(which_cov) + 1L == length(x)) {
+    from_i <- c(1L, which_cov[-length(which_cov)] +1 )
+    to_i <- c(which_cov + 1)
+  } else {
+    from_i <- c(1L, which_cov +1 )
+    to_i <- c(which_cov + 1, length(x))
+  }
+  if( length(from_i) == 1L ) {
+    res <- list( x[seq_len(to_i)] )
+  } else {
+    res <- vector("list", length = length(from_i))
+    res[[1L]] <- x[seq_len(to_i[1L])]
+    res[seq.int(from = 2L, to = length(res))] <- lapply(
+      seq_along(from_i[-1]) + 1,
+      function(i) x[c(1L, seq.int(from_i[i], to_i[i]))]
+    )
+  }
+  res
 }
 
 .path_check_valid_coverage <- function(x) {
@@ -115,6 +202,12 @@ weave_coverage <- function(
       "Use `stack()` to prepare input."
     )
   }
+  # FIXME for no explicit tildes
+  # if (!.check_path_frame_uses_coverage(x)) {
+  #   stop(
+  #     "weave_coverage() '.path' must contain coverage information."
+  #   )
+  # }
 }
 
 
@@ -157,8 +250,8 @@ test_enrichment <- function(x, log_base = 2L) {
   mm <- as.data.frame(x)
 
   # q = actual hits, m = possible hits, n = possible misses, k = n_draws
-  q <- tapply(mm, i, function(xx) unique(xx[["set_count"]]))
-  m <- tapply(mm, i, function(xx) unique(xx[["set_size"]]))
+  q <- tapply(mm, i, function(xx) max(0, unique(xx[["set_count"]])))
+  m <- tapply(mm, i, function(xx) max(0, unique(xx[["set_size"]])))
   n <- nlevels(mm[[1L]]) - unlist(m)
   k <- length(unique(mm[mm[["observed"]], 1L]))
 
@@ -270,7 +363,10 @@ test_enrichment <- function(x, log_base = 2L) {
 #' with optional .data character vector
 #' @noRd
 .weave_coverage_two <- function(x, all_terms, .data = NULL, metric) {
-  x <- as.data.frame(x[[1L]])
+  # if(S7::S7_inherits(x, multifactor)) {
+  #   x <- x[[1L]]
+  # }
+  x <- as.data.frame(x)
   unit_term <- all_terms[[1L]]
   set_term <- all_terms[[2L]]
 

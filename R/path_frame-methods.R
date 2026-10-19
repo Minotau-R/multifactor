@@ -35,7 +35,7 @@ S7::method(formula, path_frame) <- function(x) `formula.multifactor::path_frame`
     colon_i <- .is_colon_shorthand(x)
     res[seq_len(out_len) %% 2 == 0L][colon_i] <- ":"
 
-    which_vals <- which(.uses_coverage_bool(x) & !colon_i)
+    which_vals <- which(.check_pf_cov_bool(x) & !colon_i)
     res[seq_len(out_len) %% 2 == 1L][which_vals +1] <- paste(
       res[seq_len(out_len) %% 2 == 1L][which_vals +1],
       x[["cov_operator"]][which_vals],
