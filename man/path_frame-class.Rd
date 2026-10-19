@@ -4,11 +4,14 @@
 \alias{path_frame}
 \title{path_frame S7 class}
 \usage{
-path_frame(x)
+path_frame(x, call = character())
 }
 \arguments{
 \item{x}{\code{data.frame} with the first two columns named \code{"from"} and \code{"to"}.
 Optionally, additional columns (see Details)}
+
+\item{call}{\code{character} (Default: empty). If Input is a formula, captures the
+literal content as a character string. Optionally,}
 }
 \value{
 a \code{path_frame} object.

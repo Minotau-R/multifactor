@@ -161,7 +161,7 @@ local({
   lv_list <- lapply(x[mfs], levels)
   if (any(lms)) {
     lm_lst <- x[lms]
-    lv_list <- c(lv_list, list(.build_levels_from_linkmap_list(lm_lst)))
+    lv_list <- c(lv_list, list(.build_levels_from_lm_list(lm_lst)))
   }
   all_lvs <- unique(unlist(lapply(lv_list, names), FALSE, FALSE))
   all_lvs <- .reduce_level_list(lv_list, all_lvs)

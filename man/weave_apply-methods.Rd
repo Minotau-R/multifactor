@@ -40,10 +40,10 @@ df <- as.data.frame(df, row.names = levels(x)$clothing)
 
 # Apply arbitrary code to x based on group membership
 weave_apply(
-    x,
-    .path = fruit ~ clothing,
-    .data = df,
-    .fun = function(x) colSums(x)
+  x,
+  .path = fruit ~ clothing,
+  .data = df,
+  .fun = function(x) colSums(x)
 )
 
 }

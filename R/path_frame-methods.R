@@ -21,24 +21,32 @@ S7::method(formula, path_frame) <- function(x) `formula.multifactor::path_frame`
 #' @importFrom stats formula as.formula
 #'
 `formula.multifactor::path_frame` <- function(x, ...) {
-  out_len <- 1 + 2 * NROW(x)
-  res <- rep("~", out_len)
-  res[seq_len(out_len) %% 2 == 1L] <- `terms.multifactor::path_frame`(x)
-
-  if (.check_path_frame_uses_coverage(x)) {
-    res[seq_len(out_len) %% 2 == 0L][x[["use_cov"]]] <- ":"
-
-    if (any(spec <- x[["cov_req"]] %notin% c(">= 0", ">= 1"))) {
-      res[2 * which(spec) + 1L] <- paste(
-        res[2 * which(spec) + 1L], x[["cov_req"]][spec]
-      )
-    }
-  }
-
-  res <- paste0(res, collapse = "")
+  res <- .build_call_string_pf(x)
 
   stats::as.formula(res, globalenv())
 }
+
+.build_call_string_pf <- function(x) {
+  out_len <- 1 + 2 * NROW(x)
+  res <- rep(" ~ ", out_len)
+  res[seq_len(out_len) %% 2 == 1L] <- `terms.multifactor::path_frame`(x)
+
+  if (.check_path_frame_uses_coverage(x)) {
+    colon_i <- .is_colon_shorthand(x)
+    res[seq_len(out_len) %% 2 == 0L][colon_i] <- ":"
+
+    which_vals <- which(.check_pf_cov_bool(x) & !colon_i)
+    res[seq_len(out_len) %% 2 == 1L][which_vals +1] <- paste(
+      res[seq_len(out_len) %% 2 == 1L][which_vals +1],
+      x[["cov_operator"]][which_vals],
+      x[["cov_value"]][which_vals]
+    )
+  }
+
+  res <- paste0(res, collapse = "")
+  res
+}
+
 
 S7::method(terms, path_frame) <- function(x) `terms.multifactor::path_frame`(x)
 

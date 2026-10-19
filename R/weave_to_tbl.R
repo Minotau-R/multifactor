@@ -30,10 +30,10 @@
 #'
 weave_to_tbl <- function(x, .path, .data, .index = "row.names") {
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_weave_to_tbl(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_weave_to_tbl(pf)
 
-  path_list <- terms(pm)
+  path_list <- terms(pf)
 
   out <- .index_tbl_by_path_list(x, path_list, .data, .index)
   out <- `class<-`(S7::S7_data(out), "data.frame")

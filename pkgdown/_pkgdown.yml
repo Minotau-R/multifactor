@@ -40,6 +40,7 @@ reference:
 - contents:
   - as_multifactor
   - as_linkmap
+  - as_path_frame
   - as_linkmap-methods
   - as.igraph.multifactor
   - as.igraph.linkmap

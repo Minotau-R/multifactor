@@ -40,14 +40,14 @@ NULL
 
 S7::method(weave_apply, multifactor) <- function(.x, .path, .data, .fun = NULL, ..., .index = "row.names") {
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_weave_apply(pm)
-  path_list <- terms(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_weave_apply(pf)
+  path_list <- terms(pf)
 
   # TODO confirm below lines commented out lines can be deleted
-  # pm <- .select_by_path_frame(.x, pm)
+  # pf <- .select_enframe_path(.x, pf)
   #
-  # path_list <- tapply(pm, ~components, terms, simplify = FALSE) |> unname()
+  # path_list <- tapply(pf, ~components, terms, simplify = FALSE) |> unname()
 
   IDX <- .splitlinkmap(.index_tbl_by_path_list(.x, path_list, .data, .index))
 

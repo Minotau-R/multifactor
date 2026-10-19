@@ -171,7 +171,7 @@ multifactor <- S7::new_class(
     names(x) <- paste0("x_", seq_along(x))
     x <- .merge_linkmaps(x)
 
-    if (!length(levels)) levels <- .build_levels_from_linkmap_list(x)
+    if (!length(levels)) levels <- .build_levels_from_lm_list(x)
     x <- .unify_levels(x, levels)
 
     names(x) <- vapply(x, .linkmap2name, FUN.VALUE = "", USE.NAMES = FALSE)
@@ -198,6 +198,8 @@ multifactor <- S7::new_class(
 #' for internal use.
 #' @param x `data.frame` with the first two columns named `"from"` and `"to"`.
 #'     Optionally, additional columns (see Details)
+#' @param call `character` (Default: empty). If Input is a formula, captures the
+#'     literal content as a character string. Optionally,
 #' @details
 #' Rows represent edges in a path. Additional (optional) columns contain
 #' information about the edges:
@@ -217,15 +219,16 @@ path_frame <- S7::new_class(
   "path_frame",
   package = "multifactor",
   parent = S7::class_data.frame,
-  constructor = function(x) {
-    if (inherits(x, "formula")) {
-      x <- .path_to_path_frame(x)
-    }
-    stopifnot(
-      "path_frame input must be formula, character or data.frame." =
-        is.data.frame(x)
+  properties = list(
+    call = S7::new_property(
+      class = S7::class_character,
+      getter = function(self) S7::prop(self, "call"),
+      default = character()
     )
-    S7::new_object(.parent = x)
+  ),
+  constructor = function(x, call = character()) {
+    stopifnot("path_frame input must be a data.frame." = is.data.frame(x))
+    S7::new_object(.parent = x, call = call)
   },
   validator = function(self) {
     if (!all(colnames(self)[seq_len(2L)] == c("from", "to"))) {
@@ -335,7 +338,7 @@ path_frame <- S7::new_class(
   # Sequentially subset over feature names
   for (j in jj) {
     # Select all those data frames where that term is mentioned
-    ii <- rowsWithCol(m, j, FALSE)
+    ii <- .rows_with_col(m, j, FALSE)
     keep <- Reduce(intersect, lapply(x[ii], base::`[[`, j))
 
     # Filter feature ids in each df to only universally shared ones.
@@ -354,9 +357,9 @@ path_frame <- S7::new_class(
 #' @param ft A table containing features of interest, `tableX` or `tableY`.
 #' @noRd
 #'
-.trimByFeatureTable <- function(x, ft, id) {
+.trim_by_feature_table <- function(x, ft, id) {
   lv <- levels(x)[[id]]
-  r <- rowsWithCol(x@map, id)
+  r <- .rows_with_col(x@map, id)
   stopifnot(
     "Feature names appeared in several index elements. " = length(r) == 1L
   )
@@ -385,7 +388,7 @@ path_frame <- S7::new_class(
 
 #' Given a list of linkmaps x, return a unified and sorted list of levels.
 #' @noRd
-.build_levels_from_linkmap_list <- function(x) {
+.build_levels_from_lm_list <- function(x) {
   all_lvs <- unique(unlist(lapply(x, colnames), FALSE, FALSE))
   lvs <- .gather_all_levels(x, all_lvs)
   return(lvs)

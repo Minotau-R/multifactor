@@ -120,7 +120,7 @@ res <- weave_coverage(
   x = fox, .path = letter ~ word, .data = input
 )
 
-as.data.frame(res)
+res
 ```
 
 Now, let's use a second set of letters that are explicitly part of the sentence: 
@@ -135,9 +135,9 @@ res <- weave_coverage(
   x = fox, .path = letter ~ word, .data = input
 )
 
-as.data.frame(res)
+res
 ```
-Notice that the column named `"complete"` marks two partcular words as complete 
+Notice that the column named `"complete"` marks two particular words as complete 
 now. 
 
 We can use the `subset()` method for `linkmap` to automatically filter for 

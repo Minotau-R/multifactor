@@ -47,14 +47,14 @@ Perform enrichtment analysis from a weave
 \examples{
 set.seed(2612)
 # Draw five cards from a deck
-drawn  <- draw_cards(5)
+drawn <- draw_cards(5)
 drawn
 scores <- poker_scores()
 scores
 
 # Now enrich input
 result <- weave_coverage(
-x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
+  x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
 )
 
 result
@@ -63,8 +63,8 @@ result
 cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
 cheat
 
-.path = card ~ straight
-result <- weave_coverage(scores, card ~ straight, .data = cheat)
+.path = card ~ rank ~ straight > 0.2
+result <- weave_coverage(scores, .path, .data = cheat)
 result
 test_enrichment(result)
 

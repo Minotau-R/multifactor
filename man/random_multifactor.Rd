@@ -6,6 +6,7 @@
 \alias{random_multifactor}
 \alias{trade_posts}
 \alias{random_linkmap}
+\alias{random_path_frame}
 \title{Generate and optionally draw from a poker deck.}
 \usage{
 draw_cards(draw = NULL)
@@ -17,6 +18,14 @@ random_multifactor(layout = NULL, n_features = 10, sparseness = 0.75)
 trade_posts(raw.data = FALSE)
 
 random_linkmap(x = list(lower = letters, UPPER = LETTERS), sparseness = 0.5)
+
+random_path_frame(
+  n = 1L,
+  n_steps = 2L,
+  x = random_multifactor(),
+  repeats = FALSE,
+  p_cov = 0.5
+)
 }
 \arguments{
 \item{draw}{Optional \code{integer}. How many cards to draw from the deck.}
@@ -31,8 +40,22 @@ Default is \code{0.5}.}
 \item{raw.data}{\code{Boolean}, Whether to return the \code{data.frame} of goods rather
 than the default \code{multifactor}.}
 
-\item{x}{optional list of two named vectors of features to use. Default is
-\code{list(lower = letters, UPPER = LETTERS)}.}
+\item{x}{\code{multifactor} to generate random paths through.
+Default is the result of \code{random_multifactor()}}
+
+\item{n}{\verb{Numeric scalar}, Integer: How many paths should be generated.
+Default is \code{1}.}
+
+\item{n_steps}{\verb{Numeric scalar}, Integer: How many steps should be generated.
+Note that actual path lengths are likely longer than the number of
+explicit nodes.
+Default is \code{2}.}
+
+\item{repeats}{\verb{Logical scalar}, Whether the same term can appear in
+\code{n_steps}. (Default: \code{FALSE})}
+
+\item{p_cov}{\verb{Numeric scalar}, Proportion (between 0-1) of steps that should
+use coverage. (Default: 0.5).}
 }
 \value{
 a randomly generated object of the specified class.
@@ -48,10 +71,14 @@ called by \code{random_multifactor}, shouldn't be called by user.
 }
 \examples{
 # Make a random multifactor object
-random_multifactor()
+x <- random_multifactor()
+x
+
+# Generate random paths through this multifactor
+random_path_frame(n = 3, x = x)
 
 # Use a (possibly random) igraph as input:
-random_multifactor( igraph::sample_gnp(6, 2/3) )
+random_multifactor(igraph::sample_gnp(6, 2 / 3))
 
 # Make a random linkmap object
 random_linkmap()

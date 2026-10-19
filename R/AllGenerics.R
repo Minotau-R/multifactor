@@ -44,6 +44,20 @@ S7::method(nlevels, S7::class_any) <- base::nlevels
 #'
 as_multifactor <- S7::new_generic("as_multifactor", "x")
 
+#' Convert common classes to path_frame
+#' @export
+#' @rdname as_path_frame
+#' @name as_path_frame
+#' @param x input object
+#' @param ... additional arguments
+#' @returns a `path_frame`.
+#' @seealso [as_linkmap]
+#' @examples
+#' # Available methods:
+#' as_path_frame
+#'
+as_path_frame <- S7::new_generic("path_frame", "x")
+
 #' Weave a path through an object
 #' @rdname weave-generic
 #' @name weave-generic

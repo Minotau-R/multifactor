@@ -31,10 +31,10 @@ S7::method(stack, multifactor) <- function(x, .path, out.format = c("linkmap", "
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
   # Handle .path arg
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_stack(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_stack(pf)
 
-  terms <- .pf_as_stack_path_list(pm)
+  terms <- .pf_as_stack_path_list(pf)
 
   res <- .stack_terms(x, terms)
   if (out.format == "matrix") {

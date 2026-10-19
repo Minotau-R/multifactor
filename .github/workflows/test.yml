@@ -31,7 +31,7 @@ jobs:
           cont: ~
           rspm: ~
     steps:
-    - uses: neurogenomics/rworkflows@master
+    - uses: minotau-R/multifactor@devel
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
@@ -48,3 +48,4 @@ jobs:
         runner_os: ${{ runner.os }}
         cache_version: cache-v1
         docker_registry: ghcr.io
+        run_telemetry: ${{ false }}

@@ -45,7 +45,6 @@ NULL
 
 S7::method(as_linkmap, linkmap) <- function(x) x
 
-
 S7::method(as_linkmap, S7::class_data.frame) <- function(x, edge.names = NULL) {
   if (NCOL(x) >= 3L) {
     metadata <- x[, -seq_len(2L), drop = FALSE]
@@ -117,3 +116,21 @@ S7::method(as_multifactor, S7::class_any) <- function(x, edge.names = NULL) {
   mf <- multifactor(mf)
   return(mf)
 }
+
+
+S7::method(as_path_frame, S7::class_character) <- function(x) {
+  x <- stats::as.formula(paste0(x, collapse = "~"))
+  call <- .deparse_fm(x)
+  x <- .path_to_path_frame_df(x)
+  path_frame(x, call)
+}
+
+S7::method(as_path_frame, S7::class_formula) <- function(x) {
+  call <- .deparse_fm(x)
+  x <- .path_to_path_frame_df(x)
+  path_frame(x, call)
+}
+
+S7::method(as_path_frame, S7::class_data.frame) <-
+  function(x, call = "") path_frame(x, call)
+

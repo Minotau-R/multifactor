@@ -43,13 +43,14 @@ require(generics)
 x <- random_multifactor()
 
 # Use augment to chain together operations like weave and stack, in order.
-augment(x,
-    weave(x, a ~ c),
-    stack(x, a + b ~ c + d),
-    weave(x, d ~ f)
+augment(
+  x,
+  weave(x, a ~ c),
+  stack(x, a + b ~ c + d),
+  weave(x, d ~ f)
 )
 
 # Setting a linkmap to NULL by name deletes it from the multifactor
-augment(x, a2b = NULL )
+augment(x, a2b = NULL)
 
 }

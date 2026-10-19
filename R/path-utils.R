@@ -3,15 +3,23 @@
 #' @examples
 #' x <- random_multifactor()
 #' .path <- a ~ b:c > 0.2 ~ d + e:f ~ g
-#' pf <- path_frame(.path)
+#' pf <- as_path_frame(.path)
 #'
 NULL
+
+.deparse_fm <- function(x) paste0(deparse(x, 500L), collapse = "")
 
 .check_path_frame_is_minimal <- function(.pf) NROW(.pf) == 1L
 
 .check_path_frame_uses_stack <- function(.pf) any(.pf[["stack"]])
 
-.check_path_frame_uses_coverage <- function(.pf) any(.pf[["use_cov"]] > 0)
+.check_path_frame_uses_coverage <- function(.pf) any(.check_pf_cov_bool(.pf))
+
+.check_pf_cov_bool <-
+  function(x) !(x[["cov_operator"]] == ">=" & x[["cov_value"]] == 0)
+
+.is_colon_shorthand <-
+  function(x) x[["cov_operator"]] %in% c(">=", "==") & x[["cov_value"]] == 1
 
 .valid_path_input <- function(.path) {
   classes <- c("character", "formula", "data.frame", "list")
@@ -26,39 +34,41 @@ NULL
   invisible()
 }
 
-.path_to_path_frame <- function(.path) path_frame(
-  .path_to_path_frame_df(.path)
-)
+
+.path_to_path_frame_df <- function(.path) {
+    .path <- .standardize_path_to_fm(.path)
+    res <- .cut_fm_to_df(.path)
+    res
+}
 
 #' @importFrom stats as.formula
 #'
-.path_to_path_frame_df <- function(.path) {
-  .valid_path_input(.path)
+.standardize_path_to_fm <- function(.path) {
+    .valid_path_input(.path)
 
-  # Some flexibility if input is in a list of length 1:
-  if (is.list(.path) && length(.path) == 1L) {
-    .path <- .path[[1L]]
-  }
-  if (inherits(.path, "character")) {
-    .path <- stats::as.formula(paste0(.path, collapse = "~"))
-  }
-
-  res <- .cut_fm_to_df(.path)
-  return(res)
+    # Some flexibility if input is in a list of length 1:
+    if (is.list(.path) && length(.path) == 1L) {
+        .path <- .path[[1L]]
+    }
+    if (inherits(.path, "character")) {
+        .path <- stats::as.formula(paste0(.path, collapse = "~"))
+    }
+    .path
 }
 
 .cut_fm_to_df <- function(x, all_seps = c("~", ":")) {
   # Convert to character
-  x <- deparse1(x, collapse = "")
+  x <- .deparse_fm(x)
 
   all_seps <- paste0(all_seps, collapse = "|")
 
   # Get all separators and content
   seps <- strsplit(gsub(paste0("[^", all_seps, "]"), "", x), "")[[1L]]
   content <- .drop_trailing_spaces(strsplit(x, all_seps)[[1L]])
-  use_cov <- seps == ":"
-  cov_res <- .parse_coverage(content, use_cov)
-  cov_req <- cov_res[["cov_req"]]
+  full_cov <- seps == ":"
+  cov_res <- .parse_coverage(content, full_cov)
+  cov_operator <- cov_res[["cov_operator"]]
+  cov_value    <- cov_res[["cov_value"]]
   content <- cov_res[["content"]]
 
   from <- factor(content[seq_along(seps)], unique(sort(content)))
@@ -66,27 +76,27 @@ NULL
 
   stack <- grepl("+", to, fixed = TRUE) | grepl("+", from, fixed = TRUE)
 
-  data.frame(from, to, stack, use_cov, cov_req)
+  data.frame(from, to, cov_operator, cov_value, stack)
 }
 
 .pf_as_full_path_list <- function(x) unname(
   tapply(x, ~components, `terms.multifactor::path_frame`, simplify = FALSE)
 )
 
-.parse_coverage <- function(content, use_cov) {
+.parse_coverage <- function(content, full_cov) {
   # Fill in required coverage thresholds
-  # case when NO coverage:
-  cov_req <- vector("character", length = length(use_cov))
-  cov_req[!use_cov] <- ">= 0"
+  # `:` colon is shorthand for full coverage:
+  cov_req <- vector("character", length = length(full_cov))
+  cov_req[full_cov] <- ">= 1"
 
-  if (any(use_cov)) {
+  if (!all(full_cov)) {
     all_ops <- c(">", "<", ">=", "<=", "==", "!=")
     ops <- paste0(all_ops, collapse = "|")
 
     # t_cov is an index of coverage values with a specified threshold
-    t_cov <- grepl(paste0("[", ops, "]"), content[-1L]) & use_cov
+    t_cov <- grepl(paste0("[", ops, "]"), content[-1L]) & !full_cov
 
-    cov_req[use_cov & !t_cov] <- ">= 1"
+    cov_req[!full_cov & !t_cov] <- ">= 0"
 
     if (any(t_cov)) {
       cov_req[t_cov] <- .drop_trailing_spaces(
@@ -107,7 +117,11 @@ NULL
     }
   }
 
-  list(cov_req = cov_req, content = content)
+  list(
+    cov_operator = gsub(paste0("[^", ops, "]"), "", cov_req),
+    cov_value = as.numeric(gsub(".* ", "", cov_req)),
+    content = content
+  )
 }
 
 .drop_trailing_spaces <- function(x) gsub("^ | $", "", x)

@@ -40,12 +40,10 @@ NULL
   if (.drop.unmatched) x <- .trim_multifactor(x)
 
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_subset(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_subset(pf)
 
-  path_list <- terms(pm)
-
-  # full_path <- unlist(as.list(.select_std_path(x, path_list)), FALSE, FALSE)
+  path_list <- terms(pf)
 
   x <- .subset_by_path(x, path_list)
   return(x)

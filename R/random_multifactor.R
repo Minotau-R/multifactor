@@ -9,7 +9,11 @@
 #' @returns a randomly generated object of the specified class.
 #' @examples
 #' # Make a random multifactor object
-#' random_multifactor()
+#' x <- random_multifactor()
+#' x
+#'
+#' # Generate random paths through this multifactor
+#' random_path_frame(n = 3, x = x)
 #'
 #' # Use a (possibly random) igraph as input:
 #' random_multifactor(igraph::sample_gnp(6, 2 / 3))
@@ -199,4 +203,53 @@ random_linkmap <- function(x = list(lower = letters, UPPER = LETTERS),
     out <- out[, col.order]
   }
   return(out)
+}
+
+
+#' @rdname random_multifactor
+#' @name random_path_frame
+#' @importFrom stats runif
+#' @param n `Numeric scalar`, Integer: How many paths should be generated.
+#'     Default is `1`.
+#' @param n_steps `Numeric scalar`, Integer: How many steps should be generated.
+#'     Note that actual path lengths are likely longer than the number of
+#'     explicit nodes.
+#'     Default is `2`.
+#' @param x `multifactor` to generate random paths through.
+#'     Default is the result of `random_multifactor()`
+#' @param repeats `Logical scalar`, Whether the same term can appear in
+#'     `n_steps`. (Default: `FALSE`)
+#' @param p_cov `Numeric scalar`, Proportion (between 0-1) of steps that should
+#'     use coverage. (Default: 0.5).
+#' @export
+#'
+random_path_frame <- function(
+    n = 1L, n_steps = 2L, x = random_multifactor(),
+    repeats = FALSE, p_cov = 0.5
+) {
+  stopifnot(
+    "'x' must be a valid multifactor object." = inherits(x, multifactor),
+    "'p_cov' must be between 0 and 1 (proportion). " =
+      p_cov >= 0 && p_cov <= 1
+  )
+
+  cn <- colnames(x)
+  path_list <- replicate(n, sample(cn, n_steps, repeats), simplify = FALSE)
+
+  res <- lapply(path_list, select_path, x = x)
+
+  if(p_cov > 0) {
+    res <- lapply(res, .random_coverage, p_cov = p_cov)
+  }
+  res
+}
+
+.random_coverage <- function(.pf, p_cov) {
+  i <- c(FALSE, sample( c(TRUE, FALSE), NROW(.pf) -1L, TRUE, c(p_cov, 1-p_cov)))
+  .pf[["cov_operator"]] <- ">="
+  .pf[["cov_value"]] <- 0
+  .pf[["cov_operator"]][i] <- sample(c("<", ">", "<=", ">=", "=="), sum(i), TRUE)
+  .pf[["cov_value"]][i] <- sample(c(1, 1, round(runif(sum(i)), 1)), sum(i), FALSE)
+
+  .pf
 }

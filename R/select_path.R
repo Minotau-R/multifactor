@@ -28,11 +28,11 @@ NULL
 #'
 S7::method(select_path, multifactor) <- function(x, .path, ...) {
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_select(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_select(pf)
 
-  paths <- .select_by_path_frame(x, pm)
-  return(paths)
+  paths <- .select_enframe_path(x, pf)
+  path_frame(paths)
 }
 
 .path_check_valid_select <- function(x) {
@@ -46,23 +46,60 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 
 
 #' @importFrom dplyr bind_rows
-.select_by_path_frame <- function(x, pm) {
-  from_to <- terms(pm)
-  include <- from_to[-c(1L, length(from_to))]
-  from_to <- from_to[c(1L, length(from_to))]
+#' @importFrom utils tail
+.select_enframe_path <- function(x, pf) {
+  terms_pf <- terms(pf)
+  include <- terms_pf[-c(1L, length(terms_pf))]
+  from_to <- terms_pf[c(1L, length(terms_pf))]
 
   if (!length(include)) {
     include <- NULL
   }
-  full_path <- .select_path(x, terms = from_to, include)
+  full_path <- .select_path(x, from_to, include)
+
   i <- lapply(full_path, .path_to_path_frame_df)
+
+
+  if(any(cov_i <- .check_pf_cov_bool(pf))) {
+    cov_exprs <- .get_coverage_exprs(pf)
+
+    cov_vars <- vapply(
+      .coverage_get_terms_list(terms_pf, cov_i), tail, 1L,
+      FUN.VALUE = character(1L)
+    )
+
+    i <- lapply(i, .restore_coverage, cov_vars, cov_exprs)
+  }
+
 
   res <- dplyr::bind_rows(i, .id = "components")
   col_order <- c(seq.int(from = 2L, to = NCOL(res)), 1L)
 
-  path_frame(res[, col_order, drop = FALSE])
+  res <- res[, col_order, drop = FALSE]
+
+  res
 }
 
+.restore_coverage <- function(x, cov_vars, cov_exprs) {
+  inds <- lapply(cov_vars, match, x[["to"]])
+
+  if(any(lengths(inds) > 1L)) {
+    inds[[1L]] <- min(inds[[1L]])
+    for(i in seq.int(2L, length(inds))) {
+      inds[[i]] <- min(inds[[i]][inds[[i]] > inds[[i-1]]])
+    }
+  }
+
+  inds <- unlist(inds, FALSE, FALSE)
+  ops <- unlist(strsplit(cov_exprs, " ", fixed = TRUE))
+  vals <- as.numeric(ops[seq_along(ops) %% 2L == 0L])
+  ops  <- ops[seq_along(ops) %% 2L == 1L]
+
+  x <- `[<-`(x, inds, match("cov_value", colnames(x)), vals)
+  x <- `[<-`(x, inds, match("cov_operator", colnames(x)), ops)
+
+  x
+}
 
 .select_path <- function(x, terms, include = NULL, exclude = NULL, exact = NULL) {
   g <- `as.igraph.multifactor::multifactor`(x)
@@ -237,7 +274,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 #'
 .step_seq <- function(term_list, d) vapply(
   term_list,
-  FUN = rowsWithCol,
+  FUN = .rows_with_col,
   d = d,
   names = FALSE,
   FUN.VALUE = 0L,
@@ -253,7 +290,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 #' @description Helper function for `multifactor` to get names or indices of
 #' data frames that contain an id column
 #'
-rowsWithCol <- function(d, id, names = TRUE) {
+.rows_with_col <- function(d, id, names = TRUE) {
   rowInds <- which(Matrix::rowSums(d[, id, drop = FALSE] != 0L) == length(id))
   if (length(rowInds) == 0L) {
     return(0L)

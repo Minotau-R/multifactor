@@ -15,8 +15,8 @@ Methods for linkmap S7 container class
 \examples{
 # Setup
 a2b <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    b = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  b = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 
 # Create linkmap
@@ -29,6 +29,5 @@ dimnames(x)
 # Factor-like properties
 levels(x)
 nlevels(x)
-
 
 }

@@ -33,8 +33,8 @@ application-specific tags.}
 \examples{
 # Generate random linkage input
 x <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    A = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  A = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 
 # Create linkmap

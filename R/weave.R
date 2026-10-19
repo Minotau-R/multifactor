@@ -29,12 +29,12 @@ S7::method(weave, multifactor) <- function(
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
 
   .valid_path_input(.path)
-  pm <- .path_to_path_frame(.path)
-  .path_check_valid_weave(pm)
+  pf <- as_path_frame(.path)
+  .path_check_valid_weave(pf)
 
-  pm <- .select_by_path_frame(x, pm)
+  pf <- .select_enframe_path(x, pf)
 
-  full_path <- .pf_as_full_path_list(pm)
+  full_path <- .pf_as_full_path_list(pf)
   res <- lapply(full_path, .weave_full_path, x = x, out.format = "linkmap")
   res <- do.call(rbind.data.frame, res)
   res <- linkmap(res)

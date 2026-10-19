@@ -19,6 +19,7 @@ S3method(terms,"multifactor::path_frame")
 S3method(unique,"multifactor::linkmap")
 export(as_linkmap)
 export(as_multifactor)
+export(as_path_frame)
 export(draw_cards)
 export(linkmap)
 export(mf_as_graph_df)
@@ -29,6 +30,7 @@ export(poker_scores)
 export(quickbrownfox)
 export(random_linkmap)
 export(random_multifactor)
+export(random_path_frame)
 export(read_adjacency_list)
 export(select_path)
 export(test_enrichment)
@@ -58,7 +60,8 @@ importFrom(S7,
   new_class,
   new_generic,
   new_object,
-  new_property
+  new_property,
+  prop
 )
 importFrom(dplyr,bind_rows)
 importFrom(forcats,
@@ -91,12 +94,14 @@ importFrom(stats,
   formula,
   p.adjust,
   phyper,
-  reformulate
+  reformulate,
+  runif
 )
 importFrom(utils,
   count.fields,
   data,
   download.file,
-  stack
+  stack,
+  tail
 )
 importMethodsFrom(Matrix,"%&%")

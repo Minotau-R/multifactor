@@ -18,12 +18,12 @@ Define a path through a multifactor object.
 \examples{
 # Generate pair of random linkage input
 a2b <- data.frame(
-   a = sample(letters[seq(3)], 10, replace = TRUE),
-   b = sample(LETTERS[seq(3)], 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  b = sample(LETTERS[seq(3)], 10, replace = TRUE)
 )
 a2c <- data.frame(
-    a = sample(letters[seq(3)], 10, replace = TRUE),
-    c = sample(c("x", "y", "z"), 10, replace = TRUE)
+  a = sample(letters[seq(3)], 10, replace = TRUE),
+  c = sample(c("x", "y", "z"), 10, replace = TRUE)
 )
 
 # Create multifactor
