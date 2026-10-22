@@ -38,7 +38,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 .path_check_valid_select <- function(x) {
   if (.check_path_frame_uses_stack(x)) {
     stop(
-      "`weave_select()` '.path' cannot contain '+'.",
+      "`select_path()` '.path' cannot contain '+'.",
       "Use `stack()` to prepare input."
     )
   }

@@ -73,6 +73,7 @@ S7::method(weave, multifactor) <- function(
 #' @param all_terms `Character vector` of all path terms in sequence.
 #'     `.term_seq(x, y, link)`
 #' @importMethodsFrom Matrix %&%
+#' @importFrom Matrix Matrix crossprod colSums t
 #' @noRd
 #'
 .weave_to_dictionary_matrix <- function(link, all_terms) {

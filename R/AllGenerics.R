@@ -79,6 +79,27 @@ weave <- S7::new_generic("weave", "x", function(x, .path, ...) {
   S7::S7_dispatch()
 })
 
+#' Weave a path through an object and return coverage statistics
+#' @rdname weave_coverage-generic
+#' @name weave_coverage-generic
+#' @description `weave_coverage()` is an S7 generic that finds a path through a
+#'     relational object and return coverage statistics.
+#'
+#' @param x input object
+#' @param .path either a `formula` or a `character vector` of length 2 with the
+#'     names of the desired combination of feature types.
+#' @param ... additional arguments
+#' @returns a `linkmap` or `matrix`.
+#' @importFrom S7 S7_dispatch
+#' @export
+#' @examples
+#' # Available methods:
+#' weave_coverage
+#'
+weave_coverage <- S7::new_generic("weave", "x", function(x, .path, ...) {
+  S7::S7_dispatch()
+})
+
 #' Index a table and apply arbitrary code to it
 #' @rdname weave_apply-generic
 #' @name weave_apply-generic
@@ -127,3 +148,22 @@ weave_apply <- S7::new_generic(
 select_path <- S7::new_generic("select_path", "x", function(x, .path, ...) {
   S7::S7_dispatch()
 })
+
+#' Statistically estimate enrichment using relational data
+#' @name test_enrich-generic
+#' @rdname test_enrich-generic
+#' @description `test_enrich()` is an S7 generic that computes statistical
+#'     enrichment through a relational object.
+#' @param x input object
+#' @param ... additional arguments
+#' @param .data an R object, such as tabular data.
+#' @export
+#' @importFrom S7 S7_dispatch
+#' @returns a linkmap.
+#' @examples
+#' # Available methods:
+#' test_enrich
+#'
+test_enrich <- S7::new_generic("test_enrich", "x", function(
+    x, ..., .data = NULL
+) { S7::S7_dispatch() })

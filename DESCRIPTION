@@ -1,6 +1,6 @@
 Package: multifactor
 Title: S7 Classes for Relational Data
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
     person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
         role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-6891-734X")),
