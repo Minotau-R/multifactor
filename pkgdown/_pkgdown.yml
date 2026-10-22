@@ -20,10 +20,13 @@ reference:
   - weave
   - weave-methods
   - weave_coverage
+  - weave_coverage-methods
   - stack-methods
   - weave_apply
   - weave_apply-methods
   - weave_to_tbl
+  - test_enrich
+  - test_enrich-methods
 - title: Classes
 - contents:
   - multifactor
