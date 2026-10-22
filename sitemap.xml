@@ -32,12 +32,15 @@
 <url><loc>https://minotau-r.github.io/multifactor/reference/select_path-generic.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/select_path-methods.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/stack-methods.html</loc></url>
+<url><loc>https://minotau-r.github.io/multifactor/reference/test_enrich-generic.html</loc></url>
+<url><loc>https://minotau-r.github.io/multifactor/reference/test_enrich-methods.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/trade_goods.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/weave-generic.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/weave-methods.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/weave_apply-generic.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/weave_apply-methods.html</loc></url>
-<url><loc>https://minotau-r.github.io/multifactor/reference/weave_coverage.html</loc></url>
+<url><loc>https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.html</loc></url>
+<url><loc>https://minotau-r.github.io/multifactor/reference/weave_coverage-methods.html</loc></url>
 <url><loc>https://minotau-r.github.io/multifactor/reference/weave_to_tbl.html</loc></url>
 </urlset>
 

@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">multifactor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -167,13 +167,13 @@
 <span></span>
 <span><span class="va">input</span></span>
 <span><span class="co">#&gt;  [1] "s" "o" "m" "e" "c" "l" "t" "i" "n" "f" "r"</span></span></code></pre></div>
-<p>We can use the <code><a href="../reference/weave_coverage.html">weave_coverage()</a></code> function to calculate to
+<p>We can use the <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> function to calculate to
 what degree the input letters cover the words in our data set. This
 function behaves similarly to <code><a href="../reference/weave-generic.html">weave()</a></code> but comes with an
 additional argument, <code>.data</code>. For now, let’s plug in our
 input letters:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage.html">weave_coverage</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -211,7 +211,7 @@ the sentence:</p>
 <span><span class="va">input</span></span>
 <span><span class="co">#&gt; [1] "j" "u" "m" "p" "s" "o" "v" "e" "r"</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage.html">weave_coverage</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
 <span></span>

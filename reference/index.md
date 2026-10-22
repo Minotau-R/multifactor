@@ -6,8 +6,9 @@
   : Weave a path through an object
 - [`weave-methods`](https://minotau-r.github.io/multifactor/reference/weave-methods.md)
   : Weave a new linkmap from a multifactor
-- [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage.md)
-  [`test_enrichment()`](https://minotau-r.github.io/multifactor/reference/weave_coverage.md)
+- [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
+  : Weave a path through an object and return coverage statistics
+- [`weave()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-methods.md)
   : Perform enrichtment analysis from a weave
 - [`stack-methods`](https://minotau-r.github.io/multifactor/reference/stack-methods.md)
   : Combine levels across several linkmaps in a multifactor
@@ -17,6 +18,10 @@
   : Index a table by a multifactor and apply arbitrary code to it
 - [`weave_to_tbl()`](https://minotau-r.github.io/multifactor/reference/weave_to_tbl.md)
   : Expand a table based on possibly overlapping group membership.
+- [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)
+  : Statistically estimate enrichment using relational data
+- [`test_enrich-methods`](https://minotau-r.github.io/multifactor/reference/test_enrich-methods.md)
+  : Perform enrichtment tests on relational data
 
 ## Classes
 

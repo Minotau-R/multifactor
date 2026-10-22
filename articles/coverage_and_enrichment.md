@@ -89,7 +89,7 @@ We’ll need to generate some collection of letters as input data.
 `#>  [1] "s" "o" "m" "e" "c" "l" "t" "i" "n" "f" "r"`
 
 We can use the
-[`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage.md)
+[`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
 function to calculate to what degree the input letters cover the words
 in our data set. This function behaves similarly to
 [`weave()`](https://minotau-r.github.io/multifactor/reference/weave-generic.md)
@@ -97,7 +97,7 @@ but comes with an additional argument, `.data`. For now, let’s plug in
 our input letters:
 
 \
-`res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage.md)`(`\
+`res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
 `)`\
 \
@@ -138,7 +138,7 @@ sentence:
 `#> [1] "j" "u" "m" "p" "s" "o" "v" "e" "r"`
 
 \
-`res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage.md)`(`\
+`res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
 `)`\
 \
