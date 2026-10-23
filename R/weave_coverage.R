@@ -95,21 +95,52 @@ S7::method(weave_coverage, multifactor) <- function(
   cov_exprs <- .get_coverage_exprs(pf)
   res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
 
+  if(backweave <- sum(.check_pf_cov_bool(pf)[-NROW(pf)]) >= 1L) {
+    x_bw <- as.data.frame(
+      weave( x, formula(paste0(terms_pf, collapse = "~")))
+    )
+    x_bw[["set_size"]] <- unlist(
+      tapply(x_bw, stats::reformulate(tail(terms_pf, 1)),
+             function(ii) rep.int(
+               NROW(ii), times = length(unique(ii[[1L]]))
+             ),
+             simplify = FALSE), FALSE, FALSE
+    )
+  }
+
   for(i in seq_along(terms_list)) {
     x <- .weave_coverage_by_args(x, terms_list[[i]], cov_exprs[[i]], .data)
   }
 
-  res <- x[[res_name]]
+  res <- as.data.frame(x[[res_name]])
+
+  if(backweave) {
+    res[c("set_size", "coverage", "complete", "set_count")] <- NULL
+
+    res <- sort_by(
+      merge( x_bw, res, all.x = TRUE ),
+      formula(paste0("~", tail(terms_pf, 1L), " + ", terms_pf[1]))
+      )
+    res[["observed"]][is.na(res[["observed"]])] <- FALSE
+    res[["set_count"]] <- unlist(
+      tapply(res, stats::reformulate(tail(terms_pf, 1)),
+             function(ii) rep.int(
+               sum(ii[["observed"]]), times = unique(ii[["set_size"]])
+               ),
+             simplify = FALSE), FALSE, FALSE
+      )
+    res[["coverage"]] <- res[["set_count"]] / res[["set_size"]]
+    res[["complete"]] <- res[["coverage"]] == 1
+
+  }
+
   drop_cols <- setdiff(
     c("set_count", "set_size",  "coverage", "complete"), metric
     )
 
-  if(length(drop_cols)) {
-    res <- as.data.frame(res)
-    res[drop_cols] <- NULL
-    res <- as_linkmap(res)
-  }
-  res
+  if(length(drop_cols)) { res[drop_cols] <- NULL }
+
+  as_linkmap(res)
 }
 
 .get_coverage_exprs <- function(pf) {
