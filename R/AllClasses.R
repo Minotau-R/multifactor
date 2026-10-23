@@ -199,7 +199,9 @@ multifactor <- S7::new_class(
 #' @param x `data.frame` with the first two columns named `"from"` and `"to"`.
 #'     Optionally, additional columns (see Details)
 #' @param call `character` (Default: empty). If Input is a formula, captures the
-#'     literal content as a character string. Optionally,
+#'     literal content as a character string.
+#' @prop `terms` `Character vector` of names of the steps in order.
+#' @prop `links` `List of formulas`, each representing one step in the path.
 #' @details
 #' Rows represent edges in a path. Additional (optional) columns contain
 #' information about the edges:
@@ -224,6 +226,16 @@ path_frame <- S7::new_class(
       class = S7::class_character,
       getter = function(self) S7::prop(self, "call"),
       default = character()
+    ),
+    terms = S7::new_property(
+      class = S7::class_character,
+      getter = function(self) .get_path_terms.pf(self),
+      setter = function(self, value) .set_path_terms.pf(self, value)
+    ),
+    links = S7::new_property(
+      class = S7::class_list,
+      getter = function(self) .get_path_links.pf(self),
+      setter = function(self, value) .set_path_links.pf(self, value)
     )
   ),
   constructor = function(x, call = character()) {

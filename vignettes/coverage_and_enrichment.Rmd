@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 
 # Overview
 
+Among other things, the multifactor package provides a set of tools to calculate
+coverage and estimate enrichment for relational datasets. This type of operation 
+forms the basis for bioinformatics techniques such as pathway enrichment 
+analysis (PEA), but have application far beyond the biological sciences. 
 
 ## Setup 
 
@@ -33,10 +37,6 @@ library(patchwork)
 library(systemfonts)
 library(ragg)
 
-# Load demo data
-set.seed(2612)
-fox <- quickbrownfox()
-
 # Define utility function
 split_to_letters <- function(x) unique(
   unlist(
@@ -48,6 +48,19 @@ split_to_letters <- function(x) unique(
 
 ### Example Dataset: The Quick Brown Fox 
 
+We will use a toy data set of hierarchically structured data, namely the 
+sentence: 'The quick brown fox jumps over the lazy dog.' This sentence is a 
+pangram, meaning that all 26 letters of the English alphabet are represented. 
+Moreover, we have deconstructed the sentence to three levels; letters, words and
+constituents. 
+
+```{r 'load-qbf'}
+# Load the quick brown fox data set
+set.seed(2612)
+fox <- quickbrownfox()
+```
+
+We could represent these relations visually like so:
 
 ```{r 'prep-plots', echo = FALSE, fig.width=10, fig.height=6, dev='ragg_png'}
 word_lvs <- c("the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog")
@@ -97,15 +110,23 @@ lm1 + lm2 + plot_spacer() +
   )
 ```
 
+We can convince ourselves this same information is captured in the multifactor 
+object, `fox`. 
 ```{r 'show-data', message = FALSE}
 levels(fox)
 
 as.matrix(fox$letter2word)
 ```
 
-### Calculate coverage
-We'll need to generate some collection of letters as input data. 
+## Calculate coverage
+
+With coverage, we mean the proportion of items in a set that are present. In 
+other words, going back to our example, given some number of letters, we can 
+calculate which words we can make, and how complete they are. 
+
+To demonstrate, we'll need to generate some collection of letters as input data:  
 ```{r 'setup-example1', message = FALSE}
+# Generate some collection of letters
 input <- split_to_letters("some collection of letters")
 
 input
@@ -120,7 +141,7 @@ res <- weave_coverage(
   x = fox, .path = letter ~ word, .data = input
 )
 
-res
+as.data.frame(res)
 ```
 
 Now, let's use a second set of letters that are explicitly part of the sentence: 
@@ -135,7 +156,7 @@ res <- weave_coverage(
   x = fox, .path = letter ~ word, .data = input
 )
 
-res
+as.data.frame(res)
 ```
 Notice that the column named `"complete"` marks two particular words as complete 
 now. 
@@ -144,4 +165,58 @@ We can use the `subset()` method for `linkmap` to automatically filter for
 complete cases:
 ```{r 'weave-subset', message = FALSE}
 subset(res)
+```
+
+## Enrichment testing
+
+The `test_enrich()` allows for quick hypothesis testing using the same syntax: 
+
+```{r 'test-enrich1', message = FALSE}
+test_enrich(x = fox, .path = letter ~ word, .data = input)
+```
+
+Alternatively, `test_enrich()` can also be run on the result of an earlier 
+`weave_coverage()` call for the same results: 
+```{r 'test-enrich2', message = FALSE}
+test_enrich(res)
+```
+## Defining coverage
+
+By default, coverage is only calculated between the data types involved in the 
+last step of the path: 
+
+```{r 'weave-example3a', message = FALSE}
+path <- select_path(fox, letter ~ constituent)
+path
+
+input_full <- split_to_letters("jumps over")
+input_no_r <- split_to_letters("jumps ove")
+
+res_full <- weave_coverage(
+  x = fox, .path = letter ~ constituent, .data = input_full
+)
+
+res_no_r <- weave_coverage(
+  x = fox, .path = letter ~ constituent, .data = input_no_r
+)
+
+as.data.frame(res_full)
+as.data.frame(res_no_r)
+```
+
+
+```{r 'weave-example3b', message = FALSE}
+path2 <- letter ~ word >= 0 ~ constituent >= 0
+path2
+
+res_full <- weave_coverage(
+  x = fox, .path = path2, .data = input_full
+)
+
+res_no_r <- weave_coverage(
+  x = fox, .path = path2, .data = input_no_r
+)
+
+as.data.frame(res_full)
+as.data.frame(res_no_r)
 ```

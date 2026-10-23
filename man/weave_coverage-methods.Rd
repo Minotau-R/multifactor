@@ -3,17 +3,6 @@
 \name{weave_coverage-methods}
 \alias{weave_coverage-methods}
 \title{Perform enrichtment analysis from a weave}
-\usage{
-## S7 method for class <multifactor::multifactor>
-weave(
-  x,
-  .path,
-  .data = NULL,
-  metric = c("set_count", "set_size", "coverage", "complete"),
-  out.format = c("linkmap", "matrix"),
-  .data_column = "row.names"
-)
-}
 \arguments{
 \item{x}{a \code{multifactor}}
 
@@ -62,6 +51,6 @@ cheat
 .path = card ~ rank ~ straight > 0.2
 result <- weave_coverage(scores, .path, .data = cheat)
 result
-test_enrichment(result)
+test_enrich(result)
 
 }

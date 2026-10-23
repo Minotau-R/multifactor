@@ -15,7 +15,6 @@
 #'     feature IDs
 #' @returns a `linkmap` or `matrix` with the desired coverage information in
 #'     the @metadata slot.
-#' @export
 #' @examples
 #' set.seed(2612)
 #' # Draw five cards from a deck
@@ -38,8 +37,10 @@
 #' .path = card ~ rank ~ straight > 0.2
 #' result <- weave_coverage(scores, .path, .data = cheat)
 #' result
-#' test_enrichment(result)
+#' test_enrich(result)
 #'
+NULL
+
 S7::method(weave_coverage, multifactor) <- function(
     x, .path, .data = NULL,
     metric = c("set_count", "set_size", "coverage", "complete"),
@@ -64,10 +65,8 @@ S7::method(weave_coverage, multifactor) <- function(
     res <- .coverage_single_step(x, terms_pf, .data, metric)
   } else {
     if(!.check_path_frame_uses_coverage(pf)) {
-      stop(
-        "Final path has more than two steps.\n",
-        "Please indicate which step(s) should consider coverage."
-      )
+      pf[["cov_operator"]][NROW(pf)] <- ">"
+      pf[["cov_value"]][NROW(pf)] <- 0
     }
     res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
   }
