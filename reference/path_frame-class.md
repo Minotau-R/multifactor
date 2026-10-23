@@ -20,7 +20,7 @@ path_frame(x, call = character())
 - call:
 
   `character` (Default: empty). If Input is a formula, captures the
-  literal content as a character string. Optionally,
+  literal content as a character string.
 
 ## Value
 
@@ -37,6 +37,16 @@ information about the edges:
 
 - `coverage` `numeric`. The proportional coverage threshold (or 0).
 
+## Additional properties
+
+- `@terms`:
+
+  `Character vector` of names of the steps in order.
+
+- `@links`:
+
+  `List of formulas`, each representing one step in the path.
+
 ## Examples
 
 ``` r
@@ -46,5 +56,7 @@ path_frame
 #> @ constructor: function(x, call) {...}
 #> @ validator  : function(self) {...}
 #> @ properties :
-#>  $ call: <character>
+#>  $ call : <character>
+#>  $ terms: <character>
+#>  $ links: <list>     
 ```

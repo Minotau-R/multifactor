@@ -75,7 +75,7 @@ Optionally, additional columns (see Details)</p></dd>
 
 <dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
 <dd><p><code>character</code> (Default: empty). If Input is a formula, captures the
-literal content as a character string. Optionally,</p></dd>
+literal content as a character string.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -89,6 +89,19 @@ information about the edges:</p><ul><li><p><code>components</code> <code>integer
 <li><p><code>stack</code> <code>logical</code>. Whether the vertex contains merged data types.</p></li>
 <li><p><code>coverage</code> <code>numeric</code>. The proportional coverage threshold (or 0).</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="additional-properties">Additional properties<a class="anchor" aria-label="anchor" href="#additional-properties"></a></h2>
+
+
+<dl><dt><code>@terms</code></dt>
+<dd><p><code>Character vector</code> of names of the steps in order.</p></dd>
+
+
+<dt><code>@links</code></dt>
+<dd><p><code>List of formulas</code>, each representing one step in the path.</p></dd>
+
+
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -98,7 +111,9 @@ information about the edges:</p><ul><li><p><code>components</code> <code>integer
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ constructor: function(x, call) {...}</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ validator  : function(self) {...}</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ properties :</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ call: &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ call : &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ terms: &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ links: &lt;list&gt;     </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

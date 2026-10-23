@@ -2,20 +2,6 @@
 
 Perform enrichtment analysis from a weave
 
-## Usage
-
-``` r
-## S7 method for class <multifactor::multifactor>
-weave(
-  x,
-  .path,
-  .data = NULL,
-  metric = c("set_count", "set_size", "coverage", "complete"),
-  out.format = c("linkmap", "matrix"),
-  .data_column = "row.names"
-)
-```
-
 ## Arguments
 
 - x:
@@ -139,6 +125,16 @@ result
 #>  $ set_size : int  20 20 20 20 20 20 20 20 20 20 ...
 #>  $ coverage : num  0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 ...
 #>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
-test_enrichment(result)
-#> Error in test_enrichment(result): could not find function "test_enrichment"
+test_enrich(result)
+#>                  expected observed fold log_fold     p.value      p.adj
+#> Ace to 5       0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 2 to 6         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 3 to 7         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 4 to 8         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 5 to 9         0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 6 to 10        0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 7 to Jack      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 8 to Queen     0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> 9 to King      0.09615385      NaN  NaN      NaN 1.000000000 1.00000000
+#> Royal straight 0.09615385     0.25  2.6 1.378512 0.005965463 0.05965463
 ```

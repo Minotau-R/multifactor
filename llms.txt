@@ -37,7 +37,7 @@ site.](https://minotau-r.github.io/multifactor/articles/multifactor.html)
   : Weave a new linkmap from a multifactor
 - [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
   : Weave a path through an object and return coverage statistics
-- [`weave()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-methods.md)
+- [`weave_coverage-methods`](https://minotau-r.github.io/multifactor/reference/weave_coverage-methods.md)
   : Perform enrichtment analysis from a weave
 - [`stack-methods`](https://minotau-r.github.io/multifactor/reference/stack-methods.md)
   : Combine levels across several linkmaps in a multifactor
