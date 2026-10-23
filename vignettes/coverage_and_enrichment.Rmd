@@ -219,4 +219,18 @@ res_no_r <- weave_coverage(
 
 as.data.frame(res_full)
 as.data.frame(res_no_r)
+
+path3 <- letter ~ word > 0 ~ constituent > 0
+path3
+
+res_full2 <- weave_coverage(
+  x = fox, .path = path3, .data = input_full
+)
+
+res_no_r2 <- weave_coverage(
+  x = fox, .path = path3, .data = input_no_r
+)
+
+as.data.frame(res_full2)
+as.data.frame(res_no_r2)
 ```
