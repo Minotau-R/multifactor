@@ -521,7 +521,92 @@ involved in the last step of the path:</p>
 <span><span class="co">#&gt; 31      t     subject    FALSE         3       15 0.2000000    FALSE</span></span>
 <span><span class="co">#&gt; 32      u     subject     TRUE         3       15 0.2000000    FALSE</span></span>
 <span><span class="co">#&gt; 33      w     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject    FALSE         3       15 0.2000000    FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 34      x     subject    FALSE         3       15 0.2000000    FALSE</span></span>
+<span></span>
+<span><span class="va">path3</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="va">constituent</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span><span class="va">path3</span></span>
+<span><span class="co">#&gt; letter ~ word &gt; 0 ~ constituent &gt; 0</span></span>
+<span></span>
+<span><span class="va">res_full2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path3</span>, .data <span class="op">=</span> <span class="va">input_full</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res_no_r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path3</span>, .data <span class="op">=</span> <span class="va">input_no_r</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_full2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    letter constituent set_size observed set_count  coverage complete</span></span>
+<span><span class="co">#&gt; 1       a      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 2       d      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 3       e      object       10     TRUE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 4       g      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 5       h      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 6       l      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 7       o      object       10     TRUE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 8       t      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 9       y      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 10      z      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 11      e   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 12      j   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 13      m   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 14      o   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 15      p   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 16      r   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 17      s   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 18      u   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 19      v   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
+<span><span class="co">#&gt; 20      b     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 21      c     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 22      e     subject       15     TRUE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 23      f     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 24      h     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 25      i     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 26      k     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 27      n     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 28      o     subject       15     TRUE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 29      q     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 30      r     subject       15     TRUE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 31      t     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 32      u     subject       15     TRUE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 33      w     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="co">#&gt; 34      x     subject       15    FALSE         4 0.2666667    FALSE</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_no_r2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    letter constituent set_size observed set_count  coverage complete</span></span>
+<span><span class="co">#&gt; 1       a      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 2       d      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 3       e      object       10     TRUE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 4       g      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 5       h      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 6       l      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 7       o      object       10     TRUE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 8       t      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 9       y      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 10      z      object       10    FALSE         2 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 11      e   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 12      j   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 13      m   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 14      o   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 15      p   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 16      r   predicate        9    FALSE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 17      s   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 18      u   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 19      v   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
+<span><span class="co">#&gt; 20      b     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 21      c     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 22      e     subject       15     TRUE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 23      f     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 24      h     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 25      i     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 26      k     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 27      n     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 28      o     subject       15     TRUE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 29      q     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 30      r     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 31      t     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 32      u     subject       15     TRUE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 33      w     subject       15    FALSE         3 0.2000000    FALSE</span></span>
+<span><span class="co">#&gt; 34      x     subject       15    FALSE         3 0.2000000    FALSE</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

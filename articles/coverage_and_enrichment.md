@@ -462,4 +462,89 @@ in the last step of the path:
 `#> 31      t     subject    FALSE         3       15 0.2000000    FALSE`\
 `#> 32      u     subject     TRUE         3       15 0.2000000    FALSE`\
 `#> 33      w     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 34      x     subject    FALSE         3       15 0.2000000    FALSE`
+`#> 34      x     subject    FALSE         3       15 0.2000000    FALSE`\
+\
+`path3`` ``<-`` ``letter`` ``~`` ``word`` ``>`` ``0`` ``~`` ``constituent`` ``>`` ``0`\
+`path3`\
+`#> letter ~ word > 0 ~ constituent > 0`\
+\
+`res_full2`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
+`  x ``=`` ``fox``, .path ``=`` ``path3``, .data ``=`` ``input_full`\
+`)`\
+\
+`res_no_r2`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
+`  x ``=`` ``fox``, .path ``=`` ``path3``, .data ``=`` ``input_no_r`\
+`)`\
+\
+[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_full2``)`\
+`#>    letter constituent set_size observed set_count  coverage complete`\
+`#> 1       a      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 2       d      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 3       e      object       10     TRUE         2 0.2000000    FALSE`\
+`#> 4       g      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 5       h      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 6       l      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 7       o      object       10     TRUE         2 0.2000000    FALSE`\
+`#> 8       t      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 9       y      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 10      z      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 11      e   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 12      j   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 13      m   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 14      o   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 15      p   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 16      r   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 17      s   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 18      u   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 19      v   predicate        9     TRUE         9 1.0000000     TRUE`\
+`#> 20      b     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 21      c     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 22      e     subject       15     TRUE         4 0.2666667    FALSE`\
+`#> 23      f     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 24      h     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 25      i     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 26      k     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 27      n     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 28      o     subject       15     TRUE         4 0.2666667    FALSE`\
+`#> 29      q     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 30      r     subject       15     TRUE         4 0.2666667    FALSE`\
+`#> 31      t     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 32      u     subject       15     TRUE         4 0.2666667    FALSE`\
+`#> 33      w     subject       15    FALSE         4 0.2666667    FALSE`\
+`#> 34      x     subject       15    FALSE         4 0.2666667    FALSE`\
+[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_no_r2``)`\
+`#>    letter constituent set_size observed set_count  coverage complete`\
+`#> 1       a      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 2       d      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 3       e      object       10     TRUE         2 0.2000000    FALSE`\
+`#> 4       g      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 5       h      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 6       l      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 7       o      object       10     TRUE         2 0.2000000    FALSE`\
+`#> 8       t      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 9       y      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 10      z      object       10    FALSE         2 0.2000000    FALSE`\
+`#> 11      e   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 12      j   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 13      m   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 14      o   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 15      p   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 16      r   predicate        9    FALSE         8 0.8888889    FALSE`\
+`#> 17      s   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 18      u   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 19      v   predicate        9     TRUE         8 0.8888889    FALSE`\
+`#> 20      b     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 21      c     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 22      e     subject       15     TRUE         3 0.2000000    FALSE`\
+`#> 23      f     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 24      h     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 25      i     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 26      k     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 27      n     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 28      o     subject       15     TRUE         3 0.2000000    FALSE`\
+`#> 29      q     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 30      r     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 31      t     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 32      u     subject       15     TRUE         3 0.2000000    FALSE`\
+`#> 33      w     subject       15    FALSE         3 0.2000000    FALSE`\
+`#> 34      x     subject       15    FALSE         3 0.2000000    FALSE`
