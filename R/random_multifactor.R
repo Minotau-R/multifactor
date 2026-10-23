@@ -241,6 +241,9 @@ random_path_frame <- function(
   if(p_cov > 0) {
     res <- lapply(res, .random_coverage, p_cov = p_cov)
   }
+  if(n == 1L) {
+    res <- res[[1L]]
+  }
   res
 }
 

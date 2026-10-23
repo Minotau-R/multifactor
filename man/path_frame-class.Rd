@@ -11,7 +11,7 @@ path_frame(x, call = character())
 Optionally, additional columns (see Details)}
 
 \item{call}{\code{character} (Default: empty). If Input is a formula, captures the
-literal content as a character string. Optionally,}
+literal content as a character string.}
 }
 \value{
 a \code{path_frame} object.
@@ -34,3 +34,11 @@ information about the edges:
 path_frame
 
 }
+\section{Additional properties}{
+
+\describe{
+\item{\code{@terms}}{\verb{Character vector} of names of the steps in order.}
+
+\item{\code{@links}}{\verb{List of formulas}, each representing one step in the path.}
+}}
+

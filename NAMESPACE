@@ -87,6 +87,8 @@ importFrom(igraph,
 importFrom(rlang,
   check_dots_empty0,
   dots_list,
+  f_lhs,
+  f_rhs,
   is_missing
 )
 importFrom(stats,
