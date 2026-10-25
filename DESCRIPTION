@@ -27,6 +27,7 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     anansi,
     ggplot2,
+    ggforce,
     patchwork,
     ragg,
     systemfonts,

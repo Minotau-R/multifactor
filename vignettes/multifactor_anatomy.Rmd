@@ -1,0 +1,194 @@
+---
+title: "multifactor_anatomy"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{multifactor_anatomy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(multifactor)
+```
+
+### Visual representation of the linkmaps in our data set. 
+```{r, 'plot-linkmap'}
+#| message=FALSE, echo=FALSE, fig.width=12, fig.height=6, dev='ragg_png'
+
+library(multifactor)
+
+# Wrangling
+library(dplyr)
+
+# Plotting
+library(ggplot2)
+library(systemfonts)
+library(ragg)
+
+library(ggforce)
+
+require_font(
+  "Noto Color Emoji",
+  repositories = "Google Fonts", verbose = FALSE
+)
+
+# Load demo data
+set.seed(2612)
+tp <- trade_posts()
+
+e <- tapply(trade_posts(raw.data = TRUE), ~group, `[[<-`, "group", value = NULL)
+
+.to_plot_df <- function(x, e) {
+  l <- colnames(x)[[1L]]
+  r <- colnames(x)[[2L]]
+  res <- rbind(
+    data.frame(
+      rbind(
+        e[[l]][match(x[[l]], levels(x)[[l]]), ],
+        e[[r]][match(x[[r]], levels(x)[[r]]), ]
+      ),
+      y = rep(rev(seq_len(NROW(x))), 2),
+      x = rep(c(-1, -1 / 2), each = NROW(x))
+    ),
+    data.frame(
+      name = c(l, r),
+      emoji = c("", ""),
+      y = NROW(x) + 1,
+      x = c(-1, -1 / 2)
+    )
+  )
+  res[["header"]] <- res[["name"]] %in% names(e)
+  res[["group_linkmap"]] <- FALSE
+  res[["group_multifactor"]] <- TRUE
+  return(res)
+}
+
+plot_dfs <- lapply(tp, .to_plot_df, e)
+
+plot_dfs[[1]]$group_linkmap <- TRUE
+plot_dfs[[1]]$group_multifactor <- FALSE
+
+plot_dfs[[2]]$x <- plot_dfs[[2]]$x + 1 + 2 / 3.5
+plot_dfs[[2]]$y <- plot_dfs[[2]]$y - 20 / 12
+
+plot_dfs[[3]]$x <- plot_dfs[[3]]$x + 1 + 3 / 3.5
+plot_dfs[[3]]$y <- plot_dfs[[3]]$y - 10 / 12
+
+plot_dfs[[4]]$x <- plot_dfs[[4]]$x + 1 + 4 / 3.5
+plot_dfs[[4]]$y <- plot_dfs[[4]]$y
+
+plot_dfs[[5]]$x <- plot_dfs[[5]]$x + 1 + 5 / 3.5
+plot_dfs[[5]]$y <- plot_dfs[[5]]$y + 10 / 12
+
+plot_dfs[[6]]$x <- plot_dfs[[6]]$x + 1 + 6 / 3.5
+plot_dfs[[6]]$y <- plot_dfs[[6]]$y + 20 / 12
+
+
+first_linkmap <- plot_dfs[[1L]]
+all_linkmap   <- do.call(rbind, plot_dfs)
+other_linkmap <- filter(all_linkmap, group_multifactor) 
+
+
+  
+ggplot() +
+  aes(
+    x = x, y = y,
+  ) +
+  
+  # Bunched linkmaps
+  lapply(
+    rev(plot_dfs[-1]), function(x) list(
+      geom_tile(data = x, aes(fill = header), colour = "black", linewidth = 1 / 2),
+      geom_text(data = filter(x, header), aes(label = name), size = 4),
+      geom_text(
+        data = filter(x, !header), aes(label = emoji), size = 5,
+        family = "emoji"
+      )
+    )
+  ) +
+  geom_tile(
+    data = first_linkmap, aes(fill = header), 
+    colour = "black", linewidth = 1 / 2
+    ) +
+  geom_text(
+    data = filter(first_linkmap, header), aes(label = name), 
+    size = 4
+    ) +
+  geom_text(
+    data = filter(first_linkmap, !header), aes(label = emoji), 
+    size = 5, family = "emoji"
+    ) +
+  
+  ggforce::geom_mark_rect(
+    
+    data = all_linkmap %>% 
+      reframe(x = range(x), y = range(y) * 0.9), 
+    x0 = -2.5, y0 = 14,
+    description = "multifactor", 
+    colour = "dodgerblue", 
+    label.fill = "dodgerblue",
+
+    #label.colour = "inherit", 
+    label.fontsize = 16,
+        label.fontface = "bold",
+    linewidth = 2, 
+    expand = 1/15) +
+
+    ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 12,
+    description = "linkmap", 
+    colour = "skyblue", 
+    label.fill = "skyblue",
+    label.fontsize = 16, 
+    label.fontface = "bold",
+    linewidth = 2, 
+    expand = 1/20) +
+  
+    ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 10,
+    aes(x = x -0.25 , filter = header),
+    description = "feature type", 
+    colour = "orange", 
+    label.fill = "orange",
+    label.fontsize = 16, 
+    label.fontface = "bold",
+    linewidth = 2, 
+    expand = 1/80) +
+  
+  ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 8,
+    aes(filter = !header, x = min(x), y = y),
+    description = "level", 
+    colour = "gold", 
+    label.fill = "gold",
+    label.fontsize = 16, 
+    label.fontface = "bold",
+    linewidth = 2, 
+    expand = 1/80) +
+  
+  scale_y_continuous(expand = expansion(0, c(2, 5))) + 
+  scale_x_continuous(expand = expansion(0, c(2, 0.5))) +
+
+  scale_fill_manual(values = c("TRUE" = "lightgray", "FALSE" = "white")) +
+  guides(fill = "none") +
+  theme_void()
+
+# Doesn't render on github.
+# Uncomment following two lines and run locally to update fig.
+
+# pngfile <- file.path("images", "plot-linkmap.png")
+# ggsave(pngfile, p, device = ragg::agg_png)
+
+
+# knitr::include_graphics("images/plot-linkmap.png")
+```
