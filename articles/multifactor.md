@@ -110,6 +110,8 @@ data set. However, we also notice that the column names - the types of
 goods - can differ.
 
 \
+[`length`](https://rdrr.io/r/base/length.html)`(``tp``)`\
+`#> [1] 6`\
 `tp``[[``2``]``]`\
 `#> A multifactor::linkmap data.frame S7_object: 9 rows.`\
 `#>   clothing furniture`\
@@ -130,28 +132,7 @@ goods - can differ.
 `#> @ metadata: 2 variables: `\
 `#> List of 2`\
 `#>  $ clothing_emoji : chr  "🧣" "🧣" "🧤" "🎩" ...`\
-`#>  $ furniture_emoji: chr  "🛋" "🗄" "🗑" "🗑" ...`\
-`tp``[[``3``]``]`\
-`#> A multifactor::linkmap data.frame S7_object: 9 rows.`\
-`#>         books instruments`\
-`#> 1  green book     trumpet`\
-`#> 2    red book      guitar`\
-`#> 3   blue book      guitar`\
-`#> 4   blue book        drum`\
-`#> 5  green book    keyboard`\
-`#> 6 orange book    keyboard`\
-`#> 7    red book      fiddle`\
-`#> 8 orange book   saxophone`\
-`#> 9  plain book   saxophone`\
-`#> `\
-`#> @ levels:   2 variables: `\
-`#>  $ books       : 6 Levels: fancy book ... plain book `\
-`#>  $ instruments : 6 Levels: trumpet ... saxophone `\
-`#> `\
-`#> @ metadata: 2 variables: `\
-`#> List of 2`\
-`#>  $ books_emoji      : chr  "📗" "📕" "📘" "📘" ...`\
-`#>  $ instruments_emoji: chr  "🎺" "🎸" "🎸" "🥁" ...`
+`#>  $ furniture_emoji: chr  "🛋" "🗄" "🗑" "🗑" ...`
 
 #### Visual representation of the linkmaps in our data set.
 
@@ -242,6 +223,10 @@ levels:
 Note that levels of the same type are automatically unified across all
 component linkmaps with that type of level.
 
+#### Overview of multifactor classes and terms.
+
+![](images/multifactor-anatomy.png)
+
 ## weave() a path
 
 Going back to our trading post example, let’s say we’d want to get some
@@ -329,11 +314,11 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `g`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``tp``)`\
 `g`\
-`#> IGRAPH 47391b4 UN-- 6 6 -- `\
+`#> IGRAPH dbe77a2 UN-- 6 6 -- `\
 `#> + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji`\
 `#> | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji`\
 `#> | (e/n), fruit_emoji (e/n)`\
-`#> + edges from 47391b4 (vertex names):`\
+`#> + edges from dbe77a2 (vertex names):`\
 `#> [1] books      --furniture   clothing   --furniture   books      --instruments`\
 `#> [4] fruit      --instruments furniture  --marbles     instruments--marbles`\
 `# Plot graph across data types`\
@@ -347,9 +332,9 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `lg`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)`\
 `lg`\
-`#> IGRAPH 84b3a7b UN-B 12 18 -- `\
+`#> IGRAPH 19dd652 UN-B 12 18 -- `\
 `#> + attr: type (v/l), name (v/c)`\
-`#> + edges from 84b3a7b (vertex names):`\
+`#> + edges from 19dd652 (vertex names):`\
 `#>  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  `\
 `#>  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves `\
 `#>  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    `\
@@ -676,11 +661,12 @@ If stored in a file in adjacency list format, it may look like this:
 `#>  [1] Matrix_1.7-6       gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1    `\
 `#>  [5] tidyselect_1.2.1   jquerylib_0.1.4    scales_1.4.0       textshaping_1.0.5 `\
 `#>  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.23-1     R6_2.6.1          `\
-`#> [13] generics_0.1.4     knitr_1.52         htmlwidgets_1.6.4  forcats_1.0.1     `\
-`#> [17] tibble_3.3.1       desc_1.4.3         RColorBrewer_1.1-3 bslib_0.12.0      `\
-`#> [21] pillar_1.11.1      rlang_1.3.0        cachem_1.1.0       xfun_0.62         `\
-`#> [25] fs_2.1.0           sass_0.4.10        S7_0.2.2           otel_0.2.0        `\
-`#> [29] cli_3.6.6          withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5    `\
-`#> [33] digest_0.6.39      grid_4.6.1         lifecycle_1.0.5    vctrs_0.7.3       `\
-`#> [37] evaluate_1.0.5     glue_1.8.1         farver_2.1.2       rmarkdown_2.32    `\
-`#> [41] tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9`
+`#> [13] generics_0.1.4     knitr_1.52         MASS_7.3-66        htmlwidgets_1.6.4 `\
+`#> [17] forcats_1.0.1      polyclip_1.10-7    tibble_3.3.1       desc_1.4.3        `\
+`#> [21] RColorBrewer_1.1-3 bslib_0.12.0       pillar_1.11.1      rlang_1.3.0       `\
+`#> [25] cachem_1.1.0       xfun_0.62          fs_2.1.0           sass_0.4.10       `\
+`#> [29] S7_0.2.2           otel_0.2.0         cli_3.6.6          tweenr_2.0.3      `\
+`#> [33] withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39     `\
+`#> [37] grid_4.6.1         ggforce_0.5.0      lifecycle_1.0.5    vctrs_0.7.3       `\
+`#> [41] evaluate_1.0.5     glue_1.8.1         farver_2.1.2       rmarkdown_2.32    `\
+`#> [45] tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9`
