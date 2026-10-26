@@ -92,8 +92,11 @@ e <- tapply(trade_posts(raw.data = TRUE), ~group, `[[<-`, "group", value = NULL)
     )
   )
   res[["header"]] <- res[["name"]] %in% names(e)
+  res[["group_linkmap"]] <- FALSE
+  res[["group_multifactor"]] <- TRUE
   return(res)
 }
+
 ```
 
 # multifactor and linkmap objects
@@ -126,14 +129,18 @@ the levels as usual.
 We can see that we have several of these types of trade posts in our data set. 
 However, we also notice that the column names - the types of goods - can differ. 
 ```{r 'linkmap-object-more'}
+length(tp)
 tp[[2]]
-tp[[3]]
 ```
 
 ### Visual representation of the linkmaps in our data set. 
 ```{r, 'plot-linkmap'}
 #| message=FALSE, echo=FALSE, fig.width=8, fig.height=4, dev='ragg_png'
+
 plot_dfs <- lapply(tp, .to_plot_df, e)
+
+plot_dfs[[1]]$group_linkmap <- TRUE
+plot_dfs[[1]]$group_multifactor <- FALSE
 
 plot_dfs[[2]]$x <- plot_dfs[[2]]$x + 1 + 2 / 3.5
 plot_dfs[[2]]$y <- plot_dfs[[2]]$y - 20 / 12
@@ -218,13 +225,129 @@ nlevels(tp)
 Note that levels of the same type are automatically unified across all component
 linkmaps with that type of level.
 
-```{r 'plot-multifactor', echo = FALSE}
-main_graph <- data.frame(
-  label = c("fruit", "marbles", "clothing", "instruments", "furniture"),
-  x = c(0, 2 / 3, 1, 4 / 3, 2),
-  y = (c(1 / 2, 1 / 3, 2 / 3, 1 / 3, 1 / 2) * 20)
-)
+### Overview of multifactor classes and terms. 
+```{r 'multifactor-anatomy'}
+#| message=FALSE, echo=FALSE, fig.width=12, fig.height=6, dev='ragg_png'
+
+first_linkmap <- plot_dfs[[1L]]
+all_linkmap   <- do.call(rbind, plot_dfs)
+other_linkmap <- filter(all_linkmap, group_multifactor) 
+
+a <- ggplot() +
+  aes(
+    x = x, y = y,
+  ) +
+  
+  # Bunched linkmaps
+  lapply(
+    rev(plot_dfs[-1]), function(x) list(
+      geom_tile(data = x, aes(fill = header), colour = "black", linewidth = 1 / 2),
+      geom_text(data = filter(x, header), aes(label = name), size = 4),
+      geom_text(
+        data = filter(x, !header), aes(label = emoji), size = 5,
+        family = "emoji"
+      )
+    )
+  ) +
+  geom_tile(
+    data = first_linkmap, aes(fill = header), 
+    colour = "black", linewidth = 1 / 2
+    ) +
+  geom_text(
+    data = filter(first_linkmap, header), aes(label = name), 
+    size = 4
+    ) +
+  geom_text(
+    data = filter(first_linkmap, !header), aes(label = emoji), 
+    size = 5, family = "emoji"
+    ) +
+  
+  ggforce::geom_mark_rect(
+    
+    data = all_linkmap %>% 
+      reframe(x = range(x), y = 1 + range(y) * 0.8), 
+    x0 = -2.5, y0 = 0.5,
+    aes(
+      label = "multifactor",
+    description = "A collection of several linkmaps.", 
+    ), 
+    colour = "dodgerblue", 
+    label.fill = "dodgerblue",
+
+    #label.colour = "inherit", 
+    label.fontsize = 14,
+
+        con.size = 1, 
+    linewidth = 3/2,
+    expand = 1/15) +
+
+    ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 4.5,
+    aes(
+      label = "linkmap", 
+      description =  "Maps how the levels of two feature types interact."
+      ), 
+
+    colour = "skyblue", 
+    label.fill = "skyblue",
+    label.fontsize = 14.5, 
+    con.size = 1, 
+    linewidth = 3/2,
+    expand = 1/20) +
+  
+    ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 10.75,
+    aes(
+      x = x -0.25 , filter = header,
+      label = "feature type", 
+      description =  "One category or other modality of data."
+      ),
+    
+    colour = "orange", 
+    label.fill = "orange",
+    label.fontsize = 14, 
+  #  label.fontface = "bold",
+    con.size = 1, 
+    linewidth = 3/2,
+    expand = 1/80) +
+  
+  ggforce::geom_mark_rect(
+    data = first_linkmap, 
+    x0 = -2.5, y0 = 7.75,
+    aes(
+      filter = !header, x = min(x), y = y, 
+        label = "level", 
+    description =  "A member of a feature type."
+    ),
+
+    colour = "gold", 
+    label.fill = "gold",
+    label.fontsize = 14, 
+    con.size = 1, 
+    linewidth = 3/2, 
+    expand = 1/80
+    ) +
+  
+  scale_y_continuous(expand = expansion(0, c(2, 2))) + 
+  scale_x_continuous(expand = expansion(0, c(2, 0.155))) +
+
+  scale_fill_manual(values = c("TRUE" = "lightgray", "FALSE" = "white")) +
+  guides(fill = "none") +
+  theme_void()
+
+ #  a
+ # Doesn't render on github.
+ # Uncomment following two lines and run locally to update fig.
+
+ # pngfile <- file.path("images", "multifactor-anatomy.png")
+ #  ggsave(pngfile, a, device = ragg::agg_png)
+ # 
+ # 
+  knitr::include_graphics("images/multifactor-anatomy.png")
 ```
+
 # weave() a path
 Going back to our trading post example, let's say we'd want to get some new 
 hats, but we only have fruit. While both fruit and clothing are available in 

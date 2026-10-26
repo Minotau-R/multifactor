@@ -79,7 +79,6 @@ S7::method(weave_coverage, multifactor) <- function(
 }
 
 
-
 .coverage_single_step <- function(x, terms_pf, .data, metric) {
   res <- .weave_coverage_two(
     x[[.rows_with_col(x@map, terms_pf)]],
