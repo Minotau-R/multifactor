@@ -23,10 +23,10 @@ quickbrownfox <- function(raw.data = FALSE) {
   return(x)
 }
 
-# save(quickbrownfox, file = "data/quickbrownfox.rda")
 
 
-# # Define components
+
+# Define components
 #
 # sentence <- "the quick brown fox jumps over the lazy dog"
 # letter <- letters
@@ -55,9 +55,10 @@ quickbrownfox <- function(raw.data = FALSE) {
 #
 # constituent2sentence <- data.frame(
 #     constituent = c("subject", "predicate", "object"),
-#     sentence    = "complete pangram"
+#     sentence    = sentence
 # )
 #
 # quickbrownfox <- list(letter2word, word2constituent, constituent2sentence)
 #
-#
+# save(quickbrownfox, file = "data/quickbrownfox.rda")
+

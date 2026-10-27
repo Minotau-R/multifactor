@@ -26,6 +26,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
     anansi,
+    tidyr,
     ggplot2,
     ggforce,
     patchwork,
