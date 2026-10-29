@@ -27,6 +27,7 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     anansi,
     tidyr,
+    stringr,
     ggplot2,
     ggforce,
     patchwork,
