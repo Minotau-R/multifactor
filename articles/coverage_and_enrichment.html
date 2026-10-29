@@ -95,10 +95,13 @@ beyond the biological sciences.</p>
 <span></span>
 <span><span class="co"># Wrangling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plotting</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggforce.data-imaginist.com" class="external-link">ggforce</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-lib/systemfonts" class="external-link">systemfonts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ragg.r-lib.org" class="external-link">ragg</a></span><span class="op">)</span></span>
 <span></span>
@@ -138,7 +141,7 @@ multifactor object, <code>fox</code>.</p>
 <span><span class="co">#&gt; [1] "object"    "predicate" "subject"  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $sentence</span></span>
-<span><span class="co">#&gt; [1] "complete pangram"</span></span>
+<span><span class="co">#&gt; [1] "the quick brown fox jumps over the lazy dog"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fox</span><span class="op">$</span><span class="va">letter2word</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 26 x 8 sparse Matrix of class "ngCMatrix"</span></span>
@@ -183,10 +186,10 @@ are.</p>
 input data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate some collection of letters</span></span>
-<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"some collection of letters"</span><span class="op">)</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"a pangram is a sentence with all letters"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">input</span></span>
-<span><span class="co">#&gt;  [1] "s" "o" "m" "e" "c" "l" "t" "i" "n" "f" "r"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "a" "p" "n" "g" "r" "m" "i" "s" "e" "t" "c" "w" "h" "l"</span></span></code></pre></div>
 <p>We can use the <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> function to calculate to
 what degree the input letters cover the words in our data set. This
 function behaves similarly to <code><a href="../reference/weave-generic.html">weave()</a></code> but comes with an
@@ -195,105 +198,17 @@ input letters:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter  word observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       t   the     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 2       h   the    FALSE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 3       e   the     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 4       q quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       u quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       i quick     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       c quick     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       k quick    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       b brown    FALSE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      r brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      o brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 12      w brown    FALSE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 13      n brown     TRUE         3        5 0.6000000    FALSE</span></span>
-<span><span class="co">#&gt; 14      f   fox     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 15      o   fox     TRUE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 16      x   fox    FALSE         2        3 0.6666667    FALSE</span></span>
-<span><span class="co">#&gt; 17      j jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 18      u jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 19      m jumps     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 20      p jumps    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 21      s jumps     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 22      o  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 23      v  over    FALSE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 24      e  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 25      r  over     TRUE         3        4 0.7500000    FALSE</span></span>
-<span><span class="co">#&gt; 26      l  lazy     TRUE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 27      a  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 28      z  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 29      y  lazy    FALSE         1        4 0.2500000    FALSE</span></span>
-<span><span class="co">#&gt; 30      d   dog    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 31      o   dog     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 32      g   dog    FALSE         1        3 0.3333333    FALSE</span></span></code></pre></div>
-<p>Now, let’s use a second set of letters that are explicitly part of
-the sentence:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"jumps over"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">input</span></span>
-<span><span class="co">#&gt; [1] "j" "u" "m" "p" "s" "o" "v" "e" "r"</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter  word observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       t   the    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 2       h   the    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 3       e   the     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 4       q quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       u quick     TRUE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       i quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       c quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       k quick    FALSE         1        5 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       b brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      r brown     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      o brown     TRUE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 12      w brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 13      n brown    FALSE         2        5 0.4000000    FALSE</span></span>
-<span><span class="co">#&gt; 14      f   fox    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 15      o   fox     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 16      x   fox    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 17      j jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 18      u jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 19      m jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 20      p jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 21      s jumps     TRUE         5        5 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 22      o  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 23      v  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 24      e  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 25      r  over     TRUE         4        4 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 26      l  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 27      a  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 28      z  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 29      y  lazy    FALSE         0        4 0.0000000    FALSE</span></span>
-<span><span class="co">#&gt; 30      d   dog    FALSE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 31      o   dog     TRUE         1        3 0.3333333    FALSE</span></span>
-<span><span class="co">#&gt; 32      g   dog    FALSE         1        3 0.3333333    FALSE</span></span></code></pre></div>
-<p>Notice that the column named <code>"complete"</code> marks two
-particular words as complete now.</p>
+<span><span class="op">)</span></span></code></pre></div>
 <p>We can use the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method for <code>linkmap</code>
-to automatically filter for complete cases:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+to automatically filter for complete cases, only the word ‘the’ is
+complete:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 9 rows.</span></span>
-<span><span class="co">#&gt;   letter  word</span></span>
-<span><span class="co">#&gt; 1      j jumps</span></span>
-<span><span class="co">#&gt; 2      u jumps</span></span>
-<span><span class="co">#&gt; 3      m jumps</span></span>
-<span><span class="co">#&gt; 4      p jumps</span></span>
-<span><span class="co">#&gt; 5      s jumps</span></span>
-<span><span class="co">#&gt; 6      o  over</span></span>
-<span><span class="co">#&gt; 7      v  over</span></span>
-<span><span class="co">#&gt; 8      e  over</span></span>
-<span><span class="co">#&gt; 9      r  over</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 3 rows.</span></span>
+<span><span class="co">#&gt;   letter word</span></span>
+<span><span class="co">#&gt; 1      t  the</span></span>
+<span><span class="co">#&gt; 2      h  the</span></span>
+<span><span class="co">#&gt; 3      e  the</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ levels:   2 variables: </span></span>
 <span><span class="co">#&gt;  $ letter : 26 Levels: a ... z </span></span>
@@ -301,312 +216,139 @@ to automatically filter for complete cases:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ observed : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ set_count: int  5 5 5 5 5 4 4 4 4</span></span>
-<span><span class="co">#&gt;  $ set_size : int  5 5 5 5 5 4 4 4 4</span></span>
-<span><span class="co">#&gt;  $ coverage : num  1 1 1 1 1 1 1 1 1</span></span>
-<span><span class="co">#&gt;  $ complete : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ observed : logi  TRUE TRUE TRUE</span></span>
+<span><span class="co">#&gt;  $ set_count: int  3 3 3</span></span>
+<span><span class="co">#&gt;  $ set_size : int  3 3 3</span></span>
+<span><span class="co">#&gt;  $ coverage : num  1 1 1</span></span>
+<span><span class="co">#&gt;  $ complete : logi  TRUE TRUE TRUE</span></span></code></pre></div>
+<p>We can visualize this as a graph like so:
+<img src="coverage_and_enrichment_files/figure-html/plot-cov-1-1.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level3">
+<h3 id="defining-coverage">Defining coverage<a class="anchor" aria-label="anchor" href="#defining-coverage"></a>
+</h3>
+<p>By default, coverage is only calculated between the data types
+involved in the last step of the path. However, we can impose
+conditional filtering steps:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
+<span><span class="co">#&gt;    letter constituent</span></span>
+<span><span class="co">#&gt; 1       a      object</span></span>
+<span><span class="co">#&gt; 2       d      object</span></span>
+<span><span class="co">#&gt; 3       e      object</span></span>
+<span><span class="co">#&gt; 4       g      object</span></span>
+<span><span class="co">#&gt; 5       h      object</span></span>
+<span><span class="co">#&gt; 6       l      object</span></span>
+<span><span class="co">#&gt; 7       o      object</span></span>
+<span><span class="co">#&gt; 8       t      object</span></span>
+<span><span class="co">#&gt; 9       y      object</span></span>
+<span><span class="co">#&gt; 10      z      object</span></span>
+<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
+<span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ observed : logi  TRUE FALSE TRUE TRUE TRUE TRUE ...</span></span>
+<span><span class="co">#&gt;  $ set_count: int  6 6 6 6 6 6 6 6 6 6 ...</span></span>
+<span><span class="co">#&gt;  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...</span></span>
+<span><span class="co">#&gt;  $ coverage : num  0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ...</span></span>
+<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;=</span> <span class="fl">1</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
+<span><span class="co">#&gt;    letter constituent</span></span>
+<span><span class="co">#&gt; 1       a      object</span></span>
+<span><span class="co">#&gt; 2       d      object</span></span>
+<span><span class="co">#&gt; 3       e      object</span></span>
+<span><span class="co">#&gt; 4       g      object</span></span>
+<span><span class="co">#&gt; 5       h      object</span></span>
+<span><span class="co">#&gt; 6       l      object</span></span>
+<span><span class="co">#&gt; 7       o      object</span></span>
+<span><span class="co">#&gt; 8       t      object</span></span>
+<span><span class="co">#&gt; 9       y      object</span></span>
+<span><span class="co">#&gt; 10      z      object</span></span>
+<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
+<span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...</span></span>
+<span><span class="co">#&gt;  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...</span></span>
+<span><span class="co">#&gt;  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...</span></span>
+<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
+<span><span class="co">#&gt;    letter constituent</span></span>
+<span><span class="co">#&gt; 1       a      object</span></span>
+<span><span class="co">#&gt; 2       d      object</span></span>
+<span><span class="co">#&gt; 3       e      object</span></span>
+<span><span class="co">#&gt; 4       g      object</span></span>
+<span><span class="co">#&gt; 5       h      object</span></span>
+<span><span class="co">#&gt; 6       l      object</span></span>
+<span><span class="co">#&gt; 7       o      object</span></span>
+<span><span class="co">#&gt; 8       t      object</span></span>
+<span><span class="co">#&gt; 9       y      object</span></span>
+<span><span class="co">#&gt; 10      z      object</span></span>
+<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
+<span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...</span></span>
+<span><span class="co">#&gt;  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...</span></span>
+<span><span class="co">#&gt;  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...</span></span>
+<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span></code></pre></div>
+<p><img src="coverage_and_enrichment_files/figure-html/plot-cov-2-1.png" class="r-plt" alt="" width="1728"></p>
 </div>
 <div class="section level3">
 <h3 id="enrichment-testing">Enrichment testing<a class="anchor" aria-label="anchor" href="#enrichment-testing"></a>
 </h3>
 <p>The <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> allows for quick hypothesis testing
 using the same syntax:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        expected  observed      fold    log_fold     p.value      p.adj</span></span>
-<span><span class="co">#&gt; brown 0.3461538 0.4000000 1.1555556  0.20858662 0.580297963 0.98461538</span></span>
-<span><span class="co">#&gt; dog   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span>
-<span><span class="co">#&gt; fox   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span>
-<span><span class="co">#&gt; jumps 0.3461538 1.0000000 2.8888889  1.53051472 0.001915476 0.01532381</span></span>
-<span><span class="co">#&gt; lazy  0.3461538 0.0000000 0.0000000        -Inf 1.000000000 1.00000000</span></span>
-<span><span class="co">#&gt; over  0.3461538 1.0000000 2.8888889  1.53051472 0.008428094 0.03371237</span></span>
-<span><span class="co">#&gt; quick 0.3461538 0.2000000 0.5777778 -0.79141338 0.905928854 1.00000000</span></span>
-<span><span class="co">#&gt; the   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span></code></pre></div>
+<span><span class="co">#&gt;        expected  observed      fold   log_fold   p.value p.adj</span></span>
+<span><span class="co">#&gt; brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
+<span><span class="co">#&gt; dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1</span></span>
+<span><span class="co">#&gt; fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1</span></span>
+<span><span class="co">#&gt; jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
+<span><span class="co">#&gt; lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
+<span><span class="co">#&gt; over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
+<span><span class="co">#&gt; quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1</span></span>
+<span><span class="co">#&gt; the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1</span></span></code></pre></div>
 <p>Alternatively, <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> can also be run on the
 result of an earlier <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> call for the same
 results:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        expected  observed      fold    log_fold     p.value      p.adj</span></span>
-<span><span class="co">#&gt; brown 0.3461538 0.4000000 1.1555556  0.20858662 0.580297963 0.98461538</span></span>
-<span><span class="co">#&gt; dog   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span>
-<span><span class="co">#&gt; fox   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span>
-<span><span class="co">#&gt; jumps 0.3461538 1.0000000 2.8888889  1.53051472 0.001915476 0.01532381</span></span>
-<span><span class="co">#&gt; lazy  0.3461538 0.0000000 0.0000000        -Inf 1.000000000 1.00000000</span></span>
-<span><span class="co">#&gt; over  0.3461538 1.0000000 2.8888889  1.53051472 0.008428094 0.03371237</span></span>
-<span><span class="co">#&gt; quick 0.3461538 0.2000000 0.5777778 -0.79141338 0.905928854 1.00000000</span></span>
-<span><span class="co">#&gt; the   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="defining-coverage">Defining coverage<a class="anchor" aria-label="anchor" href="#defining-coverage"></a>
-</h3>
-<p>By default, coverage is only calculated between the data types
-involved in the last step of the path:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_path-generic.html">select_path</a></span><span class="op">(</span><span class="va">fox</span>, <span class="va">letter</span> <span class="op">~</span> <span class="va">constituent</span><span class="op">)</span></span>
-<span><span class="va">path</span></span>
-<span><span class="co">#&gt; A multifactor::path_frame S7_object.</span></span>
-<span><span class="co">#&gt;   A path from `letter` to `constituent`:</span></span>
-<span><span class="co">#&gt; letter ~ word ~ constituent</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     from          to cov_operator cov_value stack components</span></span>
-<span><span class="co">#&gt; 1 letter        word           &gt;=         0 FALSE          1</span></span>
-<span><span class="co">#&gt; 2   word constituent           &gt;=         0 FALSE          1</span></span>
-<span></span>
-<span><span class="va">input_full</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"jumps over"</span><span class="op">)</span></span>
-<span><span class="va">input_no_r</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"jumps ove"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input_full</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res_no_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input_no_r</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_full</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 12      j   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 13      m   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 14      o   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 15      p   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 16      r   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 17      s   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 18      u   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 19      v   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 20      b     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_no_r</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 12      j   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 13      m   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 14      o   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 15      p   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 16      r   predicate    FALSE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 17      s   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 18      u   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 19      v   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 20      b     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject    FALSE         3       15 0.2000000    FALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">path2</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;=</span> <span class="fl">0</span> <span class="op">~</span> <span class="va">constituent</span> <span class="op">&gt;=</span> <span class="fl">0</span></span>
-<span><span class="va">path2</span></span>
-<span><span class="co">#&gt; letter ~ word &gt;= 0 ~ constituent &gt;= 0</span></span>
-<span></span>
-<span><span class="va">res_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path2</span>, .data <span class="op">=</span> <span class="va">input_full</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res_no_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path2</span>, .data <span class="op">=</span> <span class="va">input_no_r</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_full</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 12      j   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 13      m   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 14      o   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 15      p   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 16      r   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 17      s   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 18      u   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 19      v   predicate     TRUE         9        9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 20      b     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject     TRUE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject    FALSE         4       15 0.2666667    FALSE</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_no_r</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent observed set_count set_size  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object     TRUE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object    FALSE         2       10 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 12      j   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 13      m   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 14      o   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 15      p   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 16      r   predicate    FALSE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 17      s   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 18      u   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 19      v   predicate     TRUE         8        9 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 20      b     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject     TRUE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject    FALSE         3       15 0.2000000    FALSE</span></span>
-<span></span>
-<span><span class="va">path3</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="va">constituent</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
-<span><span class="va">path3</span></span>
-<span><span class="co">#&gt; letter ~ word &gt; 0 ~ constituent &gt; 0</span></span>
-<span></span>
-<span><span class="va">res_full2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path3</span>, .data <span class="op">=</span> <span class="va">input_full</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res_no_r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">path3</span>, .data <span class="op">=</span> <span class="va">input_no_r</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_full2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent set_size observed set_count  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object       10     TRUE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object       10     TRUE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 12      j   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 13      m   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 14      o   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 15      p   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 16      r   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 17      s   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 18      u   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 19      v   predicate        9     TRUE         9 1.0000000     TRUE</span></span>
-<span><span class="co">#&gt; 20      b     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject       15     TRUE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject       15     TRUE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject       15     TRUE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject       15     TRUE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject       15    FALSE         4 0.2666667    FALSE</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">res_no_r2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    letter constituent set_size observed set_count  coverage complete</span></span>
-<span><span class="co">#&gt; 1       a      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 2       d      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 3       e      object       10     TRUE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 4       g      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 5       h      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 6       l      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 7       o      object       10     TRUE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 8       t      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 9       y      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 10      z      object       10    FALSE         2 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 11      e   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 12      j   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 13      m   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 14      o   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 15      p   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 16      r   predicate        9    FALSE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 17      s   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 18      u   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 19      v   predicate        9     TRUE         8 0.8888889    FALSE</span></span>
-<span><span class="co">#&gt; 20      b     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 21      c     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 22      e     subject       15     TRUE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 23      f     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 24      h     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 25      i     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 26      k     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 27      n     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 28      o     subject       15     TRUE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 29      q     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 30      r     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 31      t     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 32      u     subject       15     TRUE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 33      w     subject       15    FALSE         3 0.2000000    FALSE</span></span>
-<span><span class="co">#&gt; 34      x     subject       15    FALSE         3 0.2000000    FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;        expected  observed      fold   log_fold   p.value p.adj</span></span>
+<span><span class="co">#&gt; brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
+<span><span class="co">#&gt; dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1</span></span>
+<span><span class="co">#&gt; fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1</span></span>
+<span><span class="co">#&gt; jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
+<span><span class="co">#&gt; lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
+<span><span class="co">#&gt; over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
+<span><span class="co">#&gt; quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1</span></span>
+<span><span class="co">#&gt; the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

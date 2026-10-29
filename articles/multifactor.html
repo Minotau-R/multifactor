@@ -360,11 +360,10 @@ several paths exist, all will be traversed and included into one
 </div>
 </div>
 <div class="section level2">
-<h2 id="compatibility-with-igraph-and-matrix">Compatibility with <code>igraph</code> and <code>Matrix</code><a class="anchor" aria-label="anchor" href="#compatibility-with-igraph-and-matrix"></a>
+<h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a>
 </h2>
 <div class="section level3">
-<h3 id="convert-multifactor-and-linkmap-objects-to-igraph-representation">Convert <code>multifactor</code> and <code>linkmap</code> objects to
-<code>igraph</code> representation<a class="anchor" aria-label="anchor" href="#convert-multifactor-and-linkmap-objects-to-igraph-representation"></a>
+<h3 id="compatibility-with-igraph-and-matrix">Compatibility with <code>igraph</code> and <code>Matrix</code><a class="anchor" aria-label="anchor" href="#compatibility-with-igraph-and-matrix"></a>
 </h3>
 <p><code>multifactor</code> relies heavily on the excellent <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://matrix.r-forge.r-project.org/" class="external-link"><code>Matrix</code></a>
 packages, particularly for path finding and sparse matrix
@@ -389,11 +388,11 @@ representation.</p>
 <span><span class="co"># Convert to an igraph object</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph</a></span><span class="op">(</span><span class="va">tp</span><span class="op">)</span></span>
 <span><span class="va">g</span></span>
-<span><span class="co">#&gt; IGRAPH dbe77a2 UN-- 6 6 -- </span></span>
+<span><span class="co">#&gt; IGRAPH cee2020 UN-- 6 6 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji</span></span>
 <span><span class="co">#&gt; | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji</span></span>
 <span><span class="co">#&gt; | (e/n), fruit_emoji (e/n)</span></span>
-<span><span class="co">#&gt; + edges from dbe77a2 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from cee2020 (vertex names):</span></span>
 <span><span class="co">#&gt; [1] books      --furniture   clothing   --furniture   books      --instruments</span></span>
 <span><span class="co">#&gt; [4] fruit      --instruments furniture  --marbles     instruments--marbles</span></span>
 <span><span class="co"># Plot graph across data types</span></span>
@@ -408,9 +407,9 @@ representation.</p>
 <code class="sourceCode R"><span><span class="co"># Convert to an igraph object</span></span>
 <span><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph</a></span><span class="op">(</span><span class="va">fruit2clothing</span><span class="op">)</span></span>
 <span><span class="va">lg</span></span>
-<span><span class="co">#&gt; IGRAPH 19dd652 UN-B 12 18 -- </span></span>
+<span><span class="co">#&gt; IGRAPH eb48343 UN-B 12 18 -- </span></span>
 <span><span class="co">#&gt; + attr: type (v/l), name (v/c)</span></span>
-<span><span class="co">#&gt; + edges from 19dd652 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from eb48343 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  </span></span>
 <span><span class="co">#&gt;  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves </span></span>
 <span><span class="co">#&gt;  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    </span></span>
@@ -420,12 +419,10 @@ representation.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lg</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multifactor_files/figure-html/igraph-linkmap-sp-1.png" class="r-plt" alt="" width="576"></p>
 </div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="convert-linkmap-linkage-information-to-sparse-adjacency-matrix">Convert <code>linkmap</code> linkage information to sparse adjacency
+<div class="section level4">
+<h4 id="convert-linkmap-linkage-information-to-sparse-adjacency-matrix">Convert <code>linkmap</code> linkage information to sparse adjacency
 <code>Matrix</code><a class="anchor" aria-label="anchor" href="#convert-linkmap-linkage-information-to-sparse-adjacency-matrix"></a>
-</h2>
+</h4>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert to an igraph object</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fruit2clothing</span><span class="op">)</span></span>
@@ -440,9 +437,10 @@ representation.</p>
 <span><span class="co">#&gt;   melons         .     |     .      .   |     |</span></span>
 <span><span class="co">#&gt;   grapes         .     |     .      .   |     |</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a>
-</h2>
+</div>
+<div class="section level3">
+<h3 id="data-wrangling">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling"></a>
+</h3>
 <p><code>multifactor</code> also provides some utility functions for
 data wrangling on tables with features (rows) of the appropriate
 type.</p>
@@ -462,9 +460,9 @@ type.</p>
 <span><span class="co">#&gt; gloves   0 34 10  2 21 30  0  3 13  16</span></span>
 <span><span class="co">#&gt; hat      0 61  0  4  3  0  7 20 38  21</span></span>
 <span><span class="co">#&gt; scarf    4 80 47 72 29 55  4  4 16  25</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="weave_apply">weave_apply<a class="anchor" aria-label="anchor" href="#weave_apply"></a>
-</h3>
+<div class="section level4">
+<h4 id="weave_apply">weave_apply<a class="anchor" aria-label="anchor" href="#weave_apply"></a>
+</h4>
 <p><code>weave_apply</code> allows us to run arbitrary code on subsets
 of a table, based on groupings on the left hand of the formula:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -612,9 +610,9 @@ of a table, based on groupings on the left hand of the formula:</p>
 <span><span class="co">#&gt; Multiple R-squared:  0.7597, Adjusted R-squared:  0.5193 </span></span>
 <span><span class="co">#&gt; F-statistic: 3.161 on 1 and 1 DF,  p-value: 0.3262</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="compatibility-with-the-tidyverse-weave_to_tbl">Compatibility with the tidyverse: <code>weave_to_tbl</code><a class="anchor" aria-label="anchor" href="#compatibility-with-the-tidyverse-weave_to_tbl"></a>
-</h3>
+<div class="section level4">
+<h4 id="compatibility-with-the-tidyverse-weave_to_tbl">Compatibility with the tidyverse: <code>weave_to_tbl</code><a class="anchor" aria-label="anchor" href="#compatibility-with-the-tidyverse-weave_to_tbl"></a>
+</h4>
 <p>For those who prefer to use <code>tidyverse</code>,
 <code><a href="../reference/weave_to_tbl.html">weave_to_tbl()</a></code> returns a tidy wide-format table, ready to
 be grouped based on the first two columns.</p>
@@ -639,6 +637,7 @@ be grouped based on the first two columns.</p>
 <span><span class="co">#&gt; 16   pears      hat  0 61  0  4  3  0  7 20 38  21</span></span>
 <span><span class="co">#&gt; 17   pears    scarf  4 80 47 72 29 55  4  4 16  25</span></span>
 <span><span class="co">#&gt; 18  melons    scarf  4 80 47 72 29 55  4  4 16  25</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="reading-and-parsing-adjaceny-list-formatted-files">Reading and parsing adjaceny list-formatted files<a class="anchor" aria-label="anchor" href="#reading-and-parsing-adjaceny-list-formatted-files"></a>

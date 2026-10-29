@@ -43,5 +43,5 @@ quickbrownfox()
 #>  $ letter      : 26 Levels: a ... z 
 #>  $ word        :  8 Levels: brown ... the 
 #>  $ constituent :  3 Levels: object predicate subject 
-#>  $ sentence    :  1 Levels: complete pangram 
+#>  $ sentence    :  1 Levels: the quick brown fox jumps over the lazy dog 
 ```

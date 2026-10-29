@@ -15,10 +15,13 @@ biological sciences.
 \
 `# Wrangling`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`tidyr`](https://tidyr.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`stringr`](https://stringr.tidyverse.org)`)`\
 \
 `# Plotting`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`patchwork`](https://patchwork.data-imaginist.com)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggforce`](https://ggforce.data-imaginist.com)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`systemfonts`](https://github.com/r-lib/systemfonts)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`ragg`](https://ragg.r-lib.org)`)`\
 \
@@ -63,7 +66,7 @@ multifactor object, `fox`.
 `#> [1] "object"    "predicate" "subject"  `\
 `#> `\
 `#> $sentence`\
-`#> [1] "complete pangram"`\
+`#> [1] "the quick brown fox jumps over the lazy dog"`\
 \
 [`as.matrix`](https://rdrr.io/r/base/matrix.html)`(``fox``$``letter2word``)`\
 `#> 26 x 8 sparse Matrix of class "ngCMatrix"`\
@@ -108,10 +111,10 @@ input data:
 
 \
 `# Generate some collection of letters`\
-`input`` ``<-`` ``split_to_letters``(``"some collection of letters"``)`\
+`input`` ``<-`` ``split_to_letters``(``"a pangram is a sentence with all letters"``)`\
 \
 `input`\
-`#>  [1] "s" "o" "m" "e" "c" "l" "t" "i" "n" "f" "r"`
+`#>  [1] "a" "p" "n" "g" "r" "m" "i" "s" "e" "t" "c" "w" "h" "l"`
 
 We can use the
 [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
@@ -124,111 +127,19 @@ our input letters:
 \
 `res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
-`)`\
-\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res``)`\
-`#>    letter  word observed set_count set_size  coverage complete`\
-`#> 1       t   the     TRUE         2        3 0.6666667    FALSE`\
-`#> 2       h   the    FALSE         2        3 0.6666667    FALSE`\
-`#> 3       e   the     TRUE         2        3 0.6666667    FALSE`\
-`#> 4       q quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 5       u quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 6       i quick     TRUE         2        5 0.4000000    FALSE`\
-`#> 7       c quick     TRUE         2        5 0.4000000    FALSE`\
-`#> 8       k quick    FALSE         2        5 0.4000000    FALSE`\
-`#> 9       b brown    FALSE         3        5 0.6000000    FALSE`\
-`#> 10      r brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 11      o brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 12      w brown    FALSE         3        5 0.6000000    FALSE`\
-`#> 13      n brown     TRUE         3        5 0.6000000    FALSE`\
-`#> 14      f   fox     TRUE         2        3 0.6666667    FALSE`\
-`#> 15      o   fox     TRUE         2        3 0.6666667    FALSE`\
-`#> 16      x   fox    FALSE         2        3 0.6666667    FALSE`\
-`#> 17      j jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 18      u jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 19      m jumps     TRUE         2        5 0.4000000    FALSE`\
-`#> 20      p jumps    FALSE         2        5 0.4000000    FALSE`\
-`#> 21      s jumps     TRUE         2        5 0.4000000    FALSE`\
-`#> 22      o  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 23      v  over    FALSE         3        4 0.7500000    FALSE`\
-`#> 24      e  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 25      r  over     TRUE         3        4 0.7500000    FALSE`\
-`#> 26      l  lazy     TRUE         1        4 0.2500000    FALSE`\
-`#> 27      a  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 28      z  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 29      y  lazy    FALSE         1        4 0.2500000    FALSE`\
-`#> 30      d   dog    FALSE         1        3 0.3333333    FALSE`\
-`#> 31      o   dog     TRUE         1        3 0.3333333    FALSE`\
-`#> 32      g   dog    FALSE         1        3 0.3333333    FALSE`
-
-Now, let’s use a second set of letters that are explicitly part of the
-sentence:
-
-\
-`input`` ``<-`` ``split_to_letters``(``"jumps over"``)`\
-\
-`input`\
-`#> [1] "j" "u" "m" "p" "s" "o" "v" "e" "r"`
-
-\
-`res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
-`)`\
-\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res``)`\
-`#>    letter  word observed set_count set_size  coverage complete`\
-`#> 1       t   the    FALSE         1        3 0.3333333    FALSE`\
-`#> 2       h   the    FALSE         1        3 0.3333333    FALSE`\
-`#> 3       e   the     TRUE         1        3 0.3333333    FALSE`\
-`#> 4       q quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 5       u quick     TRUE         1        5 0.2000000    FALSE`\
-`#> 6       i quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 7       c quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 8       k quick    FALSE         1        5 0.2000000    FALSE`\
-`#> 9       b brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 10      r brown     TRUE         2        5 0.4000000    FALSE`\
-`#> 11      o brown     TRUE         2        5 0.4000000    FALSE`\
-`#> 12      w brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 13      n brown    FALSE         2        5 0.4000000    FALSE`\
-`#> 14      f   fox    FALSE         1        3 0.3333333    FALSE`\
-`#> 15      o   fox     TRUE         1        3 0.3333333    FALSE`\
-`#> 16      x   fox    FALSE         1        3 0.3333333    FALSE`\
-`#> 17      j jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 18      u jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 19      m jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 20      p jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 21      s jumps     TRUE         5        5 1.0000000     TRUE`\
-`#> 22      o  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 23      v  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 24      e  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 25      r  over     TRUE         4        4 1.0000000     TRUE`\
-`#> 26      l  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 27      a  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 28      z  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 29      y  lazy    FALSE         0        4 0.0000000    FALSE`\
-`#> 30      d   dog    FALSE         1        3 0.3333333    FALSE`\
-`#> 31      o   dog     TRUE         1        3 0.3333333    FALSE`\
-`#> 32      g   dog    FALSE         1        3 0.3333333    FALSE`
-
-Notice that the column named `"complete"` marks two particular words as
-complete now.
+`)`
 
 We can use the [`subset()`](https://rdrr.io/r/base/subset.html) method
-for `linkmap` to automatically filter for complete cases:
+for `linkmap` to automatically filter for complete cases, only the word
+‘the’ is complete:
 
 \
 [`subset`](https://rdrr.io/r/base/subset.html)`(``res``)`\
-`#> A multifactor::linkmap data.frame S7_object: 9 rows.`\
-`#>   letter  word`\
-`#> 1      j jumps`\
-`#> 2      u jumps`\
-`#> 3      m jumps`\
-`#> 4      p jumps`\
-`#> 5      s jumps`\
-`#> 6      o  over`\
-`#> 7      v  over`\
-`#> 8      e  over`\
-`#> 9      r  over`\
+`#> A multifactor::linkmap data.frame S7_object: 3 rows.`\
+`#>   letter word`\
+`#> 1      t  the`\
+`#> 2      h  the`\
+`#> 3      e  the`\
 `#> `\
 `#> @ levels:   2 variables: `\
 `#>  $ letter : 26 Levels: a ... z `\
@@ -236,11 +147,110 @@ for `linkmap` to automatically filter for complete cases:
 `#> `\
 `#> @ metadata: 5 variables: `\
 `#> List of 5`\
-`#>  $ observed : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...`\
-`#>  $ set_count: int  5 5 5 5 5 4 4 4 4`\
-`#>  $ set_size : int  5 5 5 5 5 4 4 4 4`\
-`#>  $ coverage : num  1 1 1 1 1 1 1 1 1`\
-`#>  $ complete : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...`
+`#>  $ observed : logi  TRUE TRUE TRUE`\
+`#>  $ set_count: int  3 3 3`\
+`#>  $ set_size : int  3 3 3`\
+`#>  $ coverage : num  1 1 1`\
+`#>  $ complete : logi  TRUE TRUE TRUE`
+
+We can visualize this as a graph like so:
+![](coverage_and_enrichment_files/figure-html/plot-cov-1-1.png)
+
+### Defining coverage
+
+By default, coverage is only calculated between the data types involved
+in the last step of the path. However, we can impose conditional
+filtering steps:
+
+\
+[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
+`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``~`` ``constituent``, .data ``=`` ``input`\
+`)`\
+`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
+`#>    letter constituent`\
+`#> 1       a      object`\
+`#> 2       d      object`\
+`#> 3       e      object`\
+`#> 4       g      object`\
+`#> 5       h      object`\
+`#> 6       l      object`\
+`#> 7       o      object`\
+`#> 8       t      object`\
+`#> 9       y      object`\
+`#> 10      z      object`\
+`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> `\
+`#> @ levels:   2 variables: `\
+`#>  $ letter      : 26 Levels: a ... z `\
+`#>  $ constituent :  3 Levels: object predicate subject `\
+`#> `\
+`#> @ metadata: 5 variables: `\
+`#> List of 5`\
+`#>  $ observed : logi  TRUE FALSE TRUE TRUE TRUE TRUE ...`\
+`#>  $ set_count: int  6 6 6 6 6 6 6 6 6 6 ...`\
+`#>  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...`\
+`#>  $ coverage : num  0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ...`\
+`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`\
+\
+[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
+`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``>=`` ``1`` ``~`` ``constituent``, .data ``=`` ``input`\
+`)`\
+`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
+`#>    letter constituent`\
+`#> 1       a      object`\
+`#> 2       d      object`\
+`#> 3       e      object`\
+`#> 4       g      object`\
+`#> 5       h      object`\
+`#> 6       l      object`\
+`#> 7       o      object`\
+`#> 8       t      object`\
+`#> 9       y      object`\
+`#> 10      z      object`\
+`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> `\
+`#> @ levels:   2 variables: `\
+`#>  $ letter      : 26 Levels: a ... z `\
+`#>  $ constituent :  3 Levels: object predicate subject `\
+`#> `\
+`#> @ metadata: 5 variables: `\
+`#> List of 5`\
+`#>  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...`\
+`#>  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...`\
+`#>  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...`\
+`#>  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...`\
+`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`\
+\
+[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
+`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``>`` ``0.5`` ``~`` ``constituent``, .data ``=`` ``input`\
+`)`\
+`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
+`#>    letter constituent`\
+`#> 1       a      object`\
+`#> 2       d      object`\
+`#> 3       e      object`\
+`#> 4       g      object`\
+`#> 5       h      object`\
+`#> 6       l      object`\
+`#> 7       o      object`\
+`#> 8       t      object`\
+`#> 9       y      object`\
+`#> 10      z      object`\
+`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> `\
+`#> @ levels:   2 variables: `\
+`#>  $ letter      : 26 Levels: a ... z `\
+`#>  $ constituent :  3 Levels: object predicate subject `\
+`#> `\
+`#> @ metadata: 5 variables: `\
+`#> List of 5`\
+`#>  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...`\
+`#>  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...`\
+`#>  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...`\
+`#>  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...`\
+`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`
+
+![](coverage_and_enrichment_files/figure-html/plot-cov-2-1.png)
 
 ### Enrichment testing
 
@@ -250,15 +260,15 @@ allows for quick hypothesis testing using the same syntax:
 
 \
 [`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input``)`\
-`#>        expected  observed      fold    log_fold     p.value      p.adj`\
-`#> brown 0.3461538 0.4000000 1.1555556  0.20858662 0.580297963 0.98461538`\
-`#> dog   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`\
-`#> fox   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`\
-`#> jumps 0.3461538 1.0000000 2.8888889  1.53051472 0.001915476 0.01532381`\
-`#> lazy  0.3461538 0.0000000 0.0000000        -Inf 1.000000000 1.00000000`\
-`#> over  0.3461538 1.0000000 2.8888889  1.53051472 0.008428094 0.03371237`\
-`#> quick 0.3461538 0.2000000 0.5777778 -0.79141338 0.905928854 1.00000000`\
-`#> the   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`
+`#>        expected  observed      fold   log_fold   p.value p.adj`\
+`#> brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
+`#> dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1`\
+`#> fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1`\
+`#> jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
+`#> lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
+`#> over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
+`#> quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1`\
+`#> the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1`
 
 Alternatively,
 [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)
@@ -268,283 +278,12 @@ call for the same results:
 
 \
 [`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``res``)`\
-`#>        expected  observed      fold    log_fold     p.value      p.adj`\
-`#> brown 0.3461538 0.4000000 1.1555556  0.20858662 0.580297963 0.98461538`\
-`#> dog   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`\
-`#> fox   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`\
-`#> jumps 0.3461538 1.0000000 2.8888889  1.53051472 0.001915476 0.01532381`\
-`#> lazy  0.3461538 0.0000000 0.0000000        -Inf 1.000000000 1.00000000`\
-`#> over  0.3461538 1.0000000 2.8888889  1.53051472 0.008428094 0.03371237`\
-`#> quick 0.3461538 0.2000000 0.5777778 -0.79141338 0.905928854 1.00000000`\
-`#> the   0.3461538 0.3333333 0.9629630 -0.05444778 0.738461538 0.98461538`
-
-### Defining coverage
-
-By default, coverage is only calculated between the data types involved
-in the last step of the path:
-
-\
-`path`` ``<-`` `[`select_path`](https://minotau-r.github.io/multifactor/reference/select_path-generic.md)`(``fox``, ``letter`` ``~`` ``constituent``)`\
-`path`\
-`#> A multifactor::path_frame S7_object.`\
-`` #>   A path from `letter` to `constituent`: ``\
-`#> letter ~ word ~ constituent`\
-`#> `\
-`#>     from          to cov_operator cov_value stack components`\
-`#> 1 letter        word           >=         0 FALSE          1`\
-`#> 2   word constituent           >=         0 FALSE          1`\
-\
-`input_full`` ``<-`` ``split_to_letters``(``"jumps over"``)`\
-`input_no_r`` ``<-`` ``split_to_letters``(``"jumps ove"``)`\
-\
-`res_full`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``constituent``, .data ``=`` ``input_full`\
-`)`\
-\
-`res_no_r`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``constituent``, .data ``=`` ``input_no_r`\
-`)`\
-\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_full``)`\
-`#>    letter constituent observed set_count set_size  coverage complete`\
-`#> 1       a      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 2       d      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 3       e      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 4       g      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 5       h      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 6       l      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 7       o      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 8       t      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 9       y      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 10      z      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 11      e   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 12      j   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 13      m   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 14      o   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 15      p   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 16      r   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 17      s   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 18      u   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 19      v   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 20      b     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 21      c     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 22      e     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 23      f     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 24      h     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 25      i     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 26      k     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 27      n     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 28      o     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 29      q     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 30      r     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 31      t     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 32      u     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 33      w     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 34      x     subject    FALSE         4       15 0.2666667    FALSE`\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_no_r``)`\
-`#>    letter constituent observed set_count set_size  coverage complete`\
-`#> 1       a      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 2       d      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 3       e      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 4       g      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 5       h      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 6       l      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 7       o      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 8       t      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 9       y      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 10      z      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 11      e   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 12      j   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 13      m   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 14      o   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 15      p   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 16      r   predicate    FALSE         8        9 0.8888889    FALSE`\
-`#> 17      s   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 18      u   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 19      v   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 20      b     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 21      c     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 22      e     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 23      f     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 24      h     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 25      i     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 26      k     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 27      n     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 28      o     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 29      q     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 30      r     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 31      t     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 32      u     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 33      w     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 34      x     subject    FALSE         3       15 0.2000000    FALSE`
-
-\
-`path2`` ``<-`` ``letter`` ``~`` ``word`` ``>=`` ``0`` ``~`` ``constituent`` ``>=`` ``0`\
-`path2`\
-`#> letter ~ word >= 0 ~ constituent >= 0`\
-\
-`res_full`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``path2``, .data ``=`` ``input_full`\
-`)`\
-\
-`res_no_r`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``path2``, .data ``=`` ``input_no_r`\
-`)`\
-\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_full``)`\
-`#>    letter constituent observed set_count set_size  coverage complete`\
-`#> 1       a      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 2       d      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 3       e      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 4       g      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 5       h      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 6       l      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 7       o      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 8       t      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 9       y      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 10      z      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 11      e   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 12      j   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 13      m   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 14      o   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 15      p   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 16      r   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 17      s   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 18      u   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 19      v   predicate     TRUE         9        9 1.0000000     TRUE`\
-`#> 20      b     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 21      c     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 22      e     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 23      f     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 24      h     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 25      i     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 26      k     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 27      n     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 28      o     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 29      q     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 30      r     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 31      t     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 32      u     subject     TRUE         4       15 0.2666667    FALSE`\
-`#> 33      w     subject    FALSE         4       15 0.2666667    FALSE`\
-`#> 34      x     subject    FALSE         4       15 0.2666667    FALSE`\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_no_r``)`\
-`#>    letter constituent observed set_count set_size  coverage complete`\
-`#> 1       a      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 2       d      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 3       e      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 4       g      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 5       h      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 6       l      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 7       o      object     TRUE         2       10 0.2000000    FALSE`\
-`#> 8       t      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 9       y      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 10      z      object    FALSE         2       10 0.2000000    FALSE`\
-`#> 11      e   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 12      j   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 13      m   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 14      o   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 15      p   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 16      r   predicate    FALSE         8        9 0.8888889    FALSE`\
-`#> 17      s   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 18      u   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 19      v   predicate     TRUE         8        9 0.8888889    FALSE`\
-`#> 20      b     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 21      c     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 22      e     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 23      f     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 24      h     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 25      i     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 26      k     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 27      n     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 28      o     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 29      q     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 30      r     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 31      t     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 32      u     subject     TRUE         3       15 0.2000000    FALSE`\
-`#> 33      w     subject    FALSE         3       15 0.2000000    FALSE`\
-`#> 34      x     subject    FALSE         3       15 0.2000000    FALSE`\
-\
-`path3`` ``<-`` ``letter`` ``~`` ``word`` ``>`` ``0`` ``~`` ``constituent`` ``>`` ``0`\
-`path3`\
-`#> letter ~ word > 0 ~ constituent > 0`\
-\
-`res_full2`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``path3``, .data ``=`` ``input_full`\
-`)`\
-\
-`res_no_r2`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``path3``, .data ``=`` ``input_no_r`\
-`)`\
-\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_full2``)`\
-`#>    letter constituent set_size observed set_count  coverage complete`\
-`#> 1       a      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 2       d      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 3       e      object       10     TRUE         2 0.2000000    FALSE`\
-`#> 4       g      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 5       h      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 6       l      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 7       o      object       10     TRUE         2 0.2000000    FALSE`\
-`#> 8       t      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 9       y      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 10      z      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 11      e   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 12      j   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 13      m   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 14      o   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 15      p   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 16      r   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 17      s   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 18      u   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 19      v   predicate        9     TRUE         9 1.0000000     TRUE`\
-`#> 20      b     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 21      c     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 22      e     subject       15     TRUE         4 0.2666667    FALSE`\
-`#> 23      f     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 24      h     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 25      i     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 26      k     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 27      n     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 28      o     subject       15     TRUE         4 0.2666667    FALSE`\
-`#> 29      q     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 30      r     subject       15     TRUE         4 0.2666667    FALSE`\
-`#> 31      t     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 32      u     subject       15     TRUE         4 0.2666667    FALSE`\
-`#> 33      w     subject       15    FALSE         4 0.2666667    FALSE`\
-`#> 34      x     subject       15    FALSE         4 0.2666667    FALSE`\
-[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``res_no_r2``)`\
-`#>    letter constituent set_size observed set_count  coverage complete`\
-`#> 1       a      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 2       d      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 3       e      object       10     TRUE         2 0.2000000    FALSE`\
-`#> 4       g      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 5       h      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 6       l      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 7       o      object       10     TRUE         2 0.2000000    FALSE`\
-`#> 8       t      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 9       y      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 10      z      object       10    FALSE         2 0.2000000    FALSE`\
-`#> 11      e   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 12      j   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 13      m   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 14      o   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 15      p   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 16      r   predicate        9    FALSE         8 0.8888889    FALSE`\
-`#> 17      s   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 18      u   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 19      v   predicate        9     TRUE         8 0.8888889    FALSE`\
-`#> 20      b     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 21      c     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 22      e     subject       15     TRUE         3 0.2000000    FALSE`\
-`#> 23      f     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 24      h     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 25      i     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 26      k     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 27      n     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 28      o     subject       15     TRUE         3 0.2000000    FALSE`\
-`#> 29      q     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 30      r     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 31      t     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 32      u     subject       15     TRUE         3 0.2000000    FALSE`\
-`#> 33      w     subject       15    FALSE         3 0.2000000    FALSE`\
-`#> 34      x     subject       15    FALSE         3 0.2000000    FALSE`
+`#>        expected  observed      fold   log_fold   p.value p.adj`\
+`#> brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
+`#> dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1`\
+`#> fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1`\
+`#> jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
+`#> lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
+`#> over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
+`#> quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1`\
+`#> the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1`

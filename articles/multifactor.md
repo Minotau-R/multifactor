@@ -287,9 +287,9 @@ included into one `linkmap`.
 `#> 7     marbles   furniture           >=         0 FALSE          2`\
 `#> 8   furniture    clothing           >=         0 FALSE          2`
 
-## Compatibility with `igraph` and `Matrix`
+## Utilities
 
-### Convert `multifactor` and `linkmap` objects to `igraph` representation
+### Compatibility with `igraph` and `Matrix`
 
 `multifactor` relies heavily on the excellent
 [`igraph`](https://r.igraph.org/) and
@@ -314,11 +314,11 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `g`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``tp``)`\
 `g`\
-`#> IGRAPH dbe77a2 UN-- 6 6 -- `\
+`#> IGRAPH cee2020 UN-- 6 6 -- `\
 `#> + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji`\
 `#> | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji`\
 `#> | (e/n), fruit_emoji (e/n)`\
-`#> + edges from dbe77a2 (vertex names):`\
+`#> + edges from cee2020 (vertex names):`\
 `#> [1] books      --furniture   clothing   --furniture   books      --instruments`\
 `#> [4] fruit      --instruments furniture  --marbles     instruments--marbles`\
 `# Plot graph across data types`\
@@ -332,9 +332,9 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `lg`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)`\
 `lg`\
-`#> IGRAPH 19dd652 UN-B 12 18 -- `\
+`#> IGRAPH eb48343 UN-B 12 18 -- `\
 `#> + attr: type (v/l), name (v/c)`\
-`#> + edges from 19dd652 (vertex names):`\
+`#> + edges from eb48343 (vertex names):`\
 `#>  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  `\
 `#>  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves `\
 `#>  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    `\
@@ -345,7 +345,7 @@ for path finding and sparse matrix representation.
 
 ![](multifactor_files/figure-html/igraph-linkmap-sp-1.png)
 
-## Convert `linkmap` linkage information to sparse adjacency `Matrix`
+#### Convert `linkmap` linkage information to sparse adjacency `Matrix`
 
 \
 `# Convert to an igraph object`\
@@ -361,7 +361,7 @@ for path finding and sparse matrix representation.
 `#>   melons         .     |     .      .   |     |`\
 `#>   grapes         .     |     .      .   |     |`
 
-## Utilities
+### Data wrangling
 
 `multifactor` also provides some utility functions for data wrangling on
 tables with features (rows) of the appropriate type.
@@ -383,7 +383,7 @@ tables with features (rows) of the appropriate type.
 `#> hat      0 61  0  4  3  0  7 20 38  21`\
 `#> scarf    4 80 47 72 29 55  4  4 16  25`
 
-### weave_apply
+#### weave_apply
 
 `weave_apply` allows us to run arbitrary code on subsets of a table,
 based on groupings on the left hand of the formula:
@@ -533,7 +533,7 @@ based on groupings on the left hand of the formula:
 `#> Multiple R-squared:  0.7597, Adjusted R-squared:  0.5193 `\
 `#> F-statistic: 3.161 on 1 and 1 DF,  p-value: 0.3262`
 
-### Compatibility with the tidyverse: `weave_to_tbl`
+#### Compatibility with the tidyverse: `weave_to_tbl`
 
 For those who prefer to use `tidyverse`,
 [`weave_to_tbl()`](https://minotau-r.github.io/multifactor/reference/weave_to_tbl.md)
