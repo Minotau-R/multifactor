@@ -30,10 +30,13 @@ library(multifactor)
 
 # Wrangling
 library(dplyr)
+library(tidyr)
+library(stringr)
 
 # Plotting
 library(ggplot2)
 library(patchwork)
+library(ggforce)
 library(systemfonts)
 library(ragg)
 
@@ -127,7 +130,7 @@ calculate which words we can make, and how complete they are.
 To demonstrate, we'll need to generate some collection of letters as input data:  
 ```{r 'setup-example1', message = FALSE}
 # Generate some collection of letters
-input <- split_to_letters("some collection of letters")
+input <- split_to_letters("a pangram is a sentence with all letters")
 
 input
 ```
@@ -141,30 +144,493 @@ res <- weave_coverage(
   x = fox, .path = letter ~ word, .data = input
 )
 
-as.data.frame(res)
 ```
-
-Now, let's use a second set of letters that are explicitly part of the sentence: 
-```{r 'setup-example2', message = FALSE}
-input <- split_to_letters("jumps over")
-
-input
-```
-
-```{r 'weave-example2', message = FALSE}
-res <- weave_coverage(
-  x = fox, .path = letter ~ word, .data = input
-)
-
-as.data.frame(res)
-```
-Notice that the column named `"complete"` marks two particular words as complete 
-now. 
 
 We can use the `subset()` method for `linkmap` to automatically filter for 
-complete cases:
+complete cases, only the word 'the' is complete:
 ```{r 'weave-subset', message = FALSE}
 subset(res)
+```
+
+```{r}
+#| prep-coverage-plot, message=FALSE, echo=FALSE
+
+.mf_as_long <- function(x) bind_rows(
+    lapply(
+        S7::S7_data(x),
+        function(i) dplyr::reframe(
+            as.data.frame(i),
+            from = i[[1L]], to = i[[2L]],
+            from_y = as.integer(from), to_y = as.integer(to)
+        )
+    ) ,
+    .id = "linkmap"
+)
+
+dfs <-lapply(
+    S7::S7_data(fox),
+    function(i) dplyr::reframe(
+        as.data.frame(i),
+        from = i[[1L]], to = i[[2L]],
+        from_y = as.integer(from), to_y = as.integer(to)
+    ))
+
+word_colours <- c(
+    "the"   = "#e41a1c",
+    "quick" = "#377eb8",
+    "brown" = "#a65628",
+    "fox"   = "#4daf4a",
+    "jumps" = "#984ea3",
+    "over"  = "#ff7f00",
+    "lazy"  = "#ffff33",
+    "dog"   = "#f781bf"
+)
+
+
+letter2word <- mutate(
+    dfs[[1]],
+    from_y = 27-from_y,
+    to_y = as.integer(
+        factor(
+            to,
+            levels = rev(c(
+                "the", "quick", "brown", "fox",
+                "jumps", "over", "lazy", "dog"
+            )))
+    ),
+    from_y = (from_y - mean(unique(from_y))) *
+        (length(letters) / length(unique(from))),
+    to_y = (to_y - mean(unique(to_y))) *
+        (length(letters) / length(unique(to))),
+    observed = from %in% input
+) |>
+    mutate(
+        obs = sum(observed),
+        tot = length(unique(from)),
+        complete = obs == tot, .by = to
+    )
+
+word2constituent <- mutate(
+    dfs[[2]],
+    from_y = letter2word[["to_y"]][match(from, letter2word[["to"]])],
+    
+    to_y = (to_y - mean(unique(to_y))) *
+        (length(letters) / length(unique(to)))
+) |> left_join(
+    dplyr::select(letter2word, from = to, obs, tot, l = from, observed, complete), 
+    by = "from",relationship = "many-to-many") |>
+    mutate(tot_con = length(unique(l)),
+           obs_con1 = length(unique(l)[observed]),
+           obs_con2 = length(unique(l)[complete]),
+           obs_con3 = length(unique(l)[observed & obs > (tot/2)]),
+           .by = to) |>
+    dplyr::select(-l) |>
+    distinct()
+
+constituent2sentence <- mutate(
+    dfs[[3]],
+    to = to |>
+        str_replace("brown fox", "brown\nfox") |>
+        str_replace("over the", "over\nthe"),
+    from_y = (from_y - mean(unique(from_y))) *
+        (length(letters) / length(unique(from))),
+    to_y = (to_y - mean(unique(to_y))) *
+        (length(letters) / length(unique(to)))
+)
+
+
+pstart <- ggplot() +
+
+    ggforce::geom_link(
+        data = word2constituent,
+        aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_link(
+        data = word2constituent,
+        aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5, colour = from),
+        
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(y = from_y, yend = to_y, x = 0, xend = 1.5),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(x = 0, xend = 1.5, y = from_y, yend = to_y, colour = to),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    
+    geom_label(
+        data = letter2word,
+        aes(y = from_y), label = "     ", x = 0, fill = "white",
+        show.legend = FALSE, size = 6, linewidth = 4/5,
+        label.padding = unit(0.1, "lines")
+    ) +
+    geom_text(
+        data = letter2word,
+        aes(y = from_y, label = from), x = 0,
+        show.legend = FALSE, size = 6
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to), x = 1.5, 
+        fill = "white",
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to, fill = to), x = 1.5,
+        alpha = 1/2,
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = word2constituent,
+        aes(y = to_y, label = to), x = 2.5,
+        show.legend = FALSE,
+        size = 6, fill = "white", linewidth = 4/5
+    )  +
+
+    annotate(
+        geom = "text", y = - 14, x = c(0, 1.5, 2.5),
+        label = c("letter", "word", "constituent"), size = 8
+    ) +
+    scale_colour_manual(aesthetics = c("fill", "colour"), 
+                        values = word_colours, na.value = "gray") +
+
+    scale_x_continuous(expand = expansion(0, 1)) +
+    
+    theme_void()
+
+
+####
+psimple <- ggplot() +
+    
+    ggforce::geom_link(
+        data = distinct(word2constituent),
+        aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            alpha = pmax(obs > 0, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_link(
+        data = word2constituent,
+        aes(
+            y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            colour = if_else(obs > 0, from, NA),
+            alpha = pmax(obs > 0, 1/4)
+        ),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(y = from_y, yend = to_y, x = 0, xend = 1.5, alpha = pmax(observed, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(x = 0, xend = 1.5, y = from_y, yend = to_y,
+            colour = if_else(observed, to, NA), alpha = pmax(observed, 1/4)),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    
+    geom_label(
+        data = letter2word,
+        aes(y = from_y), label = "     ", x = 0, fill = "white",
+        show.legend = FALSE, size = 6, linewidth = 4/5,
+        label.padding = unit(0.1, "lines")
+    ) +
+    geom_text(
+        data = letter2word,
+        aes(y = from_y, label = from), x = 0,
+        show.legend = FALSE, size = 6
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to), x = 1.5, 
+        fill = "white",
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to, fill = to), x = 1.5,
+        alpha = 1/2,
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_text(
+        data = distinct(word2constituent,from_y, obs, tot),
+        aes(y = from_y + 1, label = paste0(obs, "/", tot)), x = 1.5,
+        show.legend = FALSE,
+        size = 5
+    ) +
+    geom_label(
+        data = distinct(word2constituent, to_y, obs_con1, tot_con),
+        aes(y = to_y + 1,
+            label = paste0(obs_con1, "/", tot_con)), x = 2.5,   
+        fill = "white", border.colour = "white", alpha = 8/10,
+        show.legend = FALSE,
+        size = 5
+    ) +
+    geom_label(
+        data = word2constituent,
+        aes(y = to_y, label = to), x = 2.5,
+        show.legend = FALSE,
+        size = 6, fill = "white", linewidth = 4/5
+    )  +
+   annotate(
+        geom = "text", y = - 14, x = c(0, 1.5, 2.5),
+        label = c("letter", "word", "constituent"), size = 8
+    ) +
+    scale_colour_manual(
+        aesthetics = c("fill", "colour"),
+        values = word_colours, na.value = "gray"
+        ) +
+    
+    scale_x_continuous(expand = expansion(0, 0.5)) +
+    scale_alpha_identity() +
+    
+    theme_void()
+
+pdouble <- ggplot() +
+   
+    ggforce::geom_link(
+        data = distinct(word2constituent),
+        aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            alpha = pmax(obs == tot, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_link(
+        data = word2constituent,
+        aes(
+            y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            colour = if_else(obs == tot, from, NA),
+            alpha = pmax(obs == tot, 1/4)
+        ),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(y = from_y, yend = to_y, x = 0, xend = 1.5, alpha = pmax(observed, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(x = 0, xend = 1.5, y = from_y, yend = to_y,
+            colour = if_else(observed, to, NA), alpha = pmax(observed, 1/4)),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    geom_label(
+        data = letter2word,
+        aes(y = from_y), label = "     ", x = 0, fill = "white",
+        show.legend = FALSE, size = 6, linewidth = 4/5,
+        label.padding = unit(0.1, "lines")
+    ) +
+    geom_text(
+        data = letter2word,
+        aes(y = from_y, label = from), x = 0,
+        show.legend = FALSE, size = 6
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to), x = 1.5, 
+        fill = "white",
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to, fill = to), x = 1.5,
+        alpha = 1/2,
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(word2constituent, to_y, obs_con2, tot_con),
+        aes(y = to_y + 1,
+            label = paste0(obs_con2, "/", tot_con)), x = 2.5, 
+        fill = "white", border.colour = "white", alpha = 8/10,
+        show.legend = FALSE,
+        size = 5
+    ) +
+    geom_label(
+        data = word2constituent,
+        aes(y = to_y, label = to), x = 2.5,
+        show.legend = FALSE,
+        size = 6, fill = "white", linewidth = 4/5
+    )  +
+    geom_text(
+        data = distinct(word2constituent,from_y, obs, tot),
+        aes(y = from_y + 1, label = paste0(obs, "/", tot)), x = 1.5,
+        show.legend = FALSE,
+        size = 5
+    ) +
+
+    annotate(
+        geom = "text", y = - 14, x = c(0, 1.5, 2.5),
+        label = c("letter", "word", "constituent"), size = 8
+    ) +
+    scale_colour_manual(aesthetics = c("fill", "colour"), 
+                        values = word_colours, na.value = "gray") +
+    
+    scale_x_continuous(expand = expansion(0, 0.5)) +
+    scale_alpha_identity() +
+    
+    theme_void()
+
+
+pthres <- ggplot() +
+    
+    ggforce::geom_link(
+        data = distinct(word2constituent),
+        aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            alpha = pmax(obs == tot, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_link(
+        data = word2constituent,
+        aes(
+            y = from_y, yend = to_y, x = 1.5, xend = 2.5,
+            colour = if_else(obs > tot/2, from, NA),
+            alpha = pmax(obs > tot/2, 1/4)
+        ),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(y = from_y, yend = to_y, x = 0, xend = 1.5, alpha = pmax(observed, 1/4)),
+        linewidth = 2,
+        show.legend = FALSE
+    ) +
+    ggforce::geom_diagonal(
+        data = letter2word,
+        aes(x = 0, xend = 1.5, y = from_y, yend = to_y,
+            colour = if_else(observed, to, NA), alpha = pmax(observed, 1/4)),
+        linewidth = 1,
+        show.legend = FALSE
+    ) +
+    
+    geom_label(
+        data = letter2word,
+        aes(y = from_y), label = "     ", x = 0, fill = "white",
+        show.legend = FALSE, size = 6, linewidth = 4/5,
+        label.padding = unit(0.1, "lines")
+    ) +
+    geom_text(
+        data = letter2word,
+        aes(y = from_y, label = from), x = 0,
+        show.legend = FALSE, size = 6
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to), x = 1.5, 
+        fill = "white",
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(letter2word, to_y, to),
+        aes(y = to_y, label = to, fill = to), x = 1.5,
+        alpha = 1/2,
+        show.legend = FALSE,
+        size = 6, linewidth = 4/5
+    ) +
+    geom_label(
+        data = distinct(word2constituent, to_y, obs_con3, tot_con),
+        aes(y = to_y + 1,
+            label = paste0(obs_con3, "/", tot_con)), x = 2.5, 
+        fill = "white", border.colour = "white",alpha = 8/10,
+        show.legend = FALSE,
+        size = 5
+    ) +
+    geom_label(
+        data = word2constituent,
+        aes(y = to_y, label = to), x = 2.5,
+        show.legend = FALSE,
+        size = 6, fill = "white", linewidth = 4/5
+    )  +
+    geom_text(
+        data = distinct(word2constituent,from_y, obs, tot),
+        aes(y = from_y + 1, label = paste0(obs, "/", tot)), x = 1.5,
+        show.legend = FALSE,
+        size = 5
+    ) +
+
+    annotate(
+        geom = "text", y = - 14, x = c(0, 1.5, 2.5),
+        label = c("letter", "word", "constituent"), size = 8
+    ) +
+    scale_colour_manual(aesthetics = c("fill", "colour"), 
+                        values = word_colours, na.value = "gray") +
+    
+    scale_x_continuous(expand = expansion(0, 0.5)) +
+    scale_alpha_identity() +
+    
+    theme_void()
+
+```
+
+We can visualize this as a graph like so: 
+```{r}
+#| plot-cov-1, message=FALSE, echo=FALSE,
+#| fig.width=6, fig.height=8, dev='ragg_png'
+ pstart
+```
+
+## Defining coverage
+
+By default, coverage is only calculated between the data types involved in the 
+last step of the path. However, we can impose conditional filtering steps: 
+
+```{r 'weave-code-3plots', message = FALSE}
+weave_coverage(
+  x = fox, .path = letter ~ word ~ constituent, .data = input
+)
+
+weave_coverage(
+  x = fox, .path = letter ~ word >= 1 ~ constituent, .data = input
+)
+
+weave_coverage(
+  x = fox, .path = letter ~ word > 0.5 ~ constituent, .data = input
+)
+```
+
+
+
+```{r}
+#| plot-cov-2, echo = FALSE,
+#| fig.width=18, fig.height=8, dev='ragg_png'
+p2 <- psimple  + 
+    pdouble +  
+    pthres + plot_annotation(tag_levels = "A")
+p2
+
 ```
 
 ## Enrichment testing
@@ -179,58 +645,4 @@ Alternatively, `test_enrich()` can also be run on the result of an earlier
 `weave_coverage()` call for the same results: 
 ```{r 'test-enrich2', message = FALSE}
 test_enrich(res)
-```
-## Defining coverage
-
-By default, coverage is only calculated between the data types involved in the 
-last step of the path: 
-
-```{r 'weave-example3a', message = FALSE}
-path <- select_path(fox, letter ~ constituent)
-path
-
-input_full <- split_to_letters("jumps over")
-input_no_r <- split_to_letters("jumps ove")
-
-res_full <- weave_coverage(
-  x = fox, .path = letter ~ constituent, .data = input_full
-)
-
-res_no_r <- weave_coverage(
-  x = fox, .path = letter ~ constituent, .data = input_no_r
-)
-
-as.data.frame(res_full)
-as.data.frame(res_no_r)
-```
-
-
-```{r 'weave-example3b', message = FALSE}
-path2 <- letter ~ word >= 0 ~ constituent >= 0
-path2
-
-res_full <- weave_coverage(
-  x = fox, .path = path2, .data = input_full
-)
-
-res_no_r <- weave_coverage(
-  x = fox, .path = path2, .data = input_no_r
-)
-
-as.data.frame(res_full)
-as.data.frame(res_no_r)
-
-path3 <- letter ~ word > 0 ~ constituent > 0
-path3
-
-res_full2 <- weave_coverage(
-  x = fox, .path = path3, .data = input_full
-)
-
-res_no_r2 <- weave_coverage(
-  x = fox, .path = path3, .data = input_no_r
-)
-
-as.data.frame(res_full2)
-as.data.frame(res_no_r2)
 ```

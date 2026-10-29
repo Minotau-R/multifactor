@@ -375,8 +375,9 @@ select_path(tp, fruit ~ clothing)
 df_weave <- .to_plot_df(fruit2clothing, e)
 ```
 
-# Compatibility with `igraph` and `Matrix`
-## Convert `multifactor` and `linkmap` objects to `igraph` representation 
+# Utilities
+
+## Compatibility with `igraph` and `Matrix`
 `multifactor` relies heavily on the excellent [`igraph`](https://r.igraph.org/) 
 and [`Matrix`](https://matrix.r-forge.r-project.org/) packages, particularly for
 path finding and sparse matrix representation. 
@@ -400,14 +401,14 @@ lg
 plot(lg)
 ```
 
-# Convert `linkmap` linkage information to sparse adjacency `Matrix`
+### Convert `linkmap` linkage information to sparse adjacency `Matrix`
 ```{r 'Matrix-sp'}
 # Convert to an igraph object
 m <- as.matrix(fruit2clothing)
 m
 ```
 
-# Utilities
+## Data wrangling
 `multifactor` also provides some utility functions for data wrangling on tables 
 with features (rows) of the appropriate type. 
 
@@ -422,7 +423,7 @@ rownames(clothing_table) <- levels(tp)$clothing
 clothing_table
 ```
 
-## weave_apply
+### weave_apply
 `weave_apply` allows us to run arbitrary code on subsets of a table, based on
 groupings on the left hand of the formula:  
 ```{r 'subgroup-apply'}
@@ -444,7 +445,7 @@ weave_apply(
 )
 ```
 
-## Compatibility with the tidyverse: `weave_to_tbl`
+### Compatibility with the tidyverse: `weave_to_tbl`
 For those who prefer to use `tidyverse`, `weave_to_tbl()` returns a tidy 
 wide-format table, ready to be grouped based on the first two columns. 
 ```{r 'subgroup-tbl'}
