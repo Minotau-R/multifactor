@@ -18,6 +18,8 @@
   : Index a table by a multifactor and apply arbitrary code to it
 - [`weave_to_tbl()`](https://minotau-r.github.io/multifactor/reference/weave_to_tbl.md)
   : Expand a table based on possibly overlapping group membership.
+- [`weave_join()`](https://minotau-r.github.io/multifactor/reference/weave_join.md)
+  : Join linkmaps across a path
 - [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)
   : Statistically estimate enrichment using relational data
 - [`test_enrich-methods`](https://minotau-r.github.io/multifactor/reference/test_enrich-methods.md)

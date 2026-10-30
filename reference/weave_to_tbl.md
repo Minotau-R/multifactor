@@ -49,14 +49,34 @@ df <- as.data.frame(df, row.names = levels(x)$clothing)
 
 # Apply arbitrary code to x based on group membership
 weave_to_tbl(x, .path = fruit ~ clothing, .data = df)
-#>      fruit clothing V1 V2 V3 V4 V5 V6 V7 V8 V9 V10
-#> 1   grapes  t-shirt 10 29  5  4 52 72 30  6 53  44
-#> 2    pears    dress 14  5 31 19  3 65  2 43 11  16
-#> 3   apples    socks 21 14 15 48 25 16 10 25 40  14
-#> 4   grapes    socks 21 14 15 48 25 16 10 25 40  14
-#> 5 cherries   gloves  2 13  8  4  2 21 13 45  5  38
-#> 6   melons   gloves  2 13  8  4  2 21 13 45  5  38
-#> 7   grapes   gloves  2 13  8  4  2 21 13 45  5  38
-#> 8    pears    scarf  4 18 43 12 56 36  1  2 24  28
-#> 9 cherries    scarf  4 18 43 12 56 36  1  2 24  28
+#>       fruit clothing V1 V2 V3 V4 V5 V6 V7 V8 V9 V10
+#> 1    apples  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 2     pears  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 3  cherries  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 4    melons  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 5    grapes  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 6  cherries    dress  9 53 11 12 39  5 27 53 15  62
+#> 7    apples    socks 42 30  0 12  2 41 20 67  2   2
+#> 8     pears    socks 42 30  0 12  2 41 20 67  2   2
+#> 9  cherries    socks 42 30  0 12  2 41 20 67  2   2
+#> 10   melons    socks 42 30  0 12  2 41 20 67  2   2
+#> 11   grapes    socks 42 30  0 12  2 41 20 67  2   2
+#> 12   apples   gloves 20 49 42 26 25 26 46  1 11   7
+#> 13   grapes   gloves 20 49 42 26 25 26 46  1 11   7
+#> 14   apples      hat 36  0 47 24 13  4 54  0 55  46
+#> 15    pears      hat 36  0 47 24 13  4 54  0 55  46
+#> 16 cherries      hat 36  0 47 24 13  4 54  0 55  46
+#> 17   melons      hat 36  0 47 24 13  4 54  0 55  46
+#> 18   grapes      hat 36  0 47 24 13  4 54  0 55  46
+#> 19 cherries    scarf 20 73 34 24 10 60  9 40 12  34
+#> 20  oranges  t-shirt 23 52  4  7 25  2  7 24 75  51
+#> 21   apples    dress  9 53 11 12 39  5 27 53 15  62
+#> 22  oranges    dress  9 53 11 12 39  5 27 53 15  62
+#> 23   melons    dress  9 53 11 12 39  5 27 53 15  62
+#> 24   grapes    dress  9 53 11 12 39  5 27 53 15  62
+#> 25   melons   gloves 20 49 42 26 25 26 46  1 11   7
+#> 26   apples    scarf 20 73 34 24 10 60  9 40 12  34
+#> 27  oranges    scarf 20 73 34 24 10 60  9 40 12  34
+#> 28   melons    scarf 20 73 34 24 10 60  9 40 12  34
+#> 29   grapes    scarf 20 73 34 24 10 60  9 40 12  34
 ```
