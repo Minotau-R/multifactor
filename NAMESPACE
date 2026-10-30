@@ -38,6 +38,7 @@ export(trade_posts)
 export(weave)
 export(weave_apply)
 export(weave_coverage)
+export(weave_join)
 export(weave_to_tbl)
 if (getRversion() < "4.3.0") importFrom("S7", "@")
 import(S7)
@@ -63,7 +64,10 @@ importFrom(S7,
   new_property,
   prop
 )
-importFrom(dplyr,bind_rows)
+importFrom(dplyr,
+  bind_rows,
+  relocate
+)
 importFrom(forcats,
   as_factor,
   lvls_expand,
