@@ -175,121 +175,100 @@ multifactor object, <code>fox</code>.</p>
 <span><span class="co">#&gt;      z     .   .   .     .    |    .     .   .</span></span></code></pre></div>
 </div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="calculate-coverage">Calculate coverage<a class="anchor" aria-label="anchor" href="#calculate-coverage"></a>
+</h2>
 <div class="section level3">
-<h3 id="calculate-coverage">Calculate coverage<a class="anchor" aria-label="anchor" href="#calculate-coverage"></a>
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h3>
 <p>With coverage, we mean the proportion of items in a set that are
 present. In other words, going back to our example, given some number of
 letters, we can calculate which words we can make, and how complete they
 are.</p>
-<p>To demonstrate, we’ll need to generate some collection of letters as
-input data:</p>
+<p>To demonstrate, let’s first consider the graph representation of our
+dataset:
+<img src="coverage_and_enrichment_files/figure-html/plot-cov-0-1.png" class="r-plt" alt="" width="500px" height="460px"></p>
+<p>Three feature types are shown on the x-axis, with links between
+respective levels as lines. We can see that each letter is linked to the
+words it appears in, which are in turn linked to their corresponding
+constituents.</p>
+<p>We’ll also need to generate some collection of letters as input
+data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate some collection of letters</span></span>
 <span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">split_to_letters</span><span class="op">(</span><span class="st">"a pangram is a sentence with all letters"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">input</span></span>
 <span><span class="co">#&gt;  [1] "a" "p" "n" "g" "r" "m" "i" "s" "e" "t" "c" "w" "h" "l"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="defining-coverage-in-a-path">Defining coverage in a path<a class="anchor" aria-label="anchor" href="#defining-coverage-in-a-path"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="weave_coverage">weave_coverage()<a class="anchor" aria-label="anchor" href="#weave_coverage"></a>
+</h3>
 <p>We can use the <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> function to calculate to
 what degree the input letters cover the words in our data set. This
-function behaves similarly to <code><a href="../reference/weave-generic.html">weave()</a></code> but comes with an
-additional argument, <code>.data</code>. For now, let’s plug in our
-input letters:</p>
+function behaves similarly to <code><a href="../reference/weave-generic.html">weave()</a></code>, in the sense that it
+takes a multifactor as its first argument, <code>x</code>, and its
+second argument, <code>.path</code>, defines the path through that
+multifactor. It also has an additional argument, <code>.data</code>.</p>
+<p>For now, let’s plug in our input letters:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p><img src="coverage_and_enrichment_files/figure-html/weave-plot-specify1-1.png" class="r-plt" alt="" width="500px" height="460px"></p>
+<div class="section level4">
+<h4 id="filter-using-subset">Filter using <code>subset()</code><a class="anchor" aria-label="anchor" href="#filter-using-subset"></a>
+</h4>
 <p>We can use the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method for <code>linkmap</code>
 to automatically filter for complete cases, only the word ‘the’ is
 complete:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 3 rows.</span></span>
-<span><span class="co">#&gt;   letter word</span></span>
-<span><span class="co">#&gt; 1      t  the</span></span>
-<span><span class="co">#&gt; 2      h  the</span></span>
-<span><span class="co">#&gt; 3      e  the</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 0 rows.</span></span>
+<span><span class="co">#&gt; [1] letter      constituent</span></span>
+<span><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ levels:   2 variables: </span></span>
-<span><span class="co">#&gt;  $ letter : 26 Levels: a ... z </span></span>
-<span><span class="co">#&gt;  $ word   :  8 Levels: brown ... the </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
-<span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ observed : logi  TRUE TRUE TRUE</span></span>
-<span><span class="co">#&gt;  $ set_count: int  3 3 3</span></span>
-<span><span class="co">#&gt;  $ set_size : int  3 3 3</span></span>
-<span><span class="co">#&gt;  $ coverage : num  1 1 1</span></span>
-<span><span class="co">#&gt;  $ complete : logi  TRUE TRUE TRUE</span></span></code></pre></div>
-<p>We can visualize this as a graph like so:
-<img src="coverage_and_enrichment_files/figure-html/plot-cov-1-1.png" class="r-plt" alt="" width="576"></p>
-</div>
-<div class="section level3">
-<h3 id="defining-coverage">Defining coverage<a class="anchor" aria-label="anchor" href="#defining-coverage"></a>
-</h3>
+<span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
+<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject</span></span></code></pre></div>
 <p>By default, coverage is only calculated between the data types
-involved in the last step of the path. However, we can impose
-conditional filtering steps:</p>
+involved in the last step of the path. However, we can specify
+conditional filtering steps.</p>
+</div>
+<div class="section level4">
+<h4 id="complete-coverage">Complete coverage<a class="anchor" aria-label="anchor" href="#complete-coverage"></a>
+</h4>
+<p>When defining a path, we can use the <code>:</code> operator as
+shorthand for complete coverage (<code>&gt;= 1</code>). For example:
+<code>letter ~ word ~ constituent &gt;= 1</code> is equivalent to
+<code>letter ~ word : constituent</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
+<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">:</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
-<span><span class="co">#&gt;    letter constituent</span></span>
-<span><span class="co">#&gt; 1       a      object</span></span>
-<span><span class="co">#&gt; 2       d      object</span></span>
-<span><span class="co">#&gt; 3       e      object</span></span>
-<span><span class="co">#&gt; 4       g      object</span></span>
-<span><span class="co">#&gt; 5       h      object</span></span>
-<span><span class="co">#&gt; 6       l      object</span></span>
-<span><span class="co">#&gt; 7       o      object</span></span>
-<span><span class="co">#&gt; 8       t      object</span></span>
-<span><span class="co">#&gt; 9       y      object</span></span>
-<span><span class="co">#&gt; 10      z      object</span></span>
-<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 0 rows.</span></span>
+<span><span class="co">#&gt; [1] letter      constituent</span></span>
+<span><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ levels:   2 variables: </span></span>
 <span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
-<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
-<span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ observed : logi  TRUE FALSE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ set_count: int  6 6 6 6 6 6 6 6 6 6 ...</span></span>
-<span><span class="co">#&gt;  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...</span></span>
-<span><span class="co">#&gt;  $ coverage : num  0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ...</span></span>
-<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;=</span> <span class="fl">1</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
-<span><span class="co">#&gt;    letter constituent</span></span>
-<span><span class="co">#&gt; 1       a      object</span></span>
-<span><span class="co">#&gt; 2       d      object</span></span>
-<span><span class="co">#&gt; 3       e      object</span></span>
-<span><span class="co">#&gt; 4       g      object</span></span>
-<span><span class="co">#&gt; 5       h      object</span></span>
-<span><span class="co">#&gt; 6       l      object</span></span>
-<span><span class="co">#&gt; 7       o      object</span></span>
-<span><span class="co">#&gt; 8       t      object</span></span>
-<span><span class="co">#&gt; 9       y      object</span></span>
-<span><span class="co">#&gt; 10      z      object</span></span>
-<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; @ levels:   2 variables: </span></span>
-<span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
-<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; @ metadata: 5 variables: </span></span>
-<span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...</span></span>
-<span><span class="co">#&gt;  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...</span></span>
-<span><span class="co">#&gt;  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...</span></span>
-<span><span class="co">#&gt;  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...</span></span>
-<span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
+<span><span class="co">#&gt;  $ constituent :  3 Levels: object predicate subject</span></span></code></pre></div>
+<p><img src="coverage_and_enrichment_files/figure-html/weave-plot-specify2-1.png" class="r-plt" alt="" width="500px" height="460px"></p>
+</div>
+<div class="section level4">
+<h4 id="partial-coverage">Partial coverage<a class="anchor" aria-label="anchor" href="#partial-coverage"></a>
+</h4>
+<p>We can similarly define threshold-based filters using relational
+expressions. For example:
+<code>letter ~ word &gt; 0.5 ~ constituent</code> is equivalent to
+<code>letter ~ word : constituent</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
@@ -317,14 +296,15 @@ conditional filtering steps:</p>
 <span><span class="co">#&gt;  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...</span></span>
 <span><span class="co">#&gt;  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...</span></span>
 <span><span class="co">#&gt;  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span></code></pre></div>
-<p><img src="coverage_and_enrichment_files/figure-html/plot-cov-2-1.png" class="r-plt" alt="" width="1728"></p>
+<p><img src="coverage_and_enrichment_files/figure-html/weave-plot-specify3-1.png" class="r-plt" alt="" width="500px" height="460px"></p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="enrichment-testing">Enrichment testing<a class="anchor" aria-label="anchor" href="#enrichment-testing"></a>
 </h3>
 <p>The <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> allows for quick hypothesis testing
 using the same syntax:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        expected  observed      fold   log_fold   p.value p.adj</span></span>
 <span><span class="co">#&gt; brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
@@ -338,17 +318,12 @@ using the same syntax:</p>
 <p>Alternatively, <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> can also be run on the
 result of an earlier <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> call for the same
 results:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        expected  observed      fold   log_fold   p.value p.adj</span></span>
-<span><span class="co">#&gt; brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
-<span><span class="co">#&gt; dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1</span></span>
-<span><span class="co">#&gt; fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1</span></span>
-<span><span class="co">#&gt; jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
-<span><span class="co">#&gt; lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
-<span><span class="co">#&gt; over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
-<span><span class="co">#&gt; quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1</span></span>
-<span><span class="co">#&gt; the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1</span></span></code></pre></div>
+<span><span class="co">#&gt;            expected  observed      fold    log_fold   p.value     p.adj</span></span>
+<span><span class="co">#&gt; object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
+<span><span class="co">#&gt; predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
+<span><span class="co">#&gt; subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

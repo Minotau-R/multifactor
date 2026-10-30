@@ -99,15 +99,24 @@ multifactor object, `fox`.
 `#>      y     .   .   .     .    |    .     .   .`\
 `#>      z     .   .   .     .    |    .     .   .`
 
-### Calculate coverage
+## Calculate coverage
+
+### Introduction
 
 With coverage, we mean the proportion of items in a set that are
 present. In other words, going back to our example, given some number of
 letters, we can calculate which words we can make, and how complete they
 are.
 
-To demonstrate, we’ll need to generate some collection of letters as
-input data:
+To demonstrate, let’s first consider the graph representation of our
+dataset: ![](coverage_and_enrichment_files/figure-html/plot-cov-0-1.png)
+
+Three feature types are shown on the x-axis, with links between
+respective levels as lines. We can see that each letter is linked to the
+words it appears in, which are in turn linked to their corresponding
+constituents.
+
+We’ll also need to generate some collection of letters as input data:
 
 \
 `# Generate some collection of letters`\
@@ -116,18 +125,29 @@ input data:
 `input`\
 `#>  [1] "a" "p" "n" "g" "r" "m" "i" "s" "e" "t" "c" "w" "h" "l"`
 
+### Defining coverage in a path
+
+### weave_coverage()
+
 We can use the
 [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
 function to calculate to what degree the input letters cover the words
 in our data set. This function behaves similarly to
-[`weave()`](https://minotau-r.github.io/multifactor/reference/weave-generic.md)
-but comes with an additional argument, `.data`. For now, let’s plug in
-our input letters:
+[`weave()`](https://minotau-r.github.io/multifactor/reference/weave-generic.md),
+in the sense that it takes a multifactor as its first argument, `x`, and
+its second argument, `.path`, defines the path through that multifactor.
+It also has an additional argument, `.data`.
+
+For now, let’s plug in our input letters:
 
 \
 `res`` ``<-`` `[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input`\
+`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``~`` ``constituent``, .data ``=`` ``input`\
 `)`
+
+![](coverage_and_enrichment_files/figure-html/weave-plot-specify1-1.png)
+
+#### Filter using `subset()`
 
 We can use the [`subset()`](https://rdrr.io/r/base/subset.html) method
 for `linkmap` to automatically filter for complete cases, only the word
@@ -135,91 +155,45 @@ for `linkmap` to automatically filter for complete cases, only the word
 
 \
 [`subset`](https://rdrr.io/r/base/subset.html)`(``res``)`\
-`#> A multifactor::linkmap data.frame S7_object: 3 rows.`\
-`#>   letter word`\
-`#> 1      t  the`\
-`#> 2      h  the`\
-`#> 3      e  the`\
+`#> A multifactor::linkmap data.frame S7_object: 0 rows.`\
+`#> [1] letter      constituent`\
+`#> <0 rows> (or 0-length row.names)`\
 `#> `\
 `#> @ levels:   2 variables: `\
-`#>  $ letter : 26 Levels: a ... z `\
-`#>  $ word   :  8 Levels: brown ... the `\
-`#> `\
-`#> @ metadata: 5 variables: `\
-`#> List of 5`\
-`#>  $ observed : logi  TRUE TRUE TRUE`\
-`#>  $ set_count: int  3 3 3`\
-`#>  $ set_size : int  3 3 3`\
-`#>  $ coverage : num  1 1 1`\
-`#>  $ complete : logi  TRUE TRUE TRUE`
-
-We can visualize this as a graph like so:
-![](coverage_and_enrichment_files/figure-html/plot-cov-1-1.png)
-
-### Defining coverage
+`#>  $ letter      : 26 Levels: a ... z `\
+`#>  $ constituent :  3 Levels: object predicate subject`
 
 By default, coverage is only calculated between the data types involved
-in the last step of the path. However, we can impose conditional
-filtering steps:
+in the last step of the path. However, we can specify conditional
+filtering steps.
+
+#### Complete coverage
+
+When defining a path, we can use the `:` operator as shorthand for
+complete coverage (`>= 1`). For example:
+`letter ~ word ~ constituent >= 1` is equivalent to
+`letter ~ word : constituent`.
 
 \
 [`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``~`` ``constituent``, .data ``=`` ``input`\
+`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``:`` ``constituent``, .data ``=`` ``input`\
 `)`\
-`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
-`#>    letter constituent`\
-`#> 1       a      object`\
-`#> 2       d      object`\
-`#> 3       e      object`\
-`#> 4       g      object`\
-`#> 5       h      object`\
-`#> 6       l      object`\
-`#> 7       o      object`\
-`#> 8       t      object`\
-`#> 9       y      object`\
-`#> 10      z      object`\
-`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> A multifactor::linkmap data.frame S7_object: 0 rows.`\
+`#> [1] letter      constituent`\
+`#> <0 rows> (or 0-length row.names)`\
 `#> `\
 `#> @ levels:   2 variables: `\
 `#>  $ letter      : 26 Levels: a ... z `\
-`#>  $ constituent :  3 Levels: object predicate subject `\
-`#> `\
-`#> @ metadata: 5 variables: `\
-`#> List of 5`\
-`#>  $ observed : logi  TRUE FALSE TRUE TRUE TRUE TRUE ...`\
-`#>  $ set_count: int  6 6 6 6 6 6 6 6 6 6 ...`\
-`#>  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...`\
-`#>  $ coverage : num  0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ...`\
-`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`\
-\
-[`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
-`  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``>=`` ``1`` ``~`` ``constituent``, .data ``=`` ``input`\
-`)`\
-`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
-`#>    letter constituent`\
-`#> 1       a      object`\
-`#> 2       d      object`\
-`#> 3       e      object`\
-`#> 4       g      object`\
-`#> 5       h      object`\
-`#> 6       l      object`\
-`#> 7       o      object`\
-`#> 8       t      object`\
-`#> 9       y      object`\
-`#> 10      z      object`\
-`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
-`#> `\
-`#> @ levels:   2 variables: `\
-`#>  $ letter      : 26 Levels: a ... z `\
-`#>  $ constituent :  3 Levels: object predicate subject `\
-`#> `\
-`#> @ metadata: 5 variables: `\
-`#> List of 5`\
-`#>  $ set_size : int  10 10 10 10 10 10 10 10 10 10 ...`\
-`#>  $ observed : logi  FALSE FALSE TRUE FALSE TRUE FALSE ...`\
-`#>  $ set_count: int  3 3 3 3 3 3 3 3 3 3 ...`\
-`#>  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...`\
-`#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`\
+`#>  $ constituent :  3 Levels: object predicate subject`
+
+![](coverage_and_enrichment_files/figure-html/weave-plot-specify2-1.png)
+
+#### Partial coverage
+
+We can similarly define threshold-based filters using relational
+expressions. For example: `letter ~ word > 0.5 ~ constituent` is
+equivalent to `letter ~ word : constituent`.
+
 \
 [`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``>`` ``0.5`` ``~`` ``constituent``, .data ``=`` ``input`\
@@ -250,7 +224,7 @@ filtering steps:
 `#>  $ coverage : num  0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ...`\
 `#>  $ complete : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...`
 
-![](coverage_and_enrichment_files/figure-html/plot-cov-2-1.png)
+![](coverage_and_enrichment_files/figure-html/weave-plot-specify3-1.png)
 
 ### Enrichment testing
 
@@ -278,12 +252,7 @@ call for the same results:
 
 \
 [`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``res``)`\
-`#>        expected  observed      fold   log_fold   p.value p.adj`\
-`#> brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
-`#> dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1`\
-`#> fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1`\
-`#> jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
-`#> lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
-`#> over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
-`#> quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1`\
-`#> the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1`
+`#>            expected  observed      fold    log_fold   p.value     p.adj`\
+`#> object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
+`#> predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
+`#> subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
