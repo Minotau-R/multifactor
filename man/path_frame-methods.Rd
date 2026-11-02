@@ -13,6 +13,9 @@ A \code{path_frame} or method-appropriate value.
 Methods for path_frame S7 container class
 }
 \examples{
+# Only necessary in example
+require(generics)
+
 x <- random_multifactor()
 
 # Generate a path_frame
@@ -20,5 +23,9 @@ p <- select_path(x, a ~ d)
 
 # Get formula notation for the full path:
 formula(p)
+
+# Split path into components
+
+components(p)
 
 }

@@ -646,3 +646,8 @@ Alternatively, `test_enrich()` can also be run on the result of an earlier
 ```{r 'test-enrich2', message = FALSE}
 test_enrich(res)
 ```
+
+# Session Info
+```{r 'session-info-cov'}
+sessionInfo()
+```

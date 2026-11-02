@@ -15,6 +15,8 @@
 #' dim(x)
 #' dimnames(x)
 #'
+#' print(x)
+#'
 #' # Factor-like properties
 #' levels(x)
 #' nlevels(x)
@@ -23,7 +25,7 @@
 #' @returns A `linkmap`
 NULL
 
-S7::method(print, linkmap) <- function(x, n = 10L, ...) {
+S7::method(print, linkmap) <- function(x, n = 10L, show_metadata = FALSE, ...) {
   nr <- NROW(x)
   nrn <- nr - n
   cat("A ", paste(class(x), collapse = " "), ": ", nr, " rows.\n", sep = "")
@@ -41,9 +43,13 @@ S7::method(print, linkmap) <- function(x, n = 10L, ...) {
 
   # Metadata
   if (prod(dim(m <- x@metadata))) {
-    cat("\n@ metadata:", NCOL(m), "variables: \n")
-    # Dodge data.frame str header by forcing str.default:
-    str(`class<-`(m, "default"), give.attr = FALSE, give.length = FALSE)
+    if(show_metadata) {
+      cat("\n@ metadata:", NCOL(m), "variables: \n")
+      # Dodge data.frame str header by forcing str.default:
+      str(`class<-`(m, "default"), give.attr = FALSE, give.length = FALSE)
+    } else {
+      cat("\n and ", NCOL(m), " metadata variables.")
+    }
   }
 }
 

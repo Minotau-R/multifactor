@@ -26,6 +26,8 @@ x <- linkmap(a2b)
 dim(x)
 dimnames(x)
 
+print(x)
+
 # Factor-like properties
 levels(x)
 nlevels(x)

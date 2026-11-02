@@ -3,6 +3,9 @@
 #' @rdname path_frame-methods
 #'
 #' @examples
+#' # Only necessary in example
+#' require(generics)
+#'
 #' x <- random_multifactor()
 #'
 #' # Generate a path_frame
@@ -10,6 +13,10 @@
 #'
 #' # Get formula notation for the full path:
 #' formula(p)
+#'
+#' # Split path into components
+#'
+#' components(p)
 #'
 #' @param x,object `path_frame` on which the method should be applied.
 #' @returns A `path_frame` or method-appropriate value.
@@ -25,6 +32,12 @@ S7::method(formula, path_frame) <- function(x) `formula.multifactor::path_frame`
 
   stats::as.formula(res, globalenv())
 }
+
+S7::method(components, path_frame) <- function(object) `components.multifactor::path_frame`(object)
+
+#' @export
+#' @importFrom generics components
+`components.multifactor::path_frame` <- function(object, ...) split.data.frame(object, ~components)
 
 .build_call_string_pf <- function(x) {
   out_len <- 1 + 2 * NROW(x)
@@ -77,8 +90,9 @@ S7::method(print, path_frame) <- function(x, ...) {
   } else {
     cat(" with ", length(p), " sub-paths:\n", sep = "")
   }
-  for (i in length(p)) {
-    print(p[[1]])
+  for (i in seq_along(p)) {
+    cat(paste0("[[", i, "]]\n"))
+    print(p[[i]])
     cat("\n")
   }
   print.data.frame(x)

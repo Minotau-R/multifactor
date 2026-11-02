@@ -11,6 +11,7 @@ S3method(as.igraph,"multifactor::multifactor")
 S3method(as.matrix,"multifactor::linkmap")
 S3method(augment,"multifactor::multifactor")
 S3method(c,"multifactor::multifactor")
+S3method(components,"multifactor::path_frame")
 S3method(formula,"multifactor::path_frame")
 S3method(stack,"multifactor::multifactor")
 S3method(subset,"multifactor::linkmap")
@@ -69,7 +70,10 @@ importFrom(forcats,
   lvls_expand,
   lvls_union
 )
-importFrom(generics,augment)
+importFrom(generics,
+  augment,
+  components
+)
 importFrom(igraph,
   "edge_attr<-",
   E,
