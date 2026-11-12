@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# multifactor: An R package for multifactor and linkmap S7 container classes.
+
 <!-- badges: start -->
 
 [![GitHub
@@ -9,9 +11,8 @@ issues](https://img.shields.io/github/issues/Minotau-R/multifactor)](https://git
 pulls](https://img.shields.io/github/issues-pr/Minotau-R/multifactor)](https://github.com/Minotau-R/multifactor/pulls)
 [![R
 BiocCheck](https://github.com/Minotau-R/multifactor/actions/workflows/test.yml/badge.svg)](https://github.com/Minotau-R/multifactor/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/Minotau-R/multifactor/graph/badge.svg?token=VY6FVVS9BK)](https://codecov.io/gh/Minotau-R/multifactor)
 <!-- badges: end -->
-
-# multifactor: An R package for multifactor and linkmap S7 container classes.
 
 ## Introduction
 
