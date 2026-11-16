@@ -25,6 +25,7 @@ reference:
   - weave_apply
   - weave_apply-methods
   - weave_to_tbl
+  - weave_join
   - test_enrich
   - test_enrich-methods
 - title: Classes
