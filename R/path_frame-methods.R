@@ -22,7 +22,8 @@
 #' @returns A `path_frame` or method-appropriate value.
 NULL
 
-S7::method(formula, path_frame) <- function(x) `formula.multifactor::path_frame`(x)
+S7::method(formula, path_frame) <-
+  function(x) `formula.multifactor::path_frame`(x)
 
 #' @export
 #' @importFrom stats formula as.formula
@@ -33,11 +34,22 @@ S7::method(formula, path_frame) <- function(x) `formula.multifactor::path_frame`
   stats::as.formula(res, globalenv())
 }
 
-S7::method(components, path_frame) <- function(object) `components.multifactor::path_frame`(object)
+S7::method(range, path_frame) <-
+  function(..., na.rm = FALSE) `range.multifactor::path_frame`(...)
+
+#' @export
+`range.multifactor::path_frame` <- function(..., na.rm = FALSE) {
+  x <- as.data.frame(...)
+  as.character.factor(c(x[1L,1L], x[NROW(x), 2L]))
+}
+
+S7::method(components, path_frame) <-
+  function(object) `components.multifactor::path_frame`(object)
 
 #' @export
 #' @importFrom generics components
-`components.multifactor::path_frame` <- function(object, ...) split.data.frame(object, ~components)
+`components.multifactor::path_frame` <-
+  function(object, ...) split.data.frame(object, ~components)
 
 .build_call_string_pf <- function(x) {
   out_len <- 1 + 2 * NROW(x)

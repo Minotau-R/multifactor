@@ -49,6 +49,7 @@ S7::method(test_enrich, linkmap) <- function(
             x, all.vars(.path), .tempdata,
             c("set_count", "set_size", "coverage", "complete")
         )
+        x <- as_linkmap(x)
     }
 
     i <- stats::reformulate(colnames(x)[[2L]])

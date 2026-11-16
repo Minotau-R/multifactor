@@ -61,7 +61,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 
 
   if(any(cov_i <- .check_pf_cov_bool(pf))) {
-    cov_exprs <- .get_coverage_exprs(pf)
+    cov_exprs <- .get_coverage_exprs_only(pf)
 
     cov_vars <- vapply(
       .coverage_get_terms_list(terms_pf, cov_i), tail, 1L,

@@ -29,14 +29,15 @@ of row-based subsets of table \code{.data}. Mimics lapply.
 \examples{
 
 # Prepare data
+set.seed(2612)
 x <- trade_posts()
 
 # Generate small example feature table 'df'.
-n <- nlevels(x)[["clothing"]]
+n <- nlevels(x)[["fruit"]]
 df <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
 
-#' # Ensure rownames correspond to the second (RHS) variable in the formula.
-df <- as.data.frame(df, row.names = levels(x)$clothing)
+#' # Ensure rownames correspond to the first (LHS) variable in the formula.
+df <- as.data.frame(df, row.names = levels(x)$fruit)
 
 # Apply arbitrary code to x based on group membership
 weave_apply(

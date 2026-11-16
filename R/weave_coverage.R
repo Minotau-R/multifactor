@@ -9,6 +9,7 @@
 #'     with the same information. (Also see `.data_column` argument).
 #' @param metric `Character scalar`.
 #'     One or more of `'set_count'`, `'set_size'`, `'coverage'`, `'complete'`.
+#'     All are returned by default.
 #' @param out.format `Character scalar`.
 #'     One of `'linkmap'`, `'matrix'`.
 #' @param .data_column `Character scalar`. if `.data` is a table, where to find
@@ -58,18 +59,21 @@ S7::method(weave_coverage, multifactor) <- function(
   .path_check_valid_coverage(pf)
 
   pf <- path_frame(.select_enframe_path(x, pf))
-  terms_pf <- terms(pf)
+  pfs <- split.data.frame(pf, ~components)
+  # terms_pf <- terms(pf)
 
-  # check path length:
-  if (NROW(pf) == 1) {
-    res <- .coverage_single_step(x, terms_pf, .data, metric)
-  } else {
-    if(!.check_path_frame_uses_coverage(pf)) {
-      pf[["cov_operator"]][NROW(pf)] <- ">"
-      pf[["cov_value"]][NROW(pf)] <- 0
-    }
-    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
-  }
+  # split pf to terms list
+  # full_path <- ...
+  res <- lapply(pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric)
+  res <- do.call(rbind.data.frame, res)
+  res <- as_linkmap(res)
+
+  ### from weave
+  # full_path <- .pf_as_full_path_list(pf)
+  # res <- lapply(full_path, .weave_full_path, x = x, out.format = "linkmap")
+  # res <- do.call(rbind.data.frame, res)
+  # res <- linkmap(res)
+
 
   if (out.format == "matrix") {
     res <- `as.matrix.multifactor::linkmap`(res)
@@ -80,11 +84,27 @@ S7::method(weave_coverage, multifactor) <- function(
 
 
 .coverage_single_step <- function(x, terms_pf, .data, metric) {
-  res <- .weave_coverage_two(
+  res <- .weave_coverage_simple(
     x[[.rows_with_col(x@map, terms_pf)]],
     terms_pf, .data, metric
   )
-  res <- as_linkmap(res)
+  res
+}
+
+
+.weave_cov_full_path <- function(x, pf, .data, metric) {
+  # Take unmodified terms
+  terms_pf <- terms(pf)
+  # check path length:
+  if (NROW(pf) == 1) {
+    res <- .coverage_single_step(x, terms_pf, .data, metric)
+  } else {
+    if(!.check_path_frame_uses_coverage(pf)) {
+      pf[["cov_operator"]][NROW(pf)] <- ">"
+      pf[["cov_value"]][NROW(pf)] <- 0
+    }
+    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
+  }
   res
 }
 
@@ -139,10 +159,22 @@ S7::method(weave_coverage, multifactor) <- function(
 
   if(length(drop_cols)) { res[drop_cols] <- NULL }
 
-  as_linkmap(res)
+  res
 }
 
+
 .get_coverage_exprs <- function(pf) {
+  cov_i <- .check_pf_cov_bool(pf)
+  stopifnot("No coverage in path_frame input" = any(cov_i))
+
+  res <- paste(pf[["cov_operator"]], pf[["cov_value"]])
+  if(!tail(cov_i, 1L)) {
+    res <- c(res, ">= 0")
+  }
+  res
+}
+
+.get_coverage_exprs_only <- function(pf) {
   cov_i <- .check_pf_cov_bool(pf)
   stopifnot("No coverage in path_frame input" = any(cov_i))
 
@@ -155,9 +187,9 @@ S7::method(weave_coverage, multifactor) <- function(
 
 .weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data) {
 
-  lm <- .weave_full_path(x, terms_list, "linkmap")
+  lm <- .weave_full_path(x, terms_list)
   from_to <- terms_list[c(1, length(terms_list))]
-  lm <- .weave_coverage_two(
+  lm <- .weave_coverage_simple(
     lm, from_to, .data, c("set_count", "set_size", "coverage", "complete")
   )
   lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
@@ -167,8 +199,6 @@ S7::method(weave_coverage, multifactor) <- function(
 
   return(x)
 }
-
-
 
 
 .coverage_get_terms_list <- function(x, cov_i) {
@@ -220,10 +250,8 @@ S7::method(weave_coverage, multifactor) <- function(
 #' given a linkmap x, calculate enrichment of all_terms positions 1 ~ 2,
 #' with optional .data character vector
 #' @noRd
-.weave_coverage_two <- function(x, all_terms, .data = NULL, metric) {
-  # if(S7::S7_inherits(x, multifactor)) {
-  #   x <- x[[1L]]
-  # }
+.weave_coverage_simple <- function(x, all_terms, .data = NULL, metric) {
+
   x <- as.data.frame(x)
   unit_term <- all_terms[[1L]]
   set_term <- all_terms[[2L]]

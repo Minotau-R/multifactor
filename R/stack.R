@@ -75,7 +75,7 @@ S7::method(stack, multifactor) <- function(x, .path, out.format = c("linkmap", "
 .stack_weave_terms <- function(x, terms) {
   # Determine required ids in order, only keep relevant elements of link.
   all_terms <- .select_path(x, terms, NULL, NULL, NULL)
-  res <- lapply(all_terms, .weave_full_path, x = x, out.format = "linkmap")
+  res <- lapply(all_terms, .weave_full_path, x = x)
   res <- do.call(
     rbind.data.frame,
     c(res, make.row.names = FALSE, stringsAsFactors = TRUE)

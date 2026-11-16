@@ -445,11 +445,11 @@ weave_apply(
 )
 ```
 
-### Compatibility with the tidyverse: `weave_to_tbl`
-For those who prefer to use `tidyverse`, `weave_to_tbl()` returns a tidy 
+### Compatibility with the tidyverse: `weave_convert`
+For those who prefer to use `tidyverse`, `weave_convert()` returns a tidy 
 wide-format table, ready to be grouped based on the first two columns. 
 ```{r 'subgroup-tbl'}
-weave_to_tbl(tp, .path = fruit ~ clothing, .data = clothing_table)
+weave_convert(tp, .path = fruit ~ clothing, .data = clothing_table)
 ```
 
 ## Reading and parsing adjaceny list-formatted files

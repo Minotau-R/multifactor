@@ -35,7 +35,7 @@ S7::method(weave, multifactor) <- function(
   pf <- .select_enframe_path(x, pf)
 
   full_path <- .pf_as_full_path_list(pf)
-  res <- lapply(full_path, .weave_full_path, x = x, out.format = "linkmap")
+  res <- lapply(full_path, .weave_full_path, x = x)
   res <- do.call(rbind.data.frame, res)
   res <- linkmap(res)
 
@@ -55,7 +55,7 @@ S7::method(weave, multifactor) <- function(
   }
 }
 
-.weave_full_path <- function(x, all_terms, out.format) {
+.weave_full_path <- function(x, all_terms) {
   x <- .subset_by_path(x, all_terms)
   terms <- all_terms[c(1L, length(all_terms))]
 
