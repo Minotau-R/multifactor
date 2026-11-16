@@ -233,16 +233,11 @@ The
 allows for quick hypothesis testing using the same syntax:
 
 \
-[`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word``, .data ``=`` ``input``)`\
-`#>        expected  observed      fold   log_fold   p.value p.adj`\
-`#> brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
-`#> dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1`\
-`#> fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1`\
-`#> jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1`\
-`#> lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
-`#> over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1`\
-`#> quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1`\
-`#> the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1`
+[`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``constituent``, .data ``=`` ``input``)`\
+`#>            expected  observed      fold    log_fold   p.value     p.adj`\
+`#> object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
+`#> predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
+`#> subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
 
 Alternatively,
 [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)

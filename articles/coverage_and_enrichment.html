@@ -305,16 +305,11 @@ expressions. For example:
 <p>The <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> allows for quick hypothesis testing
 using the same syntax:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span>, .data <span class="op">=</span> <span class="va">input</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        expected  observed      fold   log_fold   p.value p.adj</span></span>
-<span><span class="co">#&gt; brown 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
-<span><span class="co">#&gt; dog   0.5384615 0.3333333 0.6190476 -0.6918777 0.9153846     1</span></span>
-<span><span class="co">#&gt; fox   0.5384615 0.0000000 0.0000000       -Inf 1.0000000     1</span></span>
-<span><span class="co">#&gt; jumps 0.5384615 0.6000000 1.1142857  0.1561192 0.5782609     1</span></span>
-<span><span class="co">#&gt; lazy  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
-<span><span class="co">#&gt; over  0.5384615 0.5000000 0.9285714 -0.1069152 0.7608696     1</span></span>
-<span><span class="co">#&gt; quick 0.5384615 0.4000000 0.7428571 -0.4288433 0.8826087     1</span></span>
-<span><span class="co">#&gt; the   0.5384615 1.0000000 1.8571429  0.8930848 0.1400000     1</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            expected  observed      fold    log_fold   p.value     p.adj</span></span>
+<span><span class="co">#&gt; object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
+<span><span class="co">#&gt; predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
+<span><span class="co">#&gt; subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
 <p>Alternatively, <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> can also be run on the
 result of an earlier <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> call for the same
 results:</p>
