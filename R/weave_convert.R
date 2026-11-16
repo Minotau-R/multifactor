@@ -44,7 +44,6 @@ weave_convert <- function(x, .path, .data, .index = "row.names") {
   range_pf <- `range.multifactor::path_frame`(pf)
 
   out <- .weave_res_to_index(lmp, range_pf, .data, .i = .index)
-  #
 
   xcol <- if (.index == "row.names") row.names(.data) else .data[[.index]]
 

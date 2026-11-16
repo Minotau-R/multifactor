@@ -59,8 +59,8 @@ NULL
 `subset.multifactor::linkmap` <- function(x, subset = NULL, ...) {
   df <- as.data.frame(x)
   if (is.null(subset)) {
-    if ("complete" %in% colnames(df)) {
-      i <- df[["complete"]]
+    if ("coverage" %in% colnames(df)) {
+      i <- df[["coverage"]] >= 1L
     } else {
       i <- rep_len(TRUE, NROW(df))
     }
@@ -82,14 +82,13 @@ NULL
   }
 }
 
-method(subset, multifactor) <- function(x, .path, .drop.unmatched = FALSE, ...) `subset.multifactor::multifactor`(
-  x, .path, .drop.unmatched
-)
+method(subset, multifactor) <- function(
+    x, .path, .drop.unmatched = FALSE, ...
+) `subset.multifactor::multifactor`( x, .path, .drop.unmatched )
 
-method(subset, linkmap) <- function(x, subset = NULL, ...) `subset.multifactor::linkmap`(
-  x,
-  subset = NULL, ...
-)
+method(subset, linkmap) <- function(
+    x, subset = NULL, ...
+) `subset.multifactor::linkmap`( x, subset = NULL, ... )
 
 #' @importFrom generics augment
 #'

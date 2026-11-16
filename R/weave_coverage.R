@@ -8,7 +8,7 @@
 #'     found within the first element of `.path`. Alternatively, a `data.frame`
 #'     with the same information. (Also see `.data_column` argument).
 #' @param metric `Character scalar`.
-#'     One or more of `'set_count'`, `'set_size'`, `'coverage'`, `'complete'`.
+#'     One or more of `'set_count'`, `'set_size'`, `'coverage'`.
 #'     All are returned by default.
 #' @param out.format `Character scalar`.
 #'     One of `'linkmap'`, `'matrix'`.
@@ -44,11 +44,11 @@ NULL
 
 S7::method(weave_coverage, multifactor) <- function(
     x, .path, .data = NULL,
-    metric = c("set_count", "set_size", "coverage", "complete"),
+    metric = c("set_count", "set_size", "coverage"),
     out.format = c("linkmap", "matrix"), .data_column = "row.names"
 ) {
   metric <- match.arg(
-    metric, c("set_count", "set_size", "coverage", "complete"),
+    metric, c("set_count", "set_size", "coverage"),
     several.ok = TRUE
   )
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
@@ -60,20 +60,11 @@ S7::method(weave_coverage, multifactor) <- function(
 
   pf <- path_frame(.select_enframe_path(x, pf))
   pfs <- split.data.frame(pf, ~components)
-  # terms_pf <- terms(pf)
 
   # split pf to terms list
-  # full_path <- ...
   res <- lapply(pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric)
   res <- do.call(rbind.data.frame, res)
   res <- as_linkmap(res)
-
-  ### from weave
-  # full_path <- .pf_as_full_path_list(pf)
-  # res <- lapply(full_path, .weave_full_path, x = x, out.format = "linkmap")
-  # res <- do.call(rbind.data.frame, res)
-  # res <- linkmap(res)
-
 
   if (out.format == "matrix") {
     res <- `as.matrix.multifactor::linkmap`(res)
@@ -134,7 +125,7 @@ S7::method(weave_coverage, multifactor) <- function(
   res <- as.data.frame(x[[res_name]])
 
   if(backweave) {
-    res[c("set_size", "coverage", "complete", "set_count")] <- NULL
+    res[c("set_size", "coverage", "set_count")] <- NULL
 
     res <- sort_by(
       merge( x_bw, res, all.x = TRUE ),
@@ -149,12 +140,11 @@ S7::method(weave_coverage, multifactor) <- function(
              simplify = FALSE), FALSE, FALSE
       )
     res[["coverage"]] <- res[["set_count"]] / res[["set_size"]]
-    res[["complete"]] <- res[["coverage"]] == 1
 
   }
 
   drop_cols <- setdiff(
-    c("set_count", "set_size",  "coverage", "complete"), metric
+    c("set_count", "set_size",  "coverage"), metric
     )
 
   if(length(drop_cols)) { res[drop_cols] <- NULL }
@@ -190,7 +180,7 @@ S7::method(weave_coverage, multifactor) <- function(
   lm <- .weave_full_path(x, terms_list)
   from_to <- terms_list[c(1, length(terms_list))]
   lm <- .weave_coverage_simple(
-    lm, from_to, .data, c("set_count", "set_size", "coverage", "complete")
+    lm, from_to, .data, c("set_count", "set_size", "coverage")
   )
   lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
 
@@ -274,8 +264,7 @@ S7::method(weave_coverage, multifactor) <- function(
   val <- data.frame(
     set_count = obs_set,
     set_size  = tot_set,
-    coverage  = obs_set / tot_set,
-    complete  = obs_set == tot_set
+    coverage  = obs_set / tot_set
   )[metric]
 
   metadata <- val[match(bg[[set_term]], row.names(val)), , drop = FALSE]

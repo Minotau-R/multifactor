@@ -14,7 +14,7 @@ found within the first element of \code{.path}. Alternatively, a \code{data.fram
 with the same information. (Also see \code{.data_column} argument).}
 
 \item{metric}{\verb{Character scalar}.
-One or more of \code{'set_count'}, \code{'set_size'}, \code{'coverage'}, \code{'complete'}.
+One or more of \code{'set_count'}, \code{'set_size'}, \code{'coverage'}.
 All are returned by default.}
 
 \item{out.format}{\verb{Character scalar}.

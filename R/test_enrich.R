@@ -16,7 +16,7 @@ method(test_enrich, multifactor) <- function(
 ) {
     x <- weave_coverage(
         x, .path, .data,
-        c("set_count", "set_size", "coverage", "complete"),
+        c("set_count", "set_size", "coverage"),
         "linkmap",
         .data.column
         )
@@ -47,7 +47,7 @@ S7::method(test_enrich, linkmap) <- function(
         .tempdata <- .data_coverage_to_vector(.data, .data_column)
         x <- .coverage_single_step(
             x, all.vars(.path), .tempdata,
-            c("set_count", "set_size", "coverage", "complete")
+            c("set_count", "set_size", "coverage")
         )
         x <- as_linkmap(x)
     }

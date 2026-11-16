@@ -81,28 +81,6 @@ S7::method(weave_apply, multifactor) <- function(
 }
 
 #' Index a table
-#' @name .index_tbl_by_path_list
-#' @rdname index_tbl
-#' @description
-#' `.index_tbl_by_path_list()` finds row indices for input table `.data`,
-#' based on a user-defined path through a multifactor.
-#' @noRd
-#' @examples
-#' # Utilities
-#' .index_tbl_by_path_list(link, ec ~ ko, .data)
-#'
-.index_tbl_by_path_list <- function(.x, path_list, .data, .i = "row.names") {
-  .data <- .index_tbl(.data, type = path_list[[1L]], .i = .i)
-  path_list[[1L]] <- colnames(.data)[[2L]]
-  .data <- multifactor(.data)
-
-  .x <- `c.multifactor::multifactor`(.x, .data)
-
-  weave(.x, path_list)
-}
-
-
-#' Index a table
 #' @name .weave_res_to_index
 #' @rdname index_tbl
 #' @description
