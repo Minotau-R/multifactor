@@ -671,7 +671,7 @@ pthres
 The `test_enrich()` allows for quick hypothesis testing using the same syntax: 
 
 ```{r 'test-enrich1', message = FALSE}
-test_enrich(x = fox, .path = letter ~ word, .data = input)
+test_enrich(x = fox, .path = letter ~ constituent, .data = input)
 ```
 
 Alternatively, `test_enrich()` can also be run on the result of an earlier 
