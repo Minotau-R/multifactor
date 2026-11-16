@@ -69,18 +69,14 @@ S7::method(weave_coverage, multifactor) <- function(
   if (out.format == "matrix") {
     res <- `as.matrix.multifactor::linkmap`(res)
   }
-
   res
 }
 
-
-.coverage_single_step <- function(x, terms_pf, .data, metric) {
-  res <- .weave_coverage_simple(
-    x[[.rows_with_col(x@map, terms_pf)]],
-    terms_pf, .data, metric
-  )
-  res
-}
+.coverage_single_step <- function(
+    x, terms_pf, .data, metric
+) .weave_coverage_simple(
+  x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, metric
+)
 
 
 .weave_cov_full_path <- function(x, pf, .data, metric) {
