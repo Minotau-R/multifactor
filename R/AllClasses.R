@@ -246,6 +246,9 @@ path_frame <- S7::new_class(
     if (!all(colnames(self)[seq_len(2L)] == c("from", "to"))) {
       "First two path_frame columns must be named 'from' and 'to'."
     }
+    if(length(unique(terms(self))) == 1L) {
+      "A path must contain at least two unique variables."
+    }
   }
 )
 
