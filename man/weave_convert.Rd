@@ -34,7 +34,7 @@ x <- trade_posts()
 n <- nlevels(x)[["fruit"]]
 df <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
 
-# Ensure rownames correspond to the first (LHS) variable in the formula.
+# Ensure feature names correspond to the first (LHS) variable in the formula.
 df <- as.data.frame(df, row.names = levels(x)$fruit)
 
 # Return a table with two feature type columns.

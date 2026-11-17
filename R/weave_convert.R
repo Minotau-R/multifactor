@@ -21,7 +21,7 @@
 #' n <- nlevels(x)[["fruit"]]
 #' df <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
 #'
-#' # Ensure rownames correspond to the first (LHS) variable in the formula.
+#' # Ensure feature names correspond to the first (LHS) variable in the formula.
 #' df <- as.data.frame(df, row.names = levels(x)$fruit)
 #'
 #' # Return a table with two feature type columns.
@@ -30,37 +30,20 @@
 #' @export
 #'
 weave_convert <- function(x, .path, .data, .index = "row.names") {
-  .valid_path_input(.path)
-  pf <- as_path_frame(.path)
-  .path_check_valid_weave_convert(pf)
-  pf <- path_frame(.select_enframe_path(x, pf))
+  pf <- .check_parse_path(x, .path, "weave_convert")
+  lmp <- .weave_to_linkmap(x, pf, .data, .coverage_metrics)
 
-  full_path <- .pf_as_full_path_list(pf)
-
-  lmp <- lapply(full_path, .weave_full_path, x = x)
-  lmp <- do.call(rbind.data.frame, lmp)
-  lmp <- linkmap(lmp)
-
-  range_pf <- `range.multifactor::path_frame`(pf)
+  range_pf <- .pf_from_to(pf)
 
   out <- .weave_res_to_index(lmp, range_pf, .data, .i = .index)
 
   xcol <- if (.index == "row.names") row.names(.data) else .data[[.index]]
-
   subgroup <- data.frame(y = xcol[out[[2L]]], x = out[1L], check.rows = FALSE)
-
   colnames(subgroup) <- range_pf
 
   out <- data.frame(subgroup, .data[out[[2L]], ])
   row.names(out) <- NULL
-  return(out)
+  out
 }
 
-.path_check_valid_weave_convert <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
-    stop(
-      "`weave_convert()` '.path' cannot contain '+'. ",
-      "Use `stack()` to prepare input."
-    )
-  }
-}
+

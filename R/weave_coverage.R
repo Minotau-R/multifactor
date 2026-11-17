@@ -42,23 +42,22 @@
 #'
 NULL
 
+.coverage_metrics <- c("set_count", "set_size", "coverage")
+
 S7::method(weave_coverage, multifactor) <- function(
     x, .path, .data = NULL,
     metric = c("set_count", "set_size", "coverage"),
     out.format = c("linkmap", "matrix"), .data_column = "row.names"
 ) {
   metric <- match.arg(
-    metric, c("set_count", "set_size", "coverage"),
+    metric, .coverage_metrics,
     several.ok = TRUE
   )
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
   .data <- .data_coverage_to_vector(.data, .data_column)
 
-  .valid_path_input(.path)
-  pf <- as_path_frame(.path)
-  .path_check_valid_coverage(pf)
+  pf <- .check_parse_path(x, .path, "weave_coverage")
 
-  pf <- path_frame(.select_enframe_path(x, pf))
   pfs <- split.data.frame(pf, ~components)
 
   # split pf to terms list
@@ -72,19 +71,16 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
-.coverage_single_step <-
-  function( x, terms_pf, .data, metric ) .weave_coverage_simple(
-    x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, metric
-  )
-
 .weave_cov_full_path <- function(x, pf, .data, metric) {
   # Take unmodified terms
   terms_pf <- terms(pf)
   # check path length:
   if (NROW(pf) == 1) {
-    res <- .coverage_single_step(x, terms_pf, .data, metric)
+    res <- .weave_coverage_simple(
+      x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, metric
+    )
   } else {
-    if(!.check_path_frame_uses_coverage(pf)) {
+    if(!.check_pf_uses_coverage(pf)) {
       pf[["cov_operator"]][NROW(pf)] <- ">"
       pf[["cov_value"]][NROW(pf)] <- 0
     }
@@ -119,7 +115,7 @@ S7::method(weave_coverage, multifactor) <- function(
   res <- as.data.frame(x[[res_name]])
 
   if(backweave) {
-    res[c("set_size", "coverage", "set_count")] <- NULL
+    res[.coverage_metrics] <- NULL
 
     res <- sort_by(
       merge( x_bw, res, all.x = TRUE ),
@@ -137,15 +133,11 @@ S7::method(weave_coverage, multifactor) <- function(
 
   }
 
-  drop_cols <- setdiff(
-    c("set_count", "set_size",  "coverage"), metric
-    )
-
-  if(length(drop_cols)) { res[drop_cols] <- NULL }
-
+  if( length(drop_cols <- setdiff(.coverage_metrics, metric)) ) {
+    res[drop_cols] <- NULL
+  }
   res
 }
-
 
 .get_coverage_exprs <- function(pf) {
   cov_i <- .check_pf_cov_bool(pf)
@@ -174,7 +166,7 @@ S7::method(weave_coverage, multifactor) <- function(
   lm <- .weave_full_path(x, terms_list)
   from_to <- terms_list[c(1, length(terms_list))]
   lm <- .weave_coverage_simple(
-    lm, from_to, .data, c("set_count", "set_size", "coverage")
+    lm, from_to, .data, .coverage_metrics
   )
   lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
 
@@ -208,18 +200,12 @@ S7::method(weave_coverage, multifactor) <- function(
 }
 
 .path_check_valid_coverage <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
+  if (.check_pf_uses_stack(x)) {
     stop(
       "weave_coverage() '.path' cannot contain '+'. ",
       "Use `stack()` to prepare input."
     )
   }
-  # FIXME for no explicit tildes
-  # if (!.check_path_frame_uses_coverage(x)) {
-  #   stop(
-  #     "weave_coverage() '.path' must contain coverage information."
-  #   )
-  # }
 }
 
 .as_cont_matrix <- function(x) {

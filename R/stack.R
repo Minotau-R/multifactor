@@ -32,7 +32,7 @@ S7::method(stack, multifactor) <- function(x, .path, out.format = c("linkmap", "
   # Handle .path arg
   .valid_path_input(.path)
   pf <- as_path_frame(.path)
-  .path_check_valid_stack(pf)
+  .path_check_valid_call(pf, "stack")
 
   terms <- .pf_as_stack_path_list(pf)
 
@@ -43,16 +43,7 @@ S7::method(stack, multifactor) <- function(x, .path, out.format = c("linkmap", "
   return(res)
 }
 
-.path_check_valid_stack <- function(x) {
-  stopifnot(
-    "stack does not support '.path' with multiple tildes " =
-      .check_path_frame_is_minimal(x)
-  )
-  stopifnot(
-    "At least one side of '.path' must include variables combined by '+'." =
-      .check_path_frame_uses_stack(x)
-  )
-}
+
 
 .pf_as_stack_path_list <- function(x) strsplit(
   `terms.multifactor::path_frame`(x), " + ",

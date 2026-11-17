@@ -15,7 +15,6 @@
 #' formula(p)
 #'
 #' # Split path into components
-#'
 #' components(p)
 #'
 #' @param x,object `path_frame` on which the method should be applied.
@@ -34,29 +33,25 @@ S7::method(formula, path_frame) <-
   stats::as.formula(res, globalenv())
 }
 
-S7::method(range, path_frame) <-
-  function(..., na.rm = FALSE) `range.multifactor::path_frame`(...)
-
-#' @export
-`range.multifactor::path_frame` <- function(..., na.rm = FALSE) {
-  x <- as.data.frame(...)
-  as.character.factor(c(x[1L,1L], x[NROW(x), 2L]))
-}
-
 S7::method(components, path_frame) <-
   function(object) `components.multifactor::path_frame`(object)
 
 #' @export
 #' @importFrom generics components
-`components.multifactor::path_frame` <-
-  function(object, ...) split.data.frame(object, ~components)
+`components.multifactor::path_frame` <- function(object, ...) {
+  stopifnot(
+    "Input path object has no components. See `?select_path()`." =
+      .check_pf_is_fitted(object)
+  )
+  split.data.frame(object, ~components)
+}
 
 .build_call_string_pf <- function(x) {
   out_len <- 1 + 2 * NROW(x)
   res <- rep(" ~ ", out_len)
   res[seq_len(out_len) %% 2 == 1L] <- `terms.multifactor::path_frame`(x)
 
-  if (.check_path_frame_uses_coverage(x)) {
+  if (.check_pf_uses_coverage(x)) {
     colon_i <- .is_colon_shorthand(x)
     res[seq_len(out_len) %% 2 == 0L][colon_i] <- ":"
 

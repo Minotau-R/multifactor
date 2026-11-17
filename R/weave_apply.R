@@ -42,21 +42,12 @@ NULL
 S7::method(weave_apply, multifactor) <- function(
     .x, .path, .data, .fun = NULL, ..., .index = "row.names"
     ) {
-  .valid_path_input(.path)
-  pf <- as_path_frame(.path)
-  .path_check_valid_weave_apply(pf)
-  # path_list <- terms(pf)
 
-  pf <- .select_enframe_path(.x, pf)
+  pf <- .check_parse_path(.x, .path, "weave_apply")
 
-  full_path <- .pf_as_full_path_list(pf)
-  lmp <- lapply(full_path, .weave_full_path, x = .x)
-  lmp <- do.call(rbind.data.frame, lmp)
-  lmp <- linkmap(lmp)
+  lmp <- .weave_to_linkmap(.x, pf, .data, .coverage_metrics)
 
-  range_pf <- `range.multifactor::path_frame`(pf)
-
-  index_lm <- .weave_res_to_index(lmp, range_pf, .data, .i = .index)
+  index_lm <- .weave_res_to_index(lmp, .pf_from_to(pf), .data, .i = .index)
 
   IDX <- .split_linkmap(index_lm)
 
@@ -71,13 +62,24 @@ S7::method(weave_apply, multifactor) <- function(
   return(res)
 }
 
-.path_check_valid_weave_apply <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
-    stop(
-      "`weave_apply()` '.path' cannot contain '+'.",
-      "Use `stack()` to prepare input."
+
+#' @noRd
+#'
+.weave_to_linkmap <- function(x, pf, .data, metric) {
+  if(.check_pf_uses_coverage(pf)) {
+    pfs <- split.data.frame(pf, ~components)
+    lmp <- lapply(
+      pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric
     )
+    lmp <- do.call(rbind.data.frame, lmp)
+    lmp <- as_linkmap(lmp)
+  } else {
+    full_path <- .pf_as_full_path_list(pf)
+    lmp <- lapply(full_path, .weave_full_path, x = x)
+    lmp <- do.call(rbind.data.frame, lmp)
+    lmp <- linkmap(lmp)
   }
+  lmp
 }
 
 #' Index a table

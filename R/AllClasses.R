@@ -250,7 +250,7 @@ path_frame <- S7::new_class(
 )
 
 
-##### linkmap utils --]--
+##### linkmap utils ----
 
 .check_input_df <- function(x) {
   if (!is.data.frame(x)) {

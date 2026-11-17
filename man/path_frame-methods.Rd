@@ -25,7 +25,6 @@ p <- select_path(x, a ~ d)
 formula(p)
 
 # Split path into components
-
 components(p)
 
 }

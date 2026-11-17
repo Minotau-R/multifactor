@@ -41,7 +41,7 @@ NULL
 
   .valid_path_input(.path)
   pf <- as_path_frame(.path)
-  .path_check_valid_subset(pf)
+  .path_check_valid_call(pf, "subset")
 
   path_list <- terms(pf)
 
@@ -73,14 +73,7 @@ NULL
   return(res)
 }
 
-.path_check_valid_subset <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
-    stop(
-      "subset() '.path' cannot contain '+'.",
-      "Use `stack()` to prepare input."
-    )
-  }
-}
+
 
 method(subset, multifactor) <- function(
     x, .path, .drop.unmatched = FALSE, ...

@@ -9,17 +9,33 @@ NULL
 
 .deparse_fm <- function(x) paste0(deparse(x, 500L), collapse = "")
 
-.check_path_frame_is_minimal <- function(.pf) NROW(.pf) == 1L
+.check_pf_is_minimal <- function(.pf) NROW(.pf) == 1L
 
-.check_path_frame_uses_stack <- function(.pf) any(.pf[["stack"]])
+.check_pf_uses_stack <- function(.pf) any(.pf[["stack"]])
 
-.check_path_frame_uses_coverage <- function(.pf) any(.check_pf_cov_bool(.pf))
+.check_pf_uses_coverage <- function(.pf) any(.check_pf_cov_bool(.pf))
+
+.check_pf_is_fitted <- function(.pf) "components" %in% colnames(.pf)
+
+.check_pf_fits_mf <- function(x, .pf) all(
+  vapply(split.data.frame(.pf, ~components), .path_in_mf, x = x, FALSE)
+)
+
+.path_in_mf <- function(x, .pf) {
+  need_steps <- apply(
+    .pf, 1L,  function(i) sort(unname(i[seq_len(2L)])), simplify = FALSE
+  )
+  have_steps <- unname(lapply(x, function(i) sort(names(i))))
+  all(need_steps %in% have_steps)
+}
 
 .check_pf_cov_bool <-
   function(x) !(x[["cov_operator"]] == ">=" & x[["cov_value"]] == 0)
 
 .is_colon_shorthand <-
   function(x) x[["cov_operator"]] %in% c(">=", "==") & x[["cov_value"]] == 1
+
+.pf_from_to <- function(x) as.character.factor(c(x[1L,1L], x[NROW(x), 2L]))
 
 .valid_path_input <- function(.path) {
   classes <- c("character", "formula", "data.frame", "list")

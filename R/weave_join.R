@@ -32,11 +32,9 @@ weave_join <- function(
         x, .path, metadata = FALSE, sort = TRUE, simplify = TRUE
         ) {
     stopifnot("'x' must be a multifactor." = S7::S7_inherits(x, multifactor))
-    .valid_path_input(.path)
-    pf <- as_path_frame(.path)
-    .path_check_valid_weave_join(pf)
 
-    pf <- .select_enframe_path(x, pf)
+    pf <- .check_parse_path(x, .path, "weave_join")
+
 
     full_path <- .pf_as_full_path_list(pf)
     res <- lapply(
@@ -84,13 +82,3 @@ weave_join <- function(
     res
 }
 
-
-
-.path_check_valid_weave_join <- function(x) {
-    if (.check_path_frame_uses_stack(x)) {
-        stop(
-            "`weave_join()` '.path' cannot contain '+'. ",
-            "Use `stack()` to prepare input."
-        )
-    }
-}

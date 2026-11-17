@@ -28,32 +28,17 @@ S7::method(weave, multifactor) <- function(
 ) {
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
 
-  .valid_path_input(.path)
-  pf <- as_path_frame(.path)
-  .path_check_valid_weave(pf)
-
-  pf <- .select_enframe_path(x, pf)
-
-  full_path <- .pf_as_full_path_list(pf)
-  res <- lapply(full_path, .weave_full_path, x = x)
-  res <- do.call(rbind.data.frame, res)
-  res <- linkmap(res)
+  pf <- .check_parse_path(x, .path, "weave")
+  res <- .weave_to_linkmap(x, pf, .data = NULL, metric = .coverage_metrics)
 
   if (out.format == "matrix") {
     res <- `as.matrix.multifactor::linkmap`(res)
   }
 
-  return(res)
+  res
 }
 
-.path_check_valid_weave <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
-    stop(
-      "`weave()` '.path' cannot contain '+'. ",
-      "Use `stack()` to prepare input."
-    )
-  }
-}
+
 
 .weave_full_path <- function(x, all_terms) {
   x <- .subset_by_path(x, all_terms)
