@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# multifactor: An R package for multifactor and linkmap S7 container classes.
+# multifactor: An R package for multifactor and linkmap S7 container classes
 
 <!-- badges: start -->
 
@@ -16,10 +16,14 @@ BiocCheck](https://github.com/Minotau-R/multifactor/actions/workflows/test.yml/b
 
 ## Introduction
 
-`multifactor` and `linkmap` are a pair of S7 classes to organize and
-manage multiple sets of factors, for instance when tracing or converting
-feature IDs across databases. Methods for `multifactor` aim to follow
-`factor` behaviour.
+[`multifactor`](https://minotau-r.github.io/multifactor/reference/multifactor-class.html)
+and
+[`linkmap`](https://minotau-r.github.io/multifactor/reference/linkmap-class.html)
+are a pair of S7 classes to organize and manage multiple sets of
+factors, for instance when tracing or converting feature IDs across
+databases. Methods for `multifactor` aim to follow
+[`factor`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/factor)
+behaviour.
 
 ## Installation instructions
 

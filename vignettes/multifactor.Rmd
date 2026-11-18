@@ -1,11 +1,11 @@
 ---
-title: "multifactor"
+title: "Getting started with multifactor"
 resource_files:
   - images/plot-linkmap.png
 output: 
   rmarkdown::html_document
 vignette: >
-  %\VignetteIndexEntry{1. Getting started with multifactor}
+  %\VignetteIndexEntry{Getting started with multifactor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
