@@ -4,7 +4,7 @@
 \alias{weave_convert}
 \title{Expand a table based on possibly overlapping group membership.}
 \usage{
-weave_convert(x, .path, .data, .index = "row.names")
+weave_convert(x, .path, .data, .transform = NULL, .index = "row.names")
 }
 \arguments{
 \item{x}{a \code{multifactor}.}
@@ -14,6 +14,10 @@ names of the desired combination of feature types.}
 
 \item{.data}{\verb{A table}. A \code{data.frame}, \code{matrix}, other object with rows and
 columns. Should have a \code{cbind} method.}
+
+\item{.transform}{\verb{An expression} detailing whether numerical values should
+be transformed in addition to being linked to other feature types.
+Leaving this at \code{NULL} indicates no transformation (Default).}
 
 \item{.index}{\verb{Character scalar} Column to look for feature IDs to link.
 Default: "row.names".}

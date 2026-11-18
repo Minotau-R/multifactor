@@ -25,7 +25,7 @@ for internal use.
 Rows represent edges in a path. Additional (optional) columns contain
 information about the edges:
 \itemize{
-\item \code{components} \code{integer}. Indicates subpath ID.
+\item \code{component} \code{integer}. Indicates subpath ID.
 \item \code{stack} \code{logical}. Whether the vertex contains merged data types.
 \item \code{coverage} \code{numeric}. The proportional coverage threshold (or 0).
 }

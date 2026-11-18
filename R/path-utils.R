@@ -15,10 +15,10 @@ NULL
 
 .check_pf_uses_coverage <- function(.pf) any(.check_pf_cov_bool(.pf))
 
-.check_pf_is_fitted <- function(.pf) "components" %in% colnames(.pf)
+.check_pf_is_fitted <- function(.pf) "component" %in% colnames(.pf)
 
 .check_pf_fits_mf <- function(x, .pf) all(
-  vapply(split.data.frame(.pf, ~components), .path_in_mf, x = x, FALSE)
+  vapply(`components.multifactor::path_frame`(.pf), .path_in_mf, x = x, FALSE)
 )
 
 .path_in_mf <- function(x, .pf) {
@@ -95,9 +95,8 @@ NULL
   data.frame(from, to, cov_operator, cov_value, stack)
 }
 
-.pf_as_full_path_list <- function(x) unname(
-  tapply(x, ~components, `terms.multifactor::path_frame`, simplify = FALSE)
-)
+.pf_as_full_path_list <-
+  function(x) unname( .component_apply(x, `terms.multifactor::path_frame`) )
 
 .parse_coverage <- function(content, full_cov) {
   # Fill in required coverage thresholds

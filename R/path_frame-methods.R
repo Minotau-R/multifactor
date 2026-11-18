@@ -38,12 +38,20 @@ S7::method(components, path_frame) <-
 
 #' @export
 #' @importFrom generics components
-`components.multifactor::path_frame` <- function(object, ...) {
-  stopifnot(
-    "Input path object has no components. See `?select_path()`." =
-      .check_pf_is_fitted(object)
-  )
-  split.data.frame(object, ~components)
+`components.multifactor::path_frame` <- function(
+    object, ...
+) if( !.check_pf_is_fitted(object) ) {
+  list(object)
+} else {
+  split.data.frame(object, ~component)
+}
+
+.component_apply <- function(
+    X, FUN, ..., simplify = FALSE
+) if( !.check_pf_is_fitted(X) ) {
+  tapply(X, 1L, FUN, ..., simplify = FALSE)
+} else {
+  tapply(X, ~component, FUN, ..., simplify = FALSE)
 }
 
 .build_call_string_pf <- function(x) {
@@ -76,16 +84,9 @@ S7::method(terms, path_frame) <- function(x) `terms.multifactor::path_frame`(x)
 )
 
 S7::method(print, path_frame) <- function(x, ...) {
-  from_to <- terms(x)[c(1, NROW(x) + 1L)]
+  from_to <- .pf_from_to(x)
 
-  if (has_comps <- "components" %in% colnames(x)) {
-    p <- tapply(
-      x, ~components, `formula.multifactor::path_frame`,
-      simplify = FALSE
-    )
-  } else {
-    p <- list(formula(x))
-  }
+  p <- .component_apply(x, `formula.multifactor::path_frame`)
 
   cat(
     "A ", paste(setdiff(class(x), "data.frame"), collapse = " "),

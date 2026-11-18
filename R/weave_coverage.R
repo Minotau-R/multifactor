@@ -58,7 +58,7 @@ S7::method(weave_coverage, multifactor) <- function(
 
   pf <- .check_parse_path(x, .path, "weave_coverage")
 
-  pfs <- split.data.frame(pf, ~components)
+  pfs <- `components.multifactor::path_frame`(pf)
 
   # split pf to terms list
   res <- lapply(pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric)

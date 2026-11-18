@@ -114,7 +114,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
   }
 
 
-  res <- dplyr::bind_rows(i, .id = "components")
+  res <- dplyr::bind_rows(i, .id = "component")
   col_order <- c(seq.int(from = 2L, to = NCOL(res)), 1L)
 
   res <- res[, col_order, drop = FALSE]

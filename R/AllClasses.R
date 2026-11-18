@@ -206,7 +206,7 @@ multifactor <- S7::new_class(
 #' Rows represent edges in a path. Additional (optional) columns contain
 #' information about the edges:
 #' \itemize{
-#'   \item `components` `integer`. Indicates subpath ID.
+#'   \item `component` `integer`. Indicates subpath ID.
 #'   \item `stack` `logical`. Whether the vertex contains merged data types.
 #'   \item `coverage` `numeric`. The proportional coverage threshold (or 0).
 #' }
@@ -246,7 +246,7 @@ path_frame <- S7::new_class(
     if (!all(colnames(self)[seq_len(2L)] == c("from", "to"))) {
       "First two path_frame columns must be named 'from' and 'to'."
     }
-    if(length(unique(terms(self))) == 1L) {
+    if( length(unique(`terms.multifactor::path_frame`(self))) == 1L ) {
       "A path must contain at least two unique variables."
     }
   }

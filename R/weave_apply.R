@@ -46,7 +46,6 @@ S7::method(weave_apply, multifactor) <- function(
   pf <- .check_parse_path(.x, .path, "weave_apply")
 
   lmp <- .weave_to_linkmap(.x, pf, .data, .coverage_metrics)
-
   index_lm <- .weave_res_to_index(lmp, .pf_from_to(pf), .data, .i = .index)
 
   IDX <- .split_linkmap(index_lm)
@@ -67,7 +66,7 @@ S7::method(weave_apply, multifactor) <- function(
 #'
 .weave_to_linkmap <- function(x, pf, .data, metric) {
   if(.check_pf_uses_coverage(pf)) {
-    pfs <- split.data.frame(pf, ~components)
+    pfs <- `components.multifactor::path_frame`(pf)
     lmp <- lapply(
       pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric
     )
