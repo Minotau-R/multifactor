@@ -14,6 +14,9 @@
 #'     One of `'linkmap'`, `'matrix'`.
 #' @param .data_column `Character scalar`. if `.data` is a table, where to find
 #'     feature IDs
+#' @param subset `Logical scalar`. Whether to drop levels of the 'from' feature
+#'     type that don't satisfy conditions in '.path' (Default: `TRUE`).
+#'     `test_enrich()` calls `weave_coverage()` with `subset = FALSE`.
 #' @returns a `linkmap` or `matrix` with the desired coverage information in
 #'     the @metadata slot.
 #' @examples
@@ -45,7 +48,7 @@ NULL
 .coverage_metrics <- c("set_count", "set_size", "coverage")
 
 S7::method(weave_coverage, multifactor) <- function(
-    x, .path, .data = NULL,
+    x, .path, .data = NULL, subset = TRUE,
     metric = c("set_count", "set_size", "coverage"),
     out.format = c("linkmap", "matrix"), .data_column = "row.names"
 ) {
@@ -54,14 +57,20 @@ S7::method(weave_coverage, multifactor) <- function(
     several.ok = TRUE
   )
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
-  .data <- .data_coverage_to_vector(.data, .data_column)
 
   pf <- .check_parse_path(x, .path, "weave_coverage")
+  # pfs <- `components.multifactor::path_frame`(pf)
 
-  pfs <- `components.multifactor::path_frame`(pf)
-
+  .data <- .data_coverage_to_vector(.data, .data_column)
   # split pf to terms list
-  res <- lapply(pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric)
+  #res <- .weave_to_linkmap(x, pf, .data = NULL, metric = .coverage_metrics)
+  res <- .component_apply(
+    pf, .weave_cov_full_path,
+    x = x, .data = .data, subset = subset, metric = metric
+    )
+  # res <- lapply(
+  #   pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric
+  #   )
   res <- do.call(rbind.data.frame, res)
   res <- as_linkmap(res)
 
@@ -71,26 +80,26 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
-.weave_cov_full_path <- function(x, pf, .data, metric) {
+.weave_cov_full_path <- function(x, pf, .data, subset, metric) {
   # Take unmodified terms
   terms_pf <- terms(pf)
   # check path length:
   if (NROW(pf) == 1) {
     res <- .weave_coverage_simple(
-      x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, metric
+      x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, subset, metric
     )
   } else {
     if(!.check_pf_uses_coverage(pf)) {
       pf[["cov_operator"]][NROW(pf)] <- ">"
       pf[["cov_value"]][NROW(pf)] <- 0
     }
-    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
+    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, subset, metric)
   }
   res
 }
 
 #' @importFrom S7 prop prop<-
-.coverage_reduce_loop <- function(x, pf, terms_pf, .data, metric) {
+.coverage_reduce_loop <- function(x, pf, terms_pf, .data, subset, metric) {
   terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
   cov_exprs <- .get_coverage_exprs(pf)
   res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
@@ -109,7 +118,9 @@ S7::method(weave_coverage, multifactor) <- function(
   }
 
   for(i in seq_along(terms_list)) {
-    x <- .weave_coverage_by_args(x, terms_list[[i]], cov_exprs[[i]], .data)
+    x <- .weave_coverage_by_args(
+      x, terms_list[[i]], cov_exprs[[i]], .data, subset
+      )
   }
 
   res <- as.data.frame(x[[res_name]])
@@ -161,12 +172,12 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
-.weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data) {
+.weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data, subset) {
 
   lm <- .weave_full_path(x, terms_list)
   from_to <- terms_list[c(1, length(terms_list))]
   lm <- .weave_coverage_simple(
-    lm, from_to, .data, .coverage_metrics
+    lm, from_to, .data, subset, .coverage_metrics
   )
   lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
 
@@ -220,7 +231,7 @@ S7::method(weave_coverage, multifactor) <- function(
 #' given a linkmap x, calculate enrichment of all_terms positions 1 ~ 2,
 #' with optional .data character vector
 #' @noRd
-.weave_coverage_simple <- function(x, all_terms, .data = NULL, metric) {
+.weave_coverage_simple <- function(x, all_terms, .data = NULL, subset, metric) {
 
   x <- as.data.frame(x)
   unit_term <- all_terms[[1L]]

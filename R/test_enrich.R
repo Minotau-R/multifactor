@@ -15,10 +15,10 @@ method(test_enrich, multifactor) <- function(
         method = list(fisher = c(alternative = "greater"))
 ) {
     x <- weave_coverage(
-        x, .path, .data,
-        .coverage_metrics,
-        "linkmap",
-        .data.column
+        x = x, .path = .path, .data = .data,
+        metric = .coverage_metrics,
+        out.format = "linkmap",
+        .data_column = .data_column
         )
 
     .test_enrich.linkmap(

@@ -22,6 +22,10 @@ One of \code{'linkmap'}, \code{'matrix'}.}
 
 \item{.data_column}{\verb{Character scalar}. if \code{.data} is a table, where to find
 feature IDs}
+
+\item{subset}{\verb{Logical scalar}. Whether to drop levels of the 'from' feature
+type that don't satisfy conditions in '.path' (Default: \code{TRUE}).
+\code{test_enrich()} calls \code{weave_coverage()} with \code{subset = FALSE}.}
 }
 \value{
 a \code{linkmap} or \code{matrix} with the desired coverage information in

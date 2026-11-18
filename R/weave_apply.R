@@ -20,18 +20,21 @@
 #' set.seed(2612)
 #' x <- trade_posts()
 #'
-#' # Generate small example feature table 'df'.
+#' # Generate small example feature table '.data'.
 #' n <- nlevels(x)[["fruit"]]
-#' df <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
+#' .data <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
 #'
-#' #' # Ensure rownames correspond to the first (LHS) variable in the formula.
-#' df <- as.data.frame(df, row.names = levels(x)$fruit)
+#' # Ensure rownames correspond to the first (LHS) variable in the formula.
+#' .data <- as.data.frame(.data, row.names = levels(x)$fruit)
+#'
+#' # Define path
+#' .path <- fruit ~ clothing
 #'
 #' # Apply arbitrary code to x based on group membership
 #' weave_apply(
 #'   x,
-#'   .path = fruit ~ clothing,
-#'   .data = df,
+#'   .path = .path,
+#'   .data = .data,
 #'   .fun = function(x) colSums(x)
 #' )
 #'
