@@ -24,14 +24,14 @@ st_2  <- formula(st_pf)
 
 test_that("path_frame checks work properly", {
     # Unstacked
-    expect_true(.check_path_frame_uses_coverage(fm_pf))
-    expect_false(.check_path_frame_is_minimal(fm_pf))
-    expect_false(.check_path_frame_uses_stack(fm_pf))
+    expect_true(.check_pf_uses_coverage(fm_pf))
+    expect_false(.check_pf_is_minimal(fm_pf))
+    expect_false(.check_pf_uses_stack(fm_pf))
 
     # Stacked
-    expect_true(.check_path_frame_uses_coverage(st_pf))
-    expect_false(.check_path_frame_is_minimal(st_pf))
-    expect_true(.check_path_frame_uses_stack(st_pf))
+    expect_true(.check_pf_uses_coverage(st_pf))
+    expect_false(.check_pf_is_minimal(st_pf))
+    expect_true(.check_pf_uses_stack(st_pf))
 })
 
 test_that("as_path_frame() correctly parses unstacked formula", {

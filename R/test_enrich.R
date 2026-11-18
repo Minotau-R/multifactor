@@ -15,10 +15,10 @@ method(test_enrich, multifactor) <- function(
         method = list(fisher = c(alternative = "greater"))
 ) {
     x <- weave_coverage(
-        x, .path, .data,
-        c("set_count", "set_size", "coverage", "complete"),
-        "linkmap",
-        .data.column
+        x = x, .path = .path, .data = .data,
+        metric = .coverage_metrics,
+        out.format = "linkmap",
+        .data_column = .data_column
         )
 
     .test_enrich.linkmap(
@@ -33,7 +33,7 @@ S7::method(test_enrich, linkmap) <- function(
         .data_column = "row.names",
         log_base = 2L,
         method = list(fisher = c(alternative = "greater"))
-).test_enrich.linkmap(x, .path, .data, .data_column, log_base, method)
+) .test_enrich.linkmap(x, .path, .data, .data_column, log_base, method)
 
 
 .test_enrich.linkmap <- function(
@@ -45,10 +45,12 @@ S7::method(test_enrich, linkmap) <- function(
 
     if(!all(c("observed", "set_count", "set_size") %in% colnames(x@metadata))) {
         .tempdata <- .data_coverage_to_vector(.data, .data_column)
-        x <- .coverage_single_step(
-            x, all.vars(.path), .tempdata,
-            c("set_count", "set_size", "coverage", "complete")
+        x <- .weave_coverage_simple(
+            x[[.rows_with_col(x@map, all.vars(.path))]],
+            all.vars(.path), .tempdata, .coverage_metrics
         )
+
+        x <- as_linkmap(x)
     }
 
     i <- stats::reformulate(colnames(x)[[2L]])

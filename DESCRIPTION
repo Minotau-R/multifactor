@@ -39,4 +39,4 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://minotau-r.github.io/multifactor/
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

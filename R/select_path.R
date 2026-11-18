@@ -29,20 +29,62 @@ NULL
 S7::method(select_path, multifactor) <- function(x, .path, ...) {
   .valid_path_input(.path)
   pf <- as_path_frame(.path)
-  .path_check_valid_select(pf)
+  .path_check_valid_call(pf, "select_path")
 
-  paths <- .select_enframe_path(x, pf)
-  path_frame(paths)
+  pf <- .select_enframe_path(x, pf)
+  path_frame(pf)
 }
 
-.path_check_valid_select <- function(x) {
-  if (.check_path_frame_uses_stack(x)) {
-    stop(
-      "`select_path()` '.path' cannot contain '+'.",
-      "Use `stack()` to prepare input."
+.check_parse_path <- function(x, .path, call) {
+  .valid_path_input(.path)
+  pf <- as_path_frame(.path)
+  .path_check_valid_call(pf, call)
+  if(.check_pf_is_fitted(pf)) {
+    stopifnot(
+      "'.path' contains components, but no such valid path in multifactor 'x'." =
+        .check_pf_fits_mf(x, pf)
     )
+  } else {
+    pf <- path_frame(.select_enframe_path(x, pf))
   }
+  pf
 }
+
+.path_check_valid_call <- function(pf, call) switch(
+  call,
+  subset = if (.check_pf_uses_stack(pf)) stop(
+    "subset() '.path' cannot contain '+'.",
+    "Use `stack()` to prepare input."
+  ),
+  select_path = if (.check_pf_uses_stack(pf)) stop(
+    "`select_path()` '.path' cannot contain '+'.",
+    "Use `stack()` to prepare input."
+  ),
+  stack = {
+    if(!.check_pf_is_minimal(pf)) stop(
+      "stack does not support '.path' with multiple tildes."
+    )
+    if(!.check_pf_uses_stack(pf)) stop(
+      "At least one side of '.path' must include variables combined by '+'."
+    )
+  },
+  weave <- if (.check_pf_uses_stack(pf)) stop(
+    "`weave()` '.path' cannot contain '+'. ",
+    "Use `stack()` to prepare input."
+  ),
+  weave_apply = if (.check_pf_uses_stack(pf)) stop(
+    "`weave_apply()` '.path' cannot contain '+'.",
+    "Use `stack()` to prepare input."
+  ),
+  weave_convert = if (.check_pf_uses_stack(pf)) stop(
+    "`weave_convert()` '.path' cannot contain '+'. ",
+    "Use `stack()` to prepare input."
+  ),
+  weave_join = if (.check_pf_uses_stack(pf)) stop(
+    "`weave_join()` '.path' cannot contain '+'. ",
+    "Use `stack()` to prepare input."
+  )
+)
 
 
 #' @importFrom dplyr bind_rows
@@ -61,7 +103,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
 
 
   if(any(cov_i <- .check_pf_cov_bool(pf))) {
-    cov_exprs <- .get_coverage_exprs(pf)
+    cov_exprs <- .get_coverage_exprs_only(pf)
 
     cov_vars <- vapply(
       .coverage_get_terms_list(terms_pf, cov_i), tail, 1L,
@@ -72,7 +114,7 @@ S7::method(select_path, multifactor) <- function(x, .path, ...) {
   }
 
 
-  res <- dplyr::bind_rows(i, .id = "components")
+  res <- dplyr::bind_rows(i, .id = "component")
   col_order <- c(seq.int(from = 2L, to = NCOL(res)), 1L)
 
   res <- res[, col_order, drop = FALSE]
