@@ -48,44 +48,44 @@ a `Named list` of desired output.
 ``` r
 
 # Prepare data
+set.seed(2612)
 x <- trade_posts()
 
-# Generate small example feature table 'df'.
-n <- nlevels(x)[["clothing"]]
-df <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
+# Generate small example feature table '.data'.
+n <- nlevels(x)[["fruit"]]
+.data <- replicate(10, rbinom(n, rbinom(n, 100, runif(n)), runif(n)))
 
-#' # Ensure rownames correspond to the second (RHS) variable in the formula.
-df <- as.data.frame(df, row.names = levels(x)$clothing)
+# Ensure rownames correspond to the first (LHS) variable in the formula.
+.data <- as.data.frame(.data, row.names = levels(x)$fruit)
+
+# Define path
+.path <- fruit ~ clothing
 
 # Apply arbitrary code to x based on group membership
 weave_apply(
   x,
-  .path = fruit ~ clothing,
-  .data = df,
+  .path = .path,
+  .data = .data,
   .fun = function(x) colSums(x)
 )
-#> $apples
+#> $dress
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  13  28  69   5   6  13   0   0   7  29 
+#>  31  62  68  50 150 202  52  81  95 202 
 #> 
-#> $pears
+#> $gloves
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  23  10  32  12  14  17  15  94  56   7 
+#>  24  34  36  23  55 137  32  49  64  60 
 #> 
-#> $cherries
+#> $hat
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>   1  17   4   6  55  13  22   7   8  10 
+#>  45  67  99  69 153 267  54 124 106 218 
 #> 
-#> $oranges
+#> $scarf
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  24  27  36  18  69  30  37 101  64  17 
+#>  45  67  99  69 153 267  54 124 106 218 
 #> 
-#> $melons
+#> $`t-shirt`
 #>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  24  27  36  18  69  30  37 101  64  17 
-#> 
-#> $grapes
-#>  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
-#>  14  45  73  11  61  26  22   7  15  39 
+#>  24  34  36  23  55 137  32  49  64  60 
 #> 
 ```

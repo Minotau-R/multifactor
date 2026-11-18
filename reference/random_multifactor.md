@@ -122,27 +122,30 @@ random_path_frame(n = 3, x = x)
 #> [[1]]
 #> A multifactor::path_frame S7_object.
 #>   A path from `d` to `e`:
+#> [[1]]
 #> d ~ e
 #> 
-#>   from to cov_operator cov_value stack components
-#> 1    d  e           >=         0 FALSE          1
+#>   from to cov_operator cov_value stack component
+#> 1    d  e           >=         0 FALSE         1
 #> 
 #> [[2]]
 #> A multifactor::path_frame S7_object.
 #>   A path from `a` to `b`:
+#> [[1]]
 #> a ~ b
 #> 
-#>   from to cov_operator cov_value stack components
-#> 1    a  b           >=         0 FALSE          1
+#>   from to cov_operator cov_value stack component
+#> 1    a  b           >=         0 FALSE         1
 #> 
 #> [[3]]
 #> A multifactor::path_frame S7_object.
 #>   A path from `d` to `b`:
+#> [[1]]
 #> d ~ c ~ b
 #> 
-#>   from to cov_operator cov_value stack components
-#> 1    d  c           >=         0 FALSE          1
-#> 2    c  b           >=         0 FALSE          1
+#>   from to cov_operator cov_value stack component
+#> 1    d  c           >=         0 FALSE         1
+#> 2    c  b           >=         0 FALSE         1
 #> 
 
 # Use a (possibly random) igraph as input:

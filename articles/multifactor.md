@@ -83,10 +83,7 @@ traded for types of furniture.
 `#>  $ books     : 6 Levels: fancy book ... plain book `\
 `#>  $ furniture : 6 Levels: couch ... door `\
 `#> `\
-`#> @ metadata: 2 variables: `\
-`#> List of 2`\
-`#>  $ books_emoji    : chr  "📕" "📗" "📓" "📘" ...`\
-`#>  $ furniture_emoji: chr  "🛋" "🗄" "🗄" "🗑" ...`
+`#>  and  2  metadata variables.`
 
 The two types of goods are captured by the two columns, with column
 names representing the *types* of good and rows representing which
@@ -129,10 +126,7 @@ goods - can differ.
 `#>  $ clothing  : 6 Levels: t-shirt ... scarf `\
 `#>  $ furniture : 6 Levels: couch ... door `\
 `#> `\
-`#> @ metadata: 2 variables: `\
-`#> List of 2`\
-`#>  $ clothing_emoji : chr  "🧣" "🧣" "🧤" "🎩" ...`\
-`#>  $ furniture_emoji: chr  "🛋" "🗄" "🗑" "🗑" ...`
+`#>  and  2  metadata variables.`
 
 #### Visual representation of the linkmaps in our data set.
 
@@ -225,7 +219,7 @@ component linkmaps with that type of level.
 
 #### Overview of multifactor classes and terms.
 
-![](images/multifactor-anatomy.png)
+![](multifactor_files/figure-html/multifactor-anatomy-1.png)
 
 ## weave() a path
 
@@ -275,17 +269,21 @@ included into one `linkmap`.
 [`select_path`](https://minotau-r.github.io/multifactor/reference/select_path-generic.md)`(``tp``, ``fruit`` ``~`` ``clothing``)`\
 `#> A multifactor::path_frame S7_object.`\
 `` #>   A path from `fruit` to `clothing` with 2 sub-paths: ``\
+`#> [[1]]`\
 `#> fruit ~ instruments ~ books ~ furniture ~ clothing`\
 `#> `\
-`#>          from          to cov_operator cov_value stack components`\
-`#> 1       fruit instruments           >=         0 FALSE          1`\
-`#> 2 instruments       books           >=         0 FALSE          1`\
-`#> 3       books   furniture           >=         0 FALSE          1`\
-`#> 4   furniture    clothing           >=         0 FALSE          1`\
-`#> 5       fruit instruments           >=         0 FALSE          2`\
-`#> 6 instruments     marbles           >=         0 FALSE          2`\
-`#> 7     marbles   furniture           >=         0 FALSE          2`\
-`#> 8   furniture    clothing           >=         0 FALSE          2`
+`#> [[2]]`\
+`#> fruit ~ instruments ~ marbles ~ furniture ~ clothing`\
+`#> `\
+`#>          from          to cov_operator cov_value stack component`\
+`#> 1       fruit instruments           >=         0 FALSE         1`\
+`#> 2 instruments       books           >=         0 FALSE         1`\
+`#> 3       books   furniture           >=         0 FALSE         1`\
+`#> 4   furniture    clothing           >=         0 FALSE         1`\
+`#> 5       fruit instruments           >=         0 FALSE         2`\
+`#> 6 instruments     marbles           >=         0 FALSE         2`\
+`#> 7     marbles   furniture           >=         0 FALSE         2`\
+`#> 8   furniture    clothing           >=         0 FALSE         2`
 
 ## Utilities
 
@@ -314,11 +312,11 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `g`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``tp``)`\
 `g`\
-`#> IGRAPH b7d2a69 UN-- 6 6 -- `\
+`#> IGRAPH f489f47 UN-- 6 6 -- `\
 `#> + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji`\
 `#> | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji`\
 `#> | (e/n), fruit_emoji (e/n)`\
-`#> + edges from b7d2a69 (vertex names):`\
+`#> + edges from f489f47 (vertex names):`\
 `#> [1] books      --furniture   clothing   --furniture   books      --instruments`\
 `#> [4] fruit      --instruments furniture  --marbles     instruments--marbles`\
 `# Plot graph across data types`\
@@ -332,9 +330,9 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `lg`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)`\
 `lg`\
-`#> IGRAPH aede8cb UN-B 12 18 -- `\
+`#> IGRAPH 2bc8e76 UN-B 12 18 -- `\
 `#> + attr: type (v/l), name (v/c)`\
-`#> + edges from aede8cb (vertex names):`\
+`#> + edges from 2bc8e76 (vertex names):`\
 `#>  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  `\
 `#>  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves `\
 `#>  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    `\
@@ -393,38 +391,7 @@ based on groupings on the left hand of the formula:
 `  .x ``=`` ``tp``, .path ``=`` ``fruit`` ``~`` ``clothing``,`\
 `  .data ``=`` ``clothing_table``, .fun ``=`` ``as.data.frame`\
 `)`\
-`#> $apples`\
-`#>         V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> dress   16 11 34 40 35 63  2 28  0  42`\
-`#> hat      0 61  0  4  3  0  7 20 38  21`\
-`#> scarf    4 80 47 72 29 55  4  4 16  25`\
-`#> t-shirt 14  8 34 72 47  4 32 50  0   5`\
-`#> gloves   0 34 10  2 21 30  0  3 13  16`\
-`#> `\
-`#> $pears`\
-`#>         V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> t-shirt 14  8 34 72 47  4 32 50  0   5`\
-`#> gloves   0 34 10  2 21 30  0  3 13  16`\
-`#> hat      0 61  0  4  3  0  7 20 38  21`\
-`#> scarf    4 80 47 72 29 55  4  4 16  25`\
-`#> `\
-`#> $oranges`\
-`#>       V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> dress 16 11 34 40 35 63  2 28  0  42`\
-`#> hat    0 61  0  4  3  0  7 20 38  21`\
-`#> scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> `\
-`#> $melons`\
-`#>       V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> dress 16 11 34 40 35 63  2 28  0  42`\
-`#> hat    0 61  0  4  3  0  7 20 38  21`\
-`#> scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> `\
-`#> $grapes`\
-`#>       V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> dress 16 11 34 40 35 63  2 28  0  42`\
-`#> hat    0 61  0  4  3  0  7 20 38  21`\
-`#> scarf  4 80 47 72 29 55  4  4 16  25`\
+`#> named list()`\
 \
 `# More complex example:`\
 `# For all subgroups of clothing corresponding to one particular fruit, if that`\
@@ -437,130 +404,20 @@ based on groupings on the left hand of the formula:
 `    `[`summary`](https://rdrr.io/r/base/summary.html)`(`[`lm`](https://rdrr.io/r/stats/lm.html)`(``V1`` ``~`` ``V2``, data ``=`` ``x``)``)`\
 `  ``}`\
 `)`\
-`#> $apples`\
-`#> `\
-`#> Call:`\
-`#> lm(formula = V1 ~ V2, data = x)`\
-`#> `\
-`#> Residuals:`\
-`#>   dress     hat   scarf t-shirt  gloves `\
-`#>   4.175  -2.787   4.647   1.633  -7.668 `\
-`#> `\
-`#> Coefficients:`\
-`#>             Estimate Std. Error t value Pr(>|t|)  `\
-`#> (Intercept) 13.81295    4.58505   3.013   0.0571 .`\
-`#> V2          -0.18075    0.09576  -1.887   0.1555  `\
-`#> ---`\
-`#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
-`#> `\
-`#> Residual standard error: 6.007 on 3 degrees of freedom`\
-`#> Multiple R-squared:  0.5428, Adjusted R-squared:  0.3905 `\
-`#> F-statistic: 3.562 on 1 and 3 DF,  p-value: 0.1555`\
-`#> `\
-`#> `\
-`#> $pears`\
-`#> `\
-`#> Call:`\
-`#> lm(formula = V1 ~ V2, data = x)`\
-`#> `\
-`#> Residuals:`\
-`#> t-shirt  gloves     hat   scarf `\
-`#>   4.522  -6.050  -2.489   4.017 `\
-`#> `\
-`#> Coefficients:`\
-`#>             Estimate Std. Error t value Pr(>|t|)`\
-`#> (Intercept)  10.5332     6.1564   1.711    0.229`\
-`#> V2           -0.1319     0.1156  -1.141    0.372`\
-`#> `\
-`#> Residual standard error: 6.3 on 2 degrees of freedom`\
-`#> Multiple R-squared:  0.3941, Adjusted R-squared:  0.09117 `\
-`#> F-statistic: 1.301 on 1 and 2 DF,  p-value: 0.3722`\
-`#> `\
-`#> `\
-`#> $oranges`\
-`#> `\
-`#> Call:`\
-`#> lm(formula = V1 ~ V2, data = x)`\
-`#> `\
-`#> Residuals:`\
-`#>  dress    hat  scarf `\
-`#>  1.256 -4.563  3.306 `\
-`#> `\
-`#> Coefficients:`\
-`#>             Estimate Std. Error t value Pr(>|t|)`\
-`#> (Intercept)  16.9835     6.6920   2.538    0.239`\
-`#> V2           -0.2036     0.1145  -1.778    0.326`\
-`#> `\
-`#> Residual standard error: 5.773 on 1 degrees of freedom`\
-`#> Multiple R-squared:  0.7597, Adjusted R-squared:  0.5193 `\
-`#> F-statistic: 3.161 on 1 and 1 DF,  p-value: 0.3262`\
-`#> `\
-`#> `\
-`#> $melons`\
-`#> `\
-`#> Call:`\
-`#> lm(formula = V1 ~ V2, data = x)`\
-`#> `\
-`#> Residuals:`\
-`#>  dress    hat  scarf `\
-`#>  1.256 -4.563  3.306 `\
-`#> `\
-`#> Coefficients:`\
-`#>             Estimate Std. Error t value Pr(>|t|)`\
-`#> (Intercept)  16.9835     6.6920   2.538    0.239`\
-`#> V2           -0.2036     0.1145  -1.778    0.326`\
-`#> `\
-`#> Residual standard error: 5.773 on 1 degrees of freedom`\
-`#> Multiple R-squared:  0.7597, Adjusted R-squared:  0.5193 `\
-`#> F-statistic: 3.161 on 1 and 1 DF,  p-value: 0.3262`\
-`#> `\
-`#> `\
-`#> $grapes`\
-`#> `\
-`#> Call:`\
-`#> lm(formula = V1 ~ V2, data = x)`\
-`#> `\
-`#> Residuals:`\
-`#>  dress    hat  scarf `\
-`#>  1.256 -4.563  3.306 `\
-`#> `\
-`#> Coefficients:`\
-`#>             Estimate Std. Error t value Pr(>|t|)`\
-`#> (Intercept)  16.9835     6.6920   2.538    0.239`\
-`#> V2           -0.2036     0.1145  -1.778    0.326`\
-`#> `\
-`#> Residual standard error: 5.773 on 1 degrees of freedom`\
-`#> Multiple R-squared:  0.7597, Adjusted R-squared:  0.5193 `\
-`#> F-statistic: 3.161 on 1 and 1 DF,  p-value: 0.3262`
+`#> named list()`
 
-#### Compatibility with the tidyverse: `weave_to_tbl`
+#### Compatibility with the tidyverse: `weave_convert`
 
 For those who prefer to use `tidyverse`,
-[`weave_to_tbl()`](https://minotau-r.github.io/multifactor/reference/weave_to_tbl.md)
+[`weave_convert()`](https://minotau-r.github.io/multifactor/reference/weave_convert.md)
 returns a tidy wide-format table, ready to be grouped based on the first
 two columns.
 
 \
-[`weave_to_tbl`](https://minotau-r.github.io/multifactor/reference/weave_to_tbl.md)`(``tp``, .path ``=`` ``fruit`` ``~`` ``clothing``, .data ``=`` ``clothing_table``)`\
-`#>      fruit clothing V1 V2 V3 V4 V5 V6 V7 V8 V9 V10`\
-`#> 1   apples    dress 16 11 34 40 35 63  2 28  0  42`\
-`#> 2  oranges    dress 16 11 34 40 35 63  2 28  0  42`\
-`#> 3   melons    dress 16 11 34 40 35 63  2 28  0  42`\
-`#> 4   grapes    dress 16 11 34 40 35 63  2 28  0  42`\
-`#> 5   apples      hat  0 61  0  4  3  0  7 20 38  21`\
-`#> 6  oranges      hat  0 61  0  4  3  0  7 20 38  21`\
-`#> 7   melons      hat  0 61  0  4  3  0  7 20 38  21`\
-`#> 8   grapes      hat  0 61  0  4  3  0  7 20 38  21`\
-`#> 9   apples    scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> 10 oranges    scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> 11  grapes    scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> 12  apples  t-shirt 14  8 34 72 47  4 32 50  0   5`\
-`#> 13   pears  t-shirt 14  8 34 72 47  4 32 50  0   5`\
-`#> 14  apples   gloves  0 34 10  2 21 30  0  3 13  16`\
-`#> 15   pears   gloves  0 34 10  2 21 30  0  3 13  16`\
-`#> 16   pears      hat  0 61  0  4  3  0  7 20 38  21`\
-`#> 17   pears    scarf  4 80 47 72 29 55  4  4 16  25`\
-`#> 18  melons    scarf  4 80 47 72 29 55  4  4 16  25`
+[`weave_convert`](https://minotau-r.github.io/multifactor/reference/weave_convert.md)`(``tp``, .path ``=`` ``fruit`` ``~`` ``clothing``, .data ``=`` ``clothing_table``)`\
+`#>  [1] fruit    clothing V1       V2       V3       V4       V5       V6      `\
+`#>  [9] V7       V8       V9       V10     `\
+`#> <0 rows> (or 0-length row.names)`
 
 ### Reading and parsing adjaceny list-formatted files
 
@@ -661,12 +518,12 @@ If stored in a file in adjacency list format, it may look like this:
 `#>  [1] Matrix_1.7-6       gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1    `\
 `#>  [5] tidyselect_1.2.1   jquerylib_0.1.4    scales_1.4.0       textshaping_1.0.5 `\
 `#>  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.23-1     R6_2.6.1          `\
-`#> [13] generics_0.1.4     knitr_1.52         MASS_7.3-66        htmlwidgets_1.6.4 `\
-`#> [17] forcats_1.0.1      polyclip_1.10-7    tibble_3.3.1       desc_1.4.3        `\
-`#> [21] RColorBrewer_1.1-3 bslib_0.12.0       pillar_1.11.1      rlang_1.3.0       `\
-`#> [25] cachem_1.1.0       xfun_0.62          fs_2.1.0           sass_0.4.10       `\
-`#> [29] S7_0.2.2           otel_0.2.0         cli_3.6.6          tweenr_2.0.3      `\
-`#> [33] withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39     `\
-`#> [37] grid_4.6.1         ggforce_0.5.0      lifecycle_1.0.5    vctrs_0.7.3       `\
-`#> [41] evaluate_1.0.5     glue_1.8.1         farver_2.1.2       rmarkdown_2.32    `\
-`#> [45] tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9`
+`#> [13] labeling_0.4.3     generics_0.1.4     knitr_1.52         MASS_7.3-66       `\
+`#> [17] htmlwidgets_1.6.4  forcats_1.0.1      polyclip_1.10-7    tibble_3.3.1      `\
+`#> [21] desc_1.4.3         RColorBrewer_1.1-3 bslib_0.12.0       pillar_1.11.1     `\
+`#> [25] rlang_1.3.0        cachem_1.1.0       xfun_0.62          fs_2.1.0          `\
+`#> [29] sass_0.4.10        S7_0.2.2           otel_0.2.0         cli_3.6.6         `\
+`#> [33] tweenr_2.0.3       withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5    `\
+`#> [37] digest_0.6.39      grid_4.6.1         ggforce_0.5.0      lifecycle_1.0.5   `\
+`#> [41] vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1         farver_2.1.2      `\
+`#> [45] rmarkdown_2.32     tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9`

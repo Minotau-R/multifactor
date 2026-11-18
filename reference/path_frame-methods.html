@@ -69,7 +69,10 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">random_multifactor</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Only necessary in example</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://generics.r-lib.org" class="external-link">generics</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">random_multifactor</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate a path_frame</span></span></span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="select_path-generic.html">select_path</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">~</span> <span class="va">d</span><span class="op">)</span></span></span>
@@ -77,6 +80,20 @@
 <span class="r-in"><span><span class="co"># Get formula notation for the full path:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a ~ b ~ c ~ d</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Split path into components</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/components.html" class="external-link">components</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`1`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::path_frame S7_object.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   A path from `a` to `d`:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a ~ b ~ c ~ d</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   from to cov_operator cov_value stack component</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    a  b           &gt;=         0 FALSE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    b  c           &gt;=         0 FALSE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    c  d           &gt;=         0 FALSE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

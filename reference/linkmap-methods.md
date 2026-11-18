@@ -35,6 +35,20 @@ dimnames(x)
 #> [1] "a" "b"
 #> 
 
+print(x)
+#> A multifactor::linkmap data.frame S7_object: 6 rows.
+#>   a b
+#> 1 c C
+#> 2 b B
+#> 3 b A
+#> 4 a C
+#> 5 c B
+#> 6 b C
+#> 
+#> @ levels:   2 variables: 
+#>  $ a : 3 Levels: c b a 
+#>  $ b : 3 Levels: C B A 
+
 # Factor-like properties
 levels(x)
 #> $a

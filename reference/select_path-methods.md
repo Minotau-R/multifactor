@@ -37,9 +37,10 @@ x <- multifactor(list(a2b, a2c))
 select_path(x, b ~ c)
 #> A multifactor::path_frame S7_object.
 #>   A path from `b` to `c`:
+#> [[1]]
 #> b ~ a ~ c
 #> 
-#>   from to cov_operator cov_value stack components
-#> 1    b  a           >=         0 FALSE          1
-#> 2    a  c           >=         0 FALSE          1
+#>   from to cov_operator cov_value stack component
+#> 1    b  a           >=         0 FALSE         1
+#> 2    a  c           >=         0 FALSE         1
 ```

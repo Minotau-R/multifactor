@@ -31,7 +31,7 @@ a `path_frame` object.
 Rows represent edges in a path. Additional (optional) columns contain
 information about the edges:
 
-- `components` `integer`. Indicates subpath ID.
+- `component` `integer`. Indicates subpath ID.
 
 - `stack` `logical`. Whether the vertex contains merged data types.
 
