@@ -56,9 +56,9 @@ NULL
 #' @param subset Logical expression indicating elements or rows to keep.
 #'     If `NULL` (Default), subsets based on complete coverage if available.
 #'
-`subset.multifactor::linkmap` <- function(x, subset = NULL, ...) {
+`subset.multifactor::linkmap` <- function(x, subset, ...) {
   df <- as.data.frame(x)
-  if (is.null(subset)) {
+  if (missing(subset)) {
     if ("coverage" %in% colnames(df)) {
       i <- df[["coverage"]] >= 1L
     } else {

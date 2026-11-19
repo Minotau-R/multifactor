@@ -20,28 +20,18 @@
 #' @returns a `linkmap` or `matrix` with the desired coverage information in
 #'     the @metadata slot.
 #' @examples
-#' set.seed(2612)
-#' # Draw five cards from a deck
-#' drawn <- draw_cards(5)
-#' drawn
-#' scores <- poker_scores()
-#' scores
+#' # Load the quick brown fox data set
+#' x <- quickbrownfox()
+#' .data <- c("t", "h", "e", "f", "o", "x")
+#' .path1 <- letter ~ word ~ constituent
+#' .path2 <- letter ~ word : constituent
+#' .path3 <- letter ~ word > 0.5 ~ constituent
+#' .path4 <- letter : word ~ constituent > 0.25
 #'
-#' # Now enrich input
-#' result <- weave_coverage(
-#'   x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
-#' )
-#'
-#' result
-#'
-#' # Now let's spike our hand with a royal straight flush
-#' cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
-#' cheat
-#'
-#' .path = card ~ rank ~ straight > 0.2
-#' result <- weave_coverage(scores, .path, .data = cheat)
-#' result
-#' test_enrich(result)
+#' weave_coverage(x = x, .path = .path1, .data = .data)
+#' weave_coverage(x = x, .path = .path2, .data = .data)
+#' weave_coverage(x = x, .path = .path3, .data = .data)
+#' weave_coverage(x = x, .path = .path4, .data = .data)
 #'
 NULL
 
@@ -66,7 +56,7 @@ S7::method(weave_coverage, multifactor) <- function(
   #res <- .weave_to_linkmap(x, pf, .data = NULL, metric = .coverage_metrics)
   res <- .component_apply(
     pf, .weave_cov_full_path,
-    x = x, .data = .data, subset = subset, metric = metric
+    x = x, .data = .data, metric = metric
     )
   # res <- lapply(
   #   pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric
@@ -74,79 +64,97 @@ S7::method(weave_coverage, multifactor) <- function(
   res <- do.call(rbind.data.frame, res)
   res <- as_linkmap(res)
 
+  if(subset) {
+    res <- res[res@metadata[["observed"]]]
+  }
+
   if (out.format == "matrix") {
     res <- `as.matrix.multifactor::linkmap`(res)
   }
   res
 }
 
-.weave_cov_full_path <- function(x, pf, .data, subset, metric) {
+.weave_cov_full_path <- function(x, pf, .data, metric) {
   # Take unmodified terms
   terms_pf <- terms(pf)
   # check path length:
   if (NROW(pf) == 1) {
-    res <- .weave_coverage_simple(
-      x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, subset, metric
+    res <- .linkmap_add_coverage(
+      x[[.rows_with_col(x@map, terms_pf)]], terms_pf, .data, metric
     )
   } else {
     if(!.check_pf_uses_coverage(pf)) {
       pf[["cov_operator"]][NROW(pf)] <- ">"
       pf[["cov_value"]][NROW(pf)] <- 0
     }
-    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, subset, metric)
+    res <- .coverage_reduce_loop(x, pf, terms_pf, .data, metric)
   }
   res
 }
 
+#' @noRd
+#' @description
+#' Returns a boolean answering the question:
+#' Does this coverage calculation need a 'background' weave (without thresholds)
+#' to properly find the background set size?
+#'
+.check_needs_backweave <-
+  function(pf) sum(.check_pf_cov_bool(pf)[-NROW(pf)]) >= 1L
+
 #' @importFrom S7 prop prop<-
-.coverage_reduce_loop <- function(x, pf, terms_pf, .data, subset, metric) {
-  terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
-  cov_exprs <- .get_coverage_exprs(pf)
-  res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
+.coverage_reduce_loop <- function(x, pf, terms_pf, .data, metric) {
 
-  if(backweave <- sum(.check_pf_cov_bool(pf)[-NROW(pf)]) >= 1L) {
-    x_bw <- as.data.frame(
-      weave( x, formula(paste0(terms_pf, collapse = "~")))
-    )
-    x_bw[["set_size"]] <- unlist(
-      tapply(x_bw, stats::reformulate(tail(terms_pf, 1)),
-             function(ii) rep.int(
-               NROW(ii), times = length(unique(ii[[1L]]))
-             ),
-             simplify = FALSE), FALSE, FALSE
-    )
-  }
+  res <- .coverage_for_loop(x, pf, terms_pf, .data)
 
-  for(i in seq_along(terms_list)) {
-    x <- .weave_coverage_by_args(
-      x, terms_list[[i]], cov_exprs[[i]], .data, subset
-      )
-  }
-
-  res <- as.data.frame(x[[res_name]])
-
+  backweave <- .check_needs_backweave(pf)
   if(backweave) {
-    res[.coverage_metrics] <- NULL
-
-    res <- sort_by(
-      merge( x_bw, res, all.x = TRUE ),
-      formula(paste0("~", tail(terms_pf, 1L), " + ", terms_pf[1]))
-      )
-    res[["observed"]][is.na(res[["observed"]])] <- FALSE
-    res[["set_count"]] <- unlist(
-      tapply(res, stats::reformulate(tail(terms_pf, 1)),
-             function(ii) rep.int(
-               sum(ii[["observed"]]), times = unique(ii[["set_size"]])
-               ),
-             simplify = FALSE), FALSE, FALSE
-      )
-    res[["coverage"]] <- res[["set_count"]] / res[["set_size"]]
-
+    x_bw <- weave_coverage(
+      x, formula(paste0(terms_pf, collapse = "~")),  metric = c("set_size")
+    )
+    res <- .backweave_adjust_res(res, x_bw, terms_pf)
   }
 
   if( length(drop_cols <- setdiff(.coverage_metrics, metric)) ) {
     res[drop_cols] <- NULL
   }
+  res
+}
+
+.backweave_adjust_res <- function(res, x_bw, terms_pf) {
+  to_from <- c(tail(terms_pf, 1L), terms_pf[1L])
+  x_bw <- as.data.frame(x_bw)
+  x_bw[["observed"]] <- NULL
+
+  res <- sort_by.data.frame(
+    merge( x_bw, res[c(to_from, "observed")], all.x = TRUE ),
+    stats::reformulate(to_from)  )
+
+  res[["observed"]][is.na(res[["observed"]])] <- FALSE
+
+  res[["set_count"]] <- unlist(
+    tapply(
+      res, stats::reformulate(to_from[1]),
+      function(ii) rep.int(
+        sum(ii[["observed"]]), times = unique(ii[["set_size"]])
+      ),
+      simplify = FALSE), FALSE, FALSE
+  )
+  res[["coverage"]] <- res[["set_count"]] / res[["set_size"]]
+  res
+}
+
+.coverage_for_loop <- function(x, pf, terms_pf, .data) {
+
+  terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
+  cov_exprs <- .get_coverage_exprs(pf)
+  res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
+
+  for(i in seq_along(terms_list)) {
+    x <- .weave_coverage_by_args(
+      x, terms_list[[i]], cov_exprs[[i]], .data
+    )
+  }
+  res <- as.data.frame(x[[res_name]])
   res
 }
 
@@ -172,12 +180,12 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
-.weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data, subset) {
+.weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data) {
 
   lm <- .weave_full_path(x, terms_list)
   from_to <- terms_list[c(1, length(terms_list))]
-  lm <- .weave_coverage_simple(
-    lm, from_to, .data, subset, .coverage_metrics
+  lm <- .linkmap_add_coverage(
+    lm, from_to, .data, .coverage_metrics
   )
   lm <- lm[eval(parse(text = paste("coverage", cov_exprs)), lm), , drop = FALSE]
 
@@ -191,10 +199,10 @@ S7::method(weave_coverage, multifactor) <- function(
 .coverage_get_terms_list <- function(x, cov_i) {
   which_cov <- which(cov_i)
   if(max(which_cov) + 1L == length(x)) {
-    from_i <- c(1L, which_cov[-length(which_cov)] +1 )
+    from_i <- c(1L, which_cov[-length(which_cov)] + 1 )
     to_i <- c(which_cov + 1)
   } else {
-    from_i <- c(1L, which_cov +1 )
+    from_i <- c(1L, which_cov + 1 )
     to_i <- c(which_cov + 1, length(x))
   }
   if( length(from_i) == 1L ) {
@@ -225,13 +233,13 @@ S7::method(weave_coverage, multifactor) <- function(
   n <- x[3L]
   k <- x[4L]
 
-  matrix(c(q, m - q, k - q, n - (k - q)), 2, 2)
+  matrix(c(q, m - q, k - q, n - (k - q)), 2L, 2L)
 }
 
 #' given a linkmap x, calculate enrichment of all_terms positions 1 ~ 2,
 #' with optional .data character vector
 #' @noRd
-.weave_coverage_simple <- function(x, all_terms, .data = NULL, subset, metric) {
+.linkmap_add_coverage <- function(x, all_terms, .data = NULL, metric) {
 
   x <- as.data.frame(x)
   unit_term <- all_terms[[1L]]

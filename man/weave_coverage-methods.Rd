@@ -35,27 +35,17 @@ the @metadata slot.
 Perform enrichtment analysis from a weave
 }
 \examples{
-set.seed(2612)
-# Draw five cards from a deck
-drawn <- draw_cards(5)
-drawn
-scores <- poker_scores()
-scores
+# Load the quick brown fox data set
+x <- quickbrownfox()
+.data <- c("t", "h", "e", "f", "o", "x")
+.path1 <- letter ~ word ~ constituent
+.path2 <- letter ~ word : constituent
+.path3 <- letter ~ word > 0.5 ~ constituent
+.path4 <- letter : word ~ constituent > 0.25
 
-# Now enrich input
-result <- weave_coverage(
-  x = scores, .path = card ~ suit, .data = drawn, metric = "set_count"
-)
-
-result
-
-# Now let's spike our hand with a royal straight flush
-cheat <- draw_cards()[c(10, 11, 12, 13, 1)]
-cheat
-
-.path = card ~ rank ~ straight > 0.2
-result <- weave_coverage(scores, .path, .data = cheat)
-result
-test_enrich(result)
+weave_coverage(x = x, .path = .path1, .data = .data)
+weave_coverage(x = x, .path = .path2, .data = .data)
+weave_coverage(x = x, .path = .path3, .data = .data)
+weave_coverage(x = x, .path = .path4, .data = .data)
 
 }

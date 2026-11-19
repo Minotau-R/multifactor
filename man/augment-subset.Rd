@@ -11,7 +11,7 @@
 \usage{
 \method{subset}{`multifactor::multifactor`}(x, .path, .drop.unmatched = FALSE, ...)
 
-\method{subset}{`multifactor::linkmap`}(x, subset = NULL, ...)
+\method{subset}{`multifactor::linkmap`}(x, subset, ...)
 
 \method{augment}{`multifactor::multifactor`}(x, ...)
 }

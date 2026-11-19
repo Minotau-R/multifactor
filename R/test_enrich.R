@@ -45,7 +45,7 @@ S7::method(test_enrich, linkmap) <- function(
 
     if(!all(c("observed", "set_count", "set_size") %in% colnames(x@metadata))) {
         .tempdata <- .data_coverage_to_vector(.data, .data_column)
-        x <- .weave_coverage_simple(
+        x <- .linkmap_add_coverage(
             x[[.rows_with_col(x@map, all.vars(.path))]],
             all.vars(.path), .tempdata, .coverage_metrics
         )
