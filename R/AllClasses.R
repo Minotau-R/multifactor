@@ -240,7 +240,7 @@ path_frame <- S7::new_class(
   ),
   constructor = function(x, call = character()) {
     stopifnot("path_frame input must be a data.frame." = is.data.frame(x))
-    S7::new_object(.parent = x, call = call)
+    S7::new_object(x, call = call)
   },
   validator = function(self) {
     if (!all(colnames(self)[seq_len(2L)] == c("from", "to"))) {

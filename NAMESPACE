@@ -105,7 +105,8 @@ importFrom(stats,
   p.adjust,
   phyper,
   reformulate,
-  runif
+  runif,
+  terms
 )
 importFrom(utils,
   count.fields,
