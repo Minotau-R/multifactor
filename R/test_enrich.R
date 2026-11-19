@@ -16,7 +16,7 @@ method(test_enrich, multifactor) <- function(
 ) {
     x <- weave_coverage(
         x = x, .path = .path, .data = .data,
-        metric = .coverage_metrics,
+        subset = FALSE, metric = .coverage_metrics,
         out.format = "linkmap",
         .data_column = .data_column
         )
@@ -63,7 +63,6 @@ S7::method(test_enrich, linkmap) <- function(
     k <- length(unique(mm[mm[["observed"]], 1L]))
 
     cont_df <- data.frame(q, m, n, k)
-
     expected <- k / (m + n)
     observed <- q / m
     fold <- observed / expected
@@ -75,7 +74,9 @@ S7::method(test_enrich, linkmap) <- function(
     )
     p.adj <- stats::p.adjust(p.value, method = "BH")
 
-    res <- data.frame(expected, observed, fold, log_fold, p.value, p.adj)
+    res <- data.frame(
+        n_hits = q, expected, observed, fold, log_fold, p.value, p.adj
+        )
 
     return(res)
 }
