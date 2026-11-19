@@ -79,6 +79,7 @@ S7::method(components, path_frame) <-
 S7::method(terms, path_frame) <- function(x) `terms.multifactor::path_frame`(x)
 
 #' @export
+#' @importFrom stats terms
 `terms.multifactor::path_frame` <- function(x, ...) as.character(
   c(x[[1L]], x[[2L]][NROW(x)])
 )
