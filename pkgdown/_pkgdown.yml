@@ -24,7 +24,7 @@ reference:
   - stack-methods
   - weave_apply
   - weave_apply-methods
-  - weave_to_tbl
+  - weave_convert
   - weave_join
   - test_enrich
   - test_enrich-methods
