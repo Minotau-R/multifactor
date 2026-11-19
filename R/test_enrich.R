@@ -1,8 +1,22 @@
-#' Perform enrichtment tests on relational data
+#' Perform enrichment tests on relational data
+#' @description
+#' `test_enrich` allows to test enrichment for the target feature of a
+#' multifactor or a linkmap output by `weave_coverage()` based on the origin
+#' feature.
 #' @importFrom S7 S7_inherits
 #' @importFrom stats p.adjust
 #' @param x A linkmap with coverage metadata from `weave_coverage()`.
 #' @param log_base `Integer`. Base of logarithm for log-fold (default: 2).
+#' @returns A data.frame with the enrichment statistics, including the following
+#' variables:
+#' \itemize{
+#'   \item expected: Expected percent coverage
+#'   \item observed: Observed percent coverage
+#'   \item fold: Fold effect size
+#'   \item log_fold: Log fold effect size based on `log_base` argument
+#'   \item p.value: Uncorrected p-values
+#'   \item p.adj: FDR-adjusted p-values
+#' }
 #' @rdname test_enrich-methods
 #' @name test_enrich-methods
 #'

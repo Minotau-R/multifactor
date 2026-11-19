@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# multifactor: An R package for multifactor and linkmap S7 container classes
+# multifactor: an R package for multifactor and linkmap S7 container classes
 
 <!-- badges: start -->
 
@@ -27,9 +27,8 @@ behaviour.
 
 ## Installation instructions
 
-Get the latest stable `R` release from
-[CRAN](http://cran.r-project.org/). Then install the released version of
-`multifactor`:
+Get the latest stable R release from [CRAN](http://cran.r-project.org/).
+Then install the released version of `multifactor`:
 
 ``` r
 install.packages("multifactor")
