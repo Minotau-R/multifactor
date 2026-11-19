@@ -247,10 +247,10 @@ allows for quick hypothesis testing using the same syntax:
 
 \
 [`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``constituent``, .data ``=`` ``input``)`\
-`#>            expected  observed      fold    log_fold   p.value     p.adj`\
-`#> object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
-`#> predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
-`#> subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
+`#>           n_hits  expected  observed      fold    log_fold   p.value     p.adj`\
+`#> object         6 0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
+`#> predicate      5 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
+`#> subject        8 0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
 
 Alternatively,
 [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)
@@ -260,10 +260,10 @@ call for the same results:
 
 \
 [`test_enrich`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)`(``res``)`\
-`#>            expected  observed      fold    log_fold   p.value     p.adj`\
-`#> object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
-`#> predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
-`#> subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
+`#>           n_hits  expected  observed      fold    log_fold   p.value     p.adj`\
+`#> object         6 0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052`\
+`#> predicate      5 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052`\
+`#> subject        8 0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052`
 
 ## Session Info
 

@@ -320,19 +320,19 @@ expressions. For example:
 using the same syntax:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            expected  observed      fold    log_fold   p.value     p.adj</span></span>
-<span><span class="co">#&gt; object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
-<span><span class="co">#&gt; predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
-<span><span class="co">#&gt; subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
+<span><span class="co">#&gt;           n_hits  expected  observed      fold    log_fold   p.value     p.adj</span></span>
+<span><span class="co">#&gt; object         6 0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
+<span><span class="co">#&gt; predicate      5 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
+<span><span class="co">#&gt; subject        8 0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
 <p>Alternatively, <code><a href="../reference/test_enrich-generic.html">test_enrich()</a></code> can also be run on the
 result of an earlier <code><a href="../reference/weave_coverage-generic.html">weave_coverage()</a></code> call for the same
 results:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_enrich-generic.html">test_enrich</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            expected  observed      fold    log_fold   p.value     p.adj</span></span>
-<span><span class="co">#&gt; object    0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
-<span><span class="co">#&gt; predicate 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
-<span><span class="co">#&gt; subject   0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
+<span><span class="co">#&gt;           n_hits  expected  observed      fold    log_fold   p.value     p.adj</span></span>
+<span><span class="co">#&gt; object         6 0.5384615 0.6000000 1.1142857  0.15611920 0.4640194 0.6759052</span></span>
+<span><span class="co">#&gt; predicate      5 0.5384615 0.5555556 1.0317460  0.04508789 0.6132723 0.6759052</span></span>
+<span><span class="co">#&gt; subject        8 0.5384615 0.5333333 0.9904762 -0.01380580 0.6759052 0.6759052</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
