@@ -48,19 +48,15 @@ S7::method(weave_coverage, multifactor) <- function(
   )
   out.format <- match.arg(out.format, c("linkmap", "matrix"))
 
-  pf <- .check_parse_path(x, .path, "weave_coverage")
-  # pfs <- `components.multifactor::path_frame`(pf)
-
   .data <- .data_coverage_to_vector(.data, .data_column)
-  # split pf to terms list
-  #res <- .weave_to_linkmap(x, pf, .data = NULL, metric = .coverage_metrics)
+
+  pf <- .check_parse_path(x, .path, "weave_coverage")
+
   res <- .component_apply(
     pf, .weave_cov_full_path,
     x = x, .data = .data, metric = metric
     )
-  # res <- lapply(
-  #   pfs, .weave_cov_full_path, x = x, .data = .data, metric = metric
-  #   )
+
   res <- do.call(rbind.data.frame, res)
   res <- as_linkmap(res)
 
@@ -106,8 +102,7 @@ S7::method(weave_coverage, multifactor) <- function(
 
   res <- .coverage_for_loop(x, pf, terms_pf, .data)
 
-  backweave <- .check_needs_backweave(pf)
-  if(backweave) {
+  if(.check_needs_backweave(pf)) {
     x_bw <- weave_coverage(
       x, formula(paste0(terms_pf, collapse = "~")),  metric = c("set_size")
     )
@@ -144,18 +139,14 @@ S7::method(weave_coverage, multifactor) <- function(
 }
 
 .coverage_for_loop <- function(x, pf, terms_pf, .data) {
-
   terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
   cov_exprs <- .get_coverage_exprs(pf)
-  res_name <- paste0(terms_pf[1L], "2", tail(terms_pf, 1L))
 
   for(i in seq_along(terms_list)) {
-    x <- .weave_coverage_by_args(
-      x, terms_list[[i]], cov_exprs[[i]], .data
-    )
+    x <- .weave_coverage_by_args(x, terms_list[[i]], cov_exprs[[i]], .data)
   }
-  res <- as.data.frame(x[[res_name]])
-  res
+  res <- x[[paste(.pf_from_to(pf), collapse = "2")]]
+  as.data.frame(res)
 }
 
 .get_coverage_exprs <- function(pf) {
@@ -191,8 +182,7 @@ S7::method(weave_coverage, multifactor) <- function(
 
   # Add to multifactor x
   x <- augment(x, as_linkmap(lm))
-
-  return(x)
+  x
 }
 
 
