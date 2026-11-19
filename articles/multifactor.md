@@ -1,4 +1,4 @@
-# multifactor
+# Getting started with multifactor
 
 ## Overview
 
@@ -6,7 +6,7 @@
 relational data into data-analytical tools and methods. In practice, we
 expect `multifactor` to be used in combination with additional packages
 that extend it. For instance, see
-[ariadne](https://github.com/minotau-R/ariadne) and
+[ariadne](https://codeberg.org/Minotau-R/ariadne) and
 [anansi](https://github.com/thomazbastiaanssen/anansi), two such
 packages that make use of `multifactor` to link and convert across
 biological database IDs and perform multi-omics integration analysis,
@@ -16,9 +16,8 @@ respectively.
 
 ### Installation instructions
 
-Get the latest stable `R` release from
-[CRAN](http://cran.r-project.org/). Then install the released version of
-`multifactor`:
+Get the latest stable R release from [CRAN](http://cran.r-project.org/).
+Then install the released version of `multifactor`:
 
 \
 [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"multifactor"``)`
@@ -29,10 +28,13 @@ Or install the development version from this repository:
 [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
 `remotes``::`[`install_github`](https://remotes.r-lib.org/reference/install_github.html)`(``"minotau-R/multifactor"``)`
 
-### Setup
+### Environment setup
+
+To start with, we load the necessary libraries and the `trade_posts`
+data set.
 
 \
-[`library`](https://rdrr.io/r/base/library.html)`(`[`multifactor`](https://minotau-r.github.io/multifactor/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`multifactor`](https://github.com/Minotau-R/multifactor)`)`\
 \
 `# Wrangling`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
@@ -48,15 +50,15 @@ Or install the development version from this repository:
 
 ## multifactor and linkmap objects
 
-### linkmap
+### linkmap S7 class
 
-The basic object in the `multifactor` package is the `linkmap`, which
-contains relational information across two types of features. This
+The most basic object in the `multifactor` package is the `linkmap`,
+which contains relational information across two types of features. This
 format is sometimes referred to as an [edge
 list](https://en.wikipedia.org/wiki/Edge_list). Under a thin layer of
 S7, the `linkmap` object is a `data.frame` where the first two columns
-indicate which feature IDs that are considered linked. Optional
-additional columns are considered metadata.
+indicate which feature IDs are considered linked. Optional additional
+columns are considered metadata.
 
 Let’s use an example data set to take a closer look at `linkmap`. The
 [`trade_posts()`](https://minotau-r.github.io/multifactor/reference/random_multifactor.md)
@@ -65,7 +67,10 @@ good is traded for another. In this particular case, types of books are
 traded for types of furniture.
 
 \
+`# Extract first linkmap from multifactor`\
 `linkmap`` ``<-`` ``tp``[[``1``]``]`\
+\
+`# View linkmap`\
 `linkmap`\
 `#> A multifactor::linkmap data.frame S7_object: 9 rows.`\
 `#>        books furniture`\
@@ -90,7 +95,11 @@ names representing the *types* of good and rows representing which
 specific *type-pairs* are traded at that trade post, or, more generally,
 are linked in that `linkmap`.
 
+Notice that `linkmap` is two `factor` columns in a trench coat. We can
+inspect the levels as usual.
+
 \
+`# Inspect column levels`\
 [`levels`](https://rdrr.io/r/base/levels.html)`(``linkmap``)`\
 `#> $books`\
 `#> [1] "fancy book"  "green book"  "red book"    "blue book"   "orange book"`\
@@ -99,12 +108,9 @@ are linked in that `linkmap`.
 `#> $furniture`\
 `#> [1] "couch"    "cabinet"  "wastebin" "bed"      "box"      "door"`
 
-Notice that `linkmap` is two `factor` columns in a trench coat. We can
-inspect the levels as usual.
-
 We can see that we have several of these types of trade posts in our
-data set. However, we also notice that the column names - the types of
-goods - can differ.
+data set. However, we also notice that the column names — the types of
+goods — can differ.
 
 \
 [`length`](https://rdrr.io/r/base/length.html)`(``tp``)`\
@@ -128,19 +134,20 @@ goods - can differ.
 `#> `\
 `#>  and  2  metadata variables.`
 
-#### Visual representation of the linkmaps in our data set.
+#### Visual representation of the linkmaps in our data set
 
 ![](images/plot-linkmap.png)
 
-### multifactor
+### multifactor S7 class
 
-The `multifactor` is in essence a collection of `linkmap`s. Where
-`linkmap`s contain relational information across two data types,
-`multifactor`s are a representation of the relational graph formed by
+The `multifactor` is in essence a collection of `linkmaps`. Where
+`linkmaps` contain relational information across two data types,
+`multifactors` are a representation of the relational graph formed by
 combining those `linkmaps`. The full object `tp`, which contains the
 `linkmaps` we just investigated, is in fact a `multifactor` object:
 
 \
+`# View multifactor`\
 `tp`\
 `#> A multifactor::multifactor list S7_object,`\
 `#>     6 feature types across 6 linkmaps.`\
@@ -163,25 +170,28 @@ combining those `linkmaps`. The full object `tp`, which contains the
 `#>  $ fruit       : 6 Levels: apples ... grapes `\
 `#>  $ marbles     : 6 Levels: red marble ... sparkly marble`
 
-Notice that a `multifactor` summarizes information across the component
-`linkmaps` in several ways. First, The matrix shows the types of goods
-as columns and the component `linkmaps` that contain this information as
-rows. The numbers in the matrix then show the number of unique types of
-that type of good in that particular `linkmap` - and that are therefore
-linked to the second feature in the `linkmap`.
+Notice that a `multifactor` summarizes information across the
+constituent `linkmaps` in several ways. First, The matrix shows the
+types of goods as columns and the constituent `linkmaps` that contain
+this information as rows. The numbers in the matrix then show the number
+of levels for that type of good in that particular `linkmap` — and that
+are therefore linked to the second feature in the `linkmap`.
 
 For instance, in the top-left corner of the matrix, we can see that the
 first `linkmap` links books and furniture and is aptly named
 `books2furniture`. Notice that five unique types of books as well as
 five types of furniture are mentioned in `books2furniture`.
 
-Though `multifactor` is a list of `linkmap`s under the hood, we can also
-interact with its matrix representation, as well as access the component
-levels:
+Although `multifactor` is a list of `linkmaps` under the hood, we can
+also interact with its matrix representation, as well as access the
+component levels:
 
 \
+`# View dimensions`\
 [`dim`](https://rdrr.io/r/base/dim.html)`(``tp``)`\
 `#> [1] 6 6`\
+\
+`# View dimension names`\
 [`dimnames`](https://rdrr.io/r/base/dimnames.html)`(``tp``)`\
 `#> [[1]]`\
 `#> [1] "books2furniture"     "clothing2furniture"  "books2instruments"  `\
@@ -190,6 +200,8 @@ levels:
 `#> [[2]]`\
 `#> [1] "books"       "furniture"   "clothing"    "instruments" "fruit"      `\
 `#> [6] "marbles"`\
+\
+`# View levels`\
 [`levels`](https://rdrr.io/r/base/levels.html)`(``tp``)`\
 `#> $books`\
 `#> [1] "fancy book"  "green book"  "red book"    "blue book"   "orange book"`\
@@ -210,18 +222,20 @@ levels:
 `#> $marbles`\
 `#> [1] "red marble"     "white marble"   "black marble"   "blue marble"   `\
 `#> [5] "8 marble"       "sparkly marble"`\
+\
+`# Count levels`\
 [`nlevels`](https://minotau-r.github.io/multifactor/reference/nlevels.md)`(``tp``)`\
 `#>       books    clothing       fruit   furniture instruments     marbles `\
 `#>           6           6           6           6           6           6`
 
 Note that levels of the same type are automatically unified across all
-component linkmaps with that type of level.
+component `linkmaps` with that type of level.
 
-#### Overview of multifactor classes and terms.
+#### Overview of multifactor classes and terms
 
 ![](multifactor_files/figure-html/multifactor-anatomy-1.png)
 
-## weave() a path
+## `weave()` a path
 
 Going back to our trading post example, let’s say we’d want to get some
 new hats, but we only have fruit. While both fruit and clothing are
@@ -312,11 +326,11 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `g`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``tp``)`\
 `g`\
-`#> IGRAPH f489f47 UN-- 6 6 -- `\
+`#> IGRAPH 7eea7dc UN-- 6 6 -- `\
 `#> + attr: name (v/c), name (e/c), instruments_emoji (e/n), marbles_emoji`\
 `#> | (e/n), furniture_emoji (e/n), books_emoji (e/n), clothing_emoji`\
 `#> | (e/n), fruit_emoji (e/n)`\
-`#> + edges from f489f47 (vertex names):`\
+`#> + edges from 7eea7dc (vertex names):`\
 `#> [1] books      --furniture   clothing   --furniture   books      --instruments`\
 `#> [4] fruit      --instruments furniture  --marbles     instruments--marbles`\
 `# Plot graph across data types`\
@@ -330,9 +344,9 @@ for path finding and sparse matrix representation.
 `# Convert to an igraph object`\
 `lg`` ``<-`` `[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)`\
 `lg`\
-`#> IGRAPH 2bc8e76 UN-B 12 18 -- `\
+`#> IGRAPH 014cdb1 UN-B 12 18 -- `\
 `#> + attr: type (v/l), name (v/c)`\
-`#> + edges from 2bc8e76 (vertex names):`\
+`#> + edges from 014cdb1 (vertex names):`\
 `#>  [1] apples --t-shirt pears  --t-shirt apples --dress   oranges--dress  `\
 `#>  [5] melons --dress   grapes --dress   apples --gloves  pears  --gloves `\
 `#>  [9] apples --hat     pears  --hat     oranges--hat     melons --hat    `\
@@ -419,7 +433,7 @@ two columns.
 `#>  [9] V7       V8       V9       V10     `\
 `#> <0 rows> (or 0-length row.names)`
 
-### Reading and parsing adjaceny list-formatted files
+### Reading and parsing adjacency list-formatted files
 
 Relational data between two types (bipartite) is sometimes expressed as
 a text file to be read row-wise. The first element of each row specifies
@@ -437,9 +451,11 @@ above.
 \
 `# Use igraph to deconstruct a graph into an adjacency list, coerce to characters`\
 `adj`` ``<-`` `[`lapply`](https://rdrr.io/r/base/lapply.html)`(`[`as_adj_list`](https://r.igraph.org/reference/as_adj_list.html)`(`[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``fruit2clothing``)``)``, ``as_ids``)`\
+\
 `# Only keep the 'fruit' nodes that have more than one link for now`\
 `adj`` ``<-`` ``adj``[`[`levels`](https://rdrr.io/r/base/levels.html)`(``fruit2clothing``)``$``fruit``]`\
 `adj`` ``<-`` ``adj``[`[`lengths`](https://rdrr.io/r/base/lengths.html)`(``adj``)`` ``>`` ``0``]`\
+\
 `# collapse names to first elements of character vectors`\
 `adj`` ``<-`` `[`mapply`](https://rdrr.io/r/base/mapply.html)`(``c``, `[`names`](https://rdrr.io/r/base/names.html)`(``adj``)``, ``adj``, USE.NAMES ``=`` ``FALSE``)`\
 `adj`` ``<-`` `[`vapply`](https://rdrr.io/r/base/lapply.html)`(``adj``, ``paste``, collapse ``=`` ``"\t"``, ``""``)`
@@ -483,6 +499,31 @@ If stored in a file in adjacency list format, it may look like this:
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`as.igraph`](https://r.igraph.org/reference/as.igraph.html)`(``adj_data``)``)`
 
 ![](multifactor_files/figure-html/read-adj-1.png)
+
+## Citation
+
+We hope that multifactor will be useful for your research. Please use
+the following information to cite the package and the overall approach.
+Thank you!
+
+\
+[`citation`](https://rdrr.io/r/utils/citation.html)`(``"multifactor"``)`\
+`#> Warning in citation("multifactor"): could not determine year for 'multifactor'`\
+`#> from package DESCRIPTION file`\
+`#> To cite package 'multifactor' in publications use:`\
+`#> `\
+`#>   Bastiaanssen T, Benedetti G (????). _multifactor: S7 Classes for`\
+`#>   Relational Data_. R package version 0.1.3,`\
+`#>   <https://github.com/Minotau-R/multifactor>.`\
+`#> `\
+`#> A BibTeX entry for LaTeX users is`\
+`#> `\
+`#>   @Manual{,`\
+`#>     title = {multifactor: S7 Classes for Relational Data},`\
+`#>     author = {Thomaz Bastiaanssen and Giulio Benedetti},`\
+`#>     note = {R package version 0.1.3},`\
+`#>     url = {https://github.com/Minotau-R/multifactor},`\
+`#>   }`
 
 ## Session Info
 

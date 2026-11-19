@@ -2,16 +2,18 @@
 
 ## Overview
 
-Among other things, the multifactor package provides a set of tools to
-calculate coverage and estimate enrichment for relational datasets. This
-type of operation forms the basis for bioinformatics techniques such as
-pathway enrichment analysis (PEA), but have application far beyond the
+Among other things, `multifactor` provides a set of tools to calculate
+coverage and estimate enrichment for relational data sets. This type of
+operation forms the basis for bioinformatics techniques such as pathway
+enrichment analysis (PEA), but have application far beyond the
 biological sciences.
 
-### Setup
+### Environment setup
+
+To start with, we load the necessary libraries.
 
 \
-[`library`](https://rdrr.io/r/base/library.html)`(`[`multifactor`](https://minotau-r.github.io/multifactor/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`multifactor`](https://github.com/Minotau-R/multifactor)`)`\
 \
 `# Wrangling`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
@@ -33,13 +35,16 @@ biological sciences.
 `  ``)`\
 `)`
 
-#### Example Dataset: The Quick Brown Fox
+#### Example data set: The Quick Brown Fox
 
 We will use a toy data set of hierarchically structured data, namely the
-sentence: ‘The quick brown fox jumps over the lazy dog.’ This sentence
-is a pangram, meaning that all 26 letters of the English alphabet are
-represented. Moreover, we have deconstructed the sentence to three
-levels; letters, words and constituents.
+sentence:
+
+> The quick brown fox jumps over the lazy dog
+
+This sentence is a *pangram*, meaning that all 26 letters of the English
+alphabet are represented. Moreover, we have deconstructed the sentence
+to three levels: letters, words and constituents.
 
 \
 `# Load the quick brown fox data set`\
@@ -54,6 +59,7 @@ We can convince ourselves this same information is captured in the
 multifactor object, `fox`.
 
 \
+`# View levels`\
 [`levels`](https://rdrr.io/r/base/levels.html)`(``fox``)`\
 `#> $letter`\
 `#>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"`\
@@ -68,6 +74,7 @@ multifactor object, `fox`.
 `#> $sentence`\
 `#> [1] "the quick brown fox jumps over the lazy dog"`\
 \
+`# Convert linkmap to matrix`\
 [`as.matrix`](https://rdrr.io/r/base/matrix.html)`(``fox``$``letter2word``)`\
 `#> 26 x 8 sparse Matrix of class "ngCMatrix"`\
 `#>       word`\
@@ -103,13 +110,14 @@ multifactor object, `fox`.
 
 ### Introduction
 
-With coverage, we mean the proportion of items in a set that are
+With *coverage*, we mean the proportion of items in a set that are
 present. In other words, going back to our example, given some number of
 letters, we can calculate which words we can make, and how complete they
 are.
 
 To demonstrate, let’s first consider the graph representation of our
-dataset: ![](coverage_and_enrichment_files/figure-html/plot-cov-0-1.png)
+data set:
+![](coverage_and_enrichment_files/figure-html/plot-cov-0-1.png)
 
 Three feature types are shown on the x-axis, with links between
 respective levels as lines. We can see that each letter is linked to the
@@ -127,16 +135,16 @@ We’ll also need to generate some collection of letters as input data:
 
 ### Defining coverage in a path
 
-### weave_coverage()
+### Estimate coverage using `weave_coverage()`
 
 We can use the
 [`weave_coverage()`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)
 function to calculate to what degree the input letters cover the words
 in our data set. This function behaves similarly to
 [`weave()`](https://minotau-r.github.io/multifactor/reference/weave-generic.md),
-in the sense that it takes a multifactor as its first argument, `x`, and
-its second argument, `.path`, defines the path through that multifactor.
-It also has an additional argument, `.data`.
+in the sense that it takes a `multifactor` as its first argument, `x`,
+and its second argument, `.path`, defines the path through that
+`multifactor`. It also has an additional argument, `.data`.
 
 For now, let’s plug in our input letters:
 
@@ -200,11 +208,10 @@ complete coverage (`>= 1`). For example:
 
 ![](coverage_and_enrichment_files/figure-html/weave-plot-specify2-1.png)
 
-#### Partial coverage
+#### Advanced: partial coverage
 
 We can similarly define threshold-based filters using relational
-expressions. For example: `letter ~ word > 0.5 ~ constituent` is
-equivalent to `letter ~ word : constituent`.
+expressions. For example: `letter ~ word > 0.5 ~ constituent`.
 
 \
 [`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\

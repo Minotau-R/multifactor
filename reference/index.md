@@ -23,7 +23,7 @@
 - [`test_enrich()`](https://minotau-r.github.io/multifactor/reference/test_enrich-generic.md)
   : Statistically estimate enrichment using relational data
 - [`test_enrich-methods`](https://minotau-r.github.io/multifactor/reference/test_enrich-methods.md)
-  : Perform enrichtment tests on relational data
+  : Perform enrichment tests on relational data
 
 ## Classes
 

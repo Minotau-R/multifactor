@@ -32,6 +32,7 @@ Calls igraph::graph_from_biadjacency_matrix under the hood."></head><body>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Minotau-R/multifactor/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -47,7 +48,7 @@ Calls igraph::graph_from_biadjacency_matrix under the hood."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Convert a linkmap to igraph</h1>
-
+      <small class="dont-index">Source: <a href="https://github.com/Minotau-R/multifactor/blob/devel/R/graph_conversion_utils.R" class="external-link"><code>R/graph_conversion_utils.R</code></a></small>
       <div class="d-none name"><code>as.igraph.linkmap.Rd</code></div>
     </div>
 
@@ -95,9 +96,9 @@ attributes in the returned graph (see <code><a href="https://r.igraph.org/refere
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Make igraph object:</span></span></span>
 <span class="r-in"><span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 379db53 UN-B 52 338 -- </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH cd0821d UN-B 52 338 -- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> + attr: type (v/l), name (v/c)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 379db53 (vertex names):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from cd0821d (vertex names):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] d--A e--A h--A j--A k--A l--A m--A n--A o--A p--A q--A s--A t--A v--A w--A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [16] z--A d--B h--B k--B l--B m--B s--B t--B w--B a--B c--B f--B i--B r--B x--B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [31] y--B e--C h--C k--C p--C q--C s--C z--C c--C f--C i--C u--C d--D h--D j--D</span>
