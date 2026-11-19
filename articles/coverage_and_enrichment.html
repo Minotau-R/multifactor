@@ -260,19 +260,19 @@ shorthand for complete coverage (<code>&gt;= 1</code>). For example:
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">:</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 19 rows.</span></span>
 <span><span class="co">#&gt;    letter constituent</span></span>
 <span><span class="co">#&gt; 1       a      object</span></span>
-<span><span class="co">#&gt; 2       d      object</span></span>
-<span><span class="co">#&gt; 3       e      object</span></span>
-<span><span class="co">#&gt; 4       g      object</span></span>
-<span><span class="co">#&gt; 5       h      object</span></span>
-<span><span class="co">#&gt; 6       l      object</span></span>
-<span><span class="co">#&gt; 7       o      object</span></span>
-<span><span class="co">#&gt; 8       t      object</span></span>
-<span><span class="co">#&gt; 9       y      object</span></span>
-<span><span class="co">#&gt; 10      z      object</span></span>
-<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; 2       e      object</span></span>
+<span><span class="co">#&gt; 3       g      object</span></span>
+<span><span class="co">#&gt; 4       h      object</span></span>
+<span><span class="co">#&gt; 5       l      object</span></span>
+<span><span class="co">#&gt; 6       t      object</span></span>
+<span><span class="co">#&gt; 7       e   predicate</span></span>
+<span><span class="co">#&gt; 8       m   predicate</span></span>
+<span><span class="co">#&gt; 9       p   predicate</span></span>
+<span><span class="co">#&gt; 10      r   predicate</span></span>
+<span><span class="co">#&gt;  + 9 more rows. Use `print(n = ...)` to see more rows.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ levels:   2 variables: </span></span>
 <span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>
@@ -291,19 +291,19 @@ expressions. For example:
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">fox</span>, .path <span class="op">=</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="va">constituent</span>, .data <span class="op">=</span> <span class="va">input</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 34 rows.</span></span>
+<span><span class="co">#&gt; A multifactor::linkmap data.frame S7_object: 12 rows.</span></span>
 <span><span class="co">#&gt;    letter constituent</span></span>
-<span><span class="co">#&gt; 1       a      object</span></span>
-<span><span class="co">#&gt; 2       d      object</span></span>
-<span><span class="co">#&gt; 3       e      object</span></span>
-<span><span class="co">#&gt; 4       g      object</span></span>
-<span><span class="co">#&gt; 5       h      object</span></span>
-<span><span class="co">#&gt; 6       l      object</span></span>
-<span><span class="co">#&gt; 7       o      object</span></span>
-<span><span class="co">#&gt; 8       t      object</span></span>
-<span><span class="co">#&gt; 9       y      object</span></span>
-<span><span class="co">#&gt; 10      z      object</span></span>
-<span><span class="co">#&gt;  + 24 more rows. Use `print(n = ...)` to see more rows.</span></span>
+<span><span class="co">#&gt; 1       e      object</span></span>
+<span><span class="co">#&gt; 2       h      object</span></span>
+<span><span class="co">#&gt; 3       t      object</span></span>
+<span><span class="co">#&gt; 4       m   predicate</span></span>
+<span><span class="co">#&gt; 5       p   predicate</span></span>
+<span><span class="co">#&gt; 6       s   predicate</span></span>
+<span><span class="co">#&gt; 7       e     subject</span></span>
+<span><span class="co">#&gt; 8       h     subject</span></span>
+<span><span class="co">#&gt; 9       n     subject</span></span>
+<span><span class="co">#&gt; 10      r     subject</span></span>
+<span><span class="co">#&gt;  + 2 more rows. Use `print(n = ...)` to see more rows.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; @ levels:   2 variables: </span></span>
 <span><span class="co">#&gt;  $ letter      : 26 Levels: a ... z </span></span>

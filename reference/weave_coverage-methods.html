@@ -104,94 +104,90 @@ the @metadata slot.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2612</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Draw five cards from a deck</span></span></span>
-<span class="r-in"><span><span class="va">drawn</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">draw_cards</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">drawn</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Jack♦️" "5♥️"    "King♠️" "7♥️"    "6♦️"   </span>
-<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">poker_scores</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">scores</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::multifactor list S7_object,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4 feature types across 3 linkmaps.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               card rank suit straight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> card2rank       52   13    .        .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> card2suit       52    .    4        .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rank2straight    .   13    .       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that linkmap.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ card     : 52 Levels: Ace♥️ ... King♣️ </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ rank     : 13 Levels: Ace ... King </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ suit     :  4 Levels: hearts spades diamonds clubs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ straight : 10 Levels: Ace to 5 ... Royal straight </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Load the quick brown fox data set</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="quickbrownfox.html">quickbrownfox</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="st">"h"</span>, <span class="st">"e"</span>, <span class="st">"f"</span>, <span class="st">"o"</span>, <span class="st">"x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">.path1</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">~</span> <span class="va">constituent</span></span></span>
+<span class="r-in"><span><span class="va">.path2</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">:</span> <span class="va">constituent</span></span></span>
+<span class="r-in"><span><span class="va">.path3</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">~</span> <span class="va">word</span> <span class="op">&gt;</span> <span class="fl">0.5</span> <span class="op">~</span> <span class="va">constituent</span></span></span>
+<span class="r-in"><span><span class="va">.path4</span> <span class="op">&lt;-</span> <span class="va">letter</span> <span class="op">:</span> <span class="va">word</span> <span class="op">~</span> <span class="va">constituent</span> <span class="op">&gt;</span> <span class="fl">0.25</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Now enrich input</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  x <span class="op">=</span> <span class="va">scores</span>, .path <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">suit</span>, .data <span class="op">=</span> <span class="va">drawn</span>, metric <span class="op">=</span> <span class="st">"set_count"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">result</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 52 rows.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    card  suit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Ace♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    4♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    5♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    6♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    7♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    8♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    9♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  10♣️ clubs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + 42 more rows. Use `print(n = ...)` to see more rows.</span>
+<span class="r-in"><span><span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, .path <span class="op">=</span> <span class="va">.path1</span>, .data <span class="op">=</span> <span class="va">.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 12 rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    letter constituent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       e      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       h      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       o      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       t      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       e   predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       o   predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       e     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       f     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       h     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      o     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  + 2 more rows. Use `print(n = ...)` to see more rows.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ card : 52 Levels: Ace♥️ ... King♣️ </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ suit :  4 Levels: hearts spades diamonds clubs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  and  2  metadata variables.</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Now let's spike our hand with a royal straight flush</span></span></span>
-<span class="r-in"><span><span class="va">cheat</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_multifactor.html">draw_cards</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">11</span>, <span class="fl">12</span>, <span class="fl">13</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">cheat</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10♥️"    "Jack♥️"  "Queen♥️" "King♥️"  "Ace♥️"  </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">.path</span> <span class="op">=</span> <span class="va">card</span> <span class="op">~</span> <span class="va">rank</span> <span class="op">~</span> <span class="va">straight</span> <span class="op">&gt;</span> <span class="fl">0.2</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span><span class="va">scores</span>, <span class="va">.path</span>, .data <span class="op">=</span> <span class="va">cheat</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 200 rows.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    card straight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Ace♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    4♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    5♥️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Ace♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    2♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    3♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    4♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   5♠️ Ace to 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + 190 more rows. Use `print(n = ...)` to see more rows.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ card     : 52 Levels: Ace♥️ ... King♣️ </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ straight : 10 Levels: Ace to 5 ... Royal straight </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ letter      : 26 Levels: a ... z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ constituent :  3 Levels: object predicate subject </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  and  4  metadata variables.</span>
-<span class="r-in"><span><span class="fu"><a href="test_enrich-generic.html">test_enrich</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  expected observed fold    log_fold     p.value      p.adj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Ace to 5       0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 to 6         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 to 7         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 to 8         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 to 9         0.09615385     0.00 0.00        -Inf 1.000000000 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 to 10        0.09615385     0.05 0.52 -0.94341647 0.922516699 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 to Jack      0.09615385     0.10 1.04  0.05658353 0.645790624 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 to Queen     0.09615385     0.15 1.56  0.64154603 0.283184043 0.94394681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 to King      0.09615385     0.20 2.08  1.05658353 0.065620094 0.32810047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Royal straight 0.09615385     0.25 2.60  1.37851162 0.005965463 0.05965463</span>
+<span class="r-in"><span><span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, .path <span class="op">=</span> <span class="va">.path2</span>, .data <span class="op">=</span> <span class="va">.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 12 rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    letter constituent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       e      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       h      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       o      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       t      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       e   predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       o   predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       e     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       f     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       h     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      o     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  + 2 more rows. Use `print(n = ...)` to see more rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ letter      : 26 Levels: a ... z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ constituent :  3 Levels: object predicate subject </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  and  4  metadata variables.</span>
+<span class="r-in"><span><span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, .path <span class="op">=</span> <span class="va">.path3</span>, .data <span class="op">=</span> <span class="va">.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 9 rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   letter constituent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      e      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      h      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      t      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      e     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      f     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      h     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      o     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      t     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      x     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ letter      : 26 Levels: a ... z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ constituent :  3 Levels: object predicate subject </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  and  4  metadata variables.</span>
+<span class="r-in"><span><span class="fu"><a href="weave_coverage-generic.html">weave_coverage</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, .path <span class="op">=</span> <span class="va">.path4</span>, .data <span class="op">=</span> <span class="va">.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A multifactor::linkmap data.frame S7_object: 9 rows.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   letter constituent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      e      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      h      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      t      object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      e     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      f     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      h     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      o     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      t     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      x     subject</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> @ levels:   2 variables: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ letter      : 26 Levels: a ... z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ constituent :  3 Levels: object predicate subject </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  and  4  metadata variables.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

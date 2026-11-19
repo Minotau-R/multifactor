@@ -10,7 +10,7 @@ of a given `multifactor`.
 subset(x, .path, .drop.unmatched = FALSE, ...)
 
 # S3 method for class '`multifactor::linkmap`'
-subset(x, subset = NULL, ...)
+subset(x, subset, ...)
 
 # S3 method for class '`multifactor::multifactor`'
 augment(x, ...)

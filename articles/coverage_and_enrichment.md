@@ -186,19 +186,19 @@ complete coverage (`>= 1`). For example:
 [`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``:`` ``constituent``, .data ``=`` ``input`\
 `)`\
-`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
+`#> A multifactor::linkmap data.frame S7_object: 19 rows.`\
 `#>    letter constituent`\
 `#> 1       a      object`\
-`#> 2       d      object`\
-`#> 3       e      object`\
-`#> 4       g      object`\
-`#> 5       h      object`\
-`#> 6       l      object`\
-`#> 7       o      object`\
-`#> 8       t      object`\
-`#> 9       y      object`\
-`#> 10      z      object`\
-`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> 2       e      object`\
+`#> 3       g      object`\
+`#> 4       h      object`\
+`#> 5       l      object`\
+`#> 6       t      object`\
+`#> 7       e   predicate`\
+`#> 8       m   predicate`\
+`#> 9       p   predicate`\
+`#> 10      r   predicate`\
+`` #>  + 9 more rows. Use `print(n = ...)` to see more rows. ``\
 `#> `\
 `#> @ levels:   2 variables: `\
 `#>  $ letter      : 26 Levels: a ... z `\
@@ -217,19 +217,19 @@ expressions. For example: `letter ~ word > 0.5 ~ constituent`.
 [`weave_coverage`](https://minotau-r.github.io/multifactor/reference/weave_coverage-generic.md)`(`\
 `  x ``=`` ``fox``, .path ``=`` ``letter`` ``~`` ``word`` ``>`` ``0.5`` ``~`` ``constituent``, .data ``=`` ``input`\
 `)`\
-`#> A multifactor::linkmap data.frame S7_object: 34 rows.`\
+`#> A multifactor::linkmap data.frame S7_object: 12 rows.`\
 `#>    letter constituent`\
-`#> 1       a      object`\
-`#> 2       d      object`\
-`#> 3       e      object`\
-`#> 4       g      object`\
-`#> 5       h      object`\
-`#> 6       l      object`\
-`#> 7       o      object`\
-`#> 8       t      object`\
-`#> 9       y      object`\
-`#> 10      z      object`\
-`` #>  + 24 more rows. Use `print(n = ...)` to see more rows. ``\
+`#> 1       e      object`\
+`#> 2       h      object`\
+`#> 3       t      object`\
+`#> 4       m   predicate`\
+`#> 5       p   predicate`\
+`#> 6       s   predicate`\
+`#> 7       e     subject`\
+`#> 8       h     subject`\
+`#> 9       n     subject`\
+`#> 10      r     subject`\
+`` #>  + 2 more rows. Use `print(n = ...)` to see more rows. ``\
 `#> `\
 `#> @ levels:   2 variables: `\
 `#>  $ letter      : 26 Levels: a ... z `\
