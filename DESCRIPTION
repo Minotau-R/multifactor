@@ -37,6 +37,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://minotau-r.github.io/multifactor/
+URL: https://github.com/Minotau-R/multifactor, https://minotau-r.github.io/multifactor
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.1

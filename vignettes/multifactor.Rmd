@@ -1,11 +1,12 @@
 ---
-title: "multifactor"
+title: "Getting started with multifactor"
 resource_files:
   - images/plot-linkmap.png
 output: 
   rmarkdown::html_document
+date: "`r format(Sys.Date(), '%d %B %Y')`"
 vignette: >
-  %\VignetteIndexEntry{1. Getting started with multifactor}
+  %\VignetteIndexEntry{Getting started with multifactor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +24,7 @@ knitr::opts_chunk$set(
 `multifactor` aims to provide a consistent toolkit to incorporate relational 
 data into data-analytical tools and methods. In practice, we expect 
 `multifactor` to be used in combination with additional packages that extend it.
-For instance, see [ariadne](https://github.com/minotau-R/ariadne) and
+For instance, see [ariadne](https://codeberg.org/Minotau-R/ariadne) and
 [anansi](https://github.com/thomazbastiaanssen/anansi), two such packages that 
 make use of `multifactor` to link and convert across biological database IDs and
 perform multi-omics integration analysis, respectively. 
@@ -32,7 +33,7 @@ perform multi-omics integration analysis, respectively.
 
 ## Installation instructions
 
-Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then
+Get the latest stable R release from [CRAN](http://cran.r-project.org/). Then
 install the released version of `multifactor`:
 
 ```{r 'cran-install', eval = FALSE}
@@ -46,7 +47,9 @@ install.packages("remotes")
 remotes::install_github("minotau-R/multifactor")
 ```
 
-## Setup 
+## Environment setup
+
+To start with, we load the necessary libraries and the `trade_posts` data set.
 
 ```{r 'setup-multifactor', message = FALSE}
 library(multifactor)
@@ -100,12 +103,12 @@ e <- tapply(trade_posts(raw.data = TRUE), ~group, `[[<-`, "group", value = NULL)
 ```
 
 # multifactor and linkmap objects
-## linkmap
-The basic object in the `multifactor` package is the `linkmap`, which contains 
+## linkmap S7 class
+The most basic object in the `multifactor` package is the `linkmap`, which contains 
 relational information across two types of features. This format is sometimes 
 referred to as an [edge list](https://en.wikipedia.org/wiki/Edge_list). 
 Under a thin layer of S7, the `linkmap` object is a `data.frame` where the first
-two columns indicate which feature IDs that are considered linked. Optional 
+two columns indicate which feature IDs are considered linked. Optional 
 additional columns are considered metadata. 
 
 Let's use an example data set to take a closer look at `linkmap`. The 
@@ -113,29 +116,38 @@ Let's use an example data set to take a closer look at `linkmap`. The
 type of good is traded for another. In this particular case, types of books are 
 traded for types of furniture. 
 ```{r 'linkmap-object-start'}
+# Extract first linkmap from multifactor
 linkmap <- tp[[1]]
+
+# View linkmap
 linkmap
 ```
 The two types of goods are captured by the two columns, with column names 
 representing the *types* of good and rows representing which specific 
 *type-pairs* are traded at that trade post, or, more generally, are linked in 
 that `linkmap`. 
-```{r 'linkmap-object-lvs'}
-levels(linkmap)
-```
+
 Notice that `linkmap` is two `factor` columns in a trench coat. We can inspect 
 the levels as usual. 
+```{r 'linkmap-object-lvs'}
+# Inspect column levels
+levels(linkmap)
+```
 
 We can see that we have several of these types of trade posts in our data set. 
-However, we also notice that the column names - the types of goods - can differ. 
+However, we also notice that the column names — the types of goods — can differ. 
 ```{r 'linkmap-object-more'}
 length(tp)
 tp[[2]]
 ```
 
-### Visual representation of the linkmaps in our data set. 
+### Visual representation of the linkmaps in our data set 
 ```{r, 'plot-linkmap'}
-#| message=FALSE, echo=FALSE, fig.width=8, fig.height=4, dev='ragg_png'
+#| message: false
+#| echo: false
+#| fig.width: 8
+#| fig.height: 4
+#| dev: 'ragg_png'
 
 plot_dfs <- lapply(tp, .to_plot_df, e)
 
@@ -192,42 +204,55 @@ p <- ggplot() +
 knitr::include_graphics("images/plot-linkmap.png")
 ```
 
-## multifactor
-The `multifactor` is in essence a collection of `linkmap`s. Where `linkmap`s 
-contain relational information across two data types, `multifactor`s are a 
+## multifactor S7 class
+The `multifactor` is in essence a collection of `linkmaps`. Where `linkmaps` 
+contain relational information across two data types, `multifactors` are a 
 representation of the relational graph formed by combining those `linkmaps`. 
 The full object `tp`, which contains the `linkmaps` we just investigated, is in
 fact a `multifactor` object: 
 
 ```{r 'multifactor-object-start'}
+# View multifactor
 tp
 ```
-Notice that a `multifactor` summarizes information across the component 
+Notice that a `multifactor` summarizes information across the constituent 
 `linkmaps` in several ways. First, The matrix shows the types of goods as 
-columns and the component `linkmaps` that contain this information as rows. The 
-numbers in the matrix then show the number of unique types of that type of good 
-in that particular `linkmap` - and that are therefore linked to the second feature
-in the `linkmap`. 
+columns and the constituent `linkmaps` that contain this information as rows. The 
+numbers in the matrix then show the number of levels for that type of good 
+in that particular `linkmap` — and that are therefore linked to the second
+feature in the `linkmap`. 
 
 For instance, in the top-left corner of the matrix, we can see that the first 
 `linkmap` links books and furniture and is aptly named `books2furniture`.
 Notice that five unique types of books as well as five types of furniture are
 mentioned in `books2furniture`.  
 
-Though `multifactor` is a list of `linkmap`s under the hood, we can also 
+Although `multifactor` is a list of `linkmaps` under the hood, we can also 
 interact with its matrix representation, as well as access the component levels:  
 ```{r 'multifactor-object-matrix'}
+# View dimensions
 dim(tp)
+
+# View dimension names
 dimnames(tp)
+
+# View levels
 levels(tp)
+
+# Count levels
 nlevels(tp)
 ```
 Note that levels of the same type are automatically unified across all component
-linkmaps with that type of level.
+`linkmaps` with that type of level.
 
-### Overview of multifactor classes and terms. 
-```{r 'multifactor-anatomy'}
-#| message=FALSE, echo=FALSE, fig.width=12, fig.height=6, dev='ragg_png'
+### Overview of multifactor classes and terms 
+```{r}
+#| label: 'multifactor-anatomy'
+#| message: false
+#| echo: false
+#| fig.width: 12
+#| fig.height: 6
+#| dev: 'ragg_png'
 
 first_linkmap <- plot_dfs[[1L]]
 all_linkmap   <- do.call(rbind, plot_dfs)
@@ -273,11 +298,10 @@ a <- ggplot() +
     ), 
     colour = "dodgerblue", 
     label.fill = "dodgerblue",
-
-    #label.colour = "inherit", 
     label.fontsize = 14,
-
-        con.size = 1, 
+    con.colour = "inherit",
+    con.size = 1,
+    con.cap = 0,
     linewidth = 3/2,
     expand = 1/15) +
 
@@ -291,8 +315,10 @@ a <- ggplot() +
 
     colour = "skyblue", 
     label.fill = "skyblue",
-    label.fontsize = 14.5, 
+    label.fontsize = 14.5,
+    con.colour = "inherit",
     con.size = 1, 
+    con.cap = 0,
     linewidth = 3/2,
     expand = 1/20) +
   
@@ -308,8 +334,9 @@ a <- ggplot() +
     colour = "orange", 
     label.fill = "orange",
     label.fontsize = 14, 
-  #  label.fontface = "bold",
-    con.size = 1, 
+    con.colour = "inherit",
+    con.size = 1,
+    con.cap = 0,
     linewidth = 3/2,
     expand = 1/80) +
   
@@ -325,7 +352,9 @@ a <- ggplot() +
     colour = "gold", 
     label.fill = "gold",
     label.fontsize = 14, 
+    con.colour = "inherit",
     con.size = 1, 
+    con.cap = 0,
     linewidth = 3/2, 
     expand = 1/80
     ) +
@@ -337,7 +366,7 @@ a <- ggplot() +
   guides(fill = "none") +
   theme_void()
 
-  a
+a
  # Doesn't render on github.
  # Uncomment following two lines and run locally to update fig.
 
@@ -348,7 +377,7 @@ a <- ggplot() +
  # knitr::include_graphics("images/multifactor-anatomy.png")
 ```
 
-# weave() a path
+# `weave()` a path
 Going back to our trading post example, let's say we'd want to get some new 
 hats, but we only have fruit. While both fruit and clothing are available in 
 our data set, there aren't any trade post that deals in that particular pair of 
@@ -452,7 +481,7 @@ wide-format table, ready to be grouped based on the first two columns.
 weave_convert(tp, .path = fruit ~ clothing, .data = clothing_table)
 ```
 
-## Reading and parsing adjaceny list-formatted files
+## Reading and parsing adjacency list-formatted files
 Relational data between two types (bipartite) is sometimes expressed as a text 
 file to be read row-wise. The first element of each row specifies a level of the 
 first type of data, whereas all following elements all from the second type, 
@@ -465,9 +494,11 @@ We'll format the `linkmap` from fruit to furniture that we generated above.
 ```{r 'adj-example'}
 # Use igraph to deconstruct a graph into an adjacency list, coerce to characters
 adj <- lapply(as_adj_list(as.igraph(fruit2clothing)), as_ids)
+
 # Only keep the 'fruit' nodes that have more than one link for now
 adj <- adj[levels(fruit2clothing)$fruit]
 adj <- adj[lengths(adj) > 0]
+
 # collapse names to first elements of character vectors
 adj <- mapply(c, names(adj), adj, USE.NAMES = FALSE)
 adj <- vapply(adj, paste, collapse = "\t", "")
@@ -494,6 +525,13 @@ adj_data
 
 # Notice that the unlinked data types are no longer in the graph.
 plot(as.igraph(adj_data))
+```
+
+# Citation
+We hope that multifactor will be useful for your research. Please use the
+following information to cite the package and the overall approach. Thank you!
+```{r citation}
+citation("multifactor")
 ```
 
 # Session Info

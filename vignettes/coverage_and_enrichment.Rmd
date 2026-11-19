@@ -2,6 +2,7 @@
 title: "Coverage and enrichment testing"
 output: 
   rmarkdown::html_document
+date: "`r format(Sys.Date(), '%d %B %Y')`"
 vignette: >
   %\VignetteIndexEntry{2. Coverage and enrichment testing}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,12 +19,14 @@ knitr::opts_chunk$set(
 
 # Overview
 
-Among other things, the multifactor package provides a set of tools to calculate
-coverage and estimate enrichment for relational datasets. This type of operation 
+Among other things, `multifactor` provides a set of tools to calculate
+coverage and estimate enrichment for relational data sets. This type of operation 
 forms the basis for bioinformatics techniques such as pathway enrichment 
 analysis (PEA), but have application far beyond the biological sciences. 
 
-## Setup 
+## Environment setup 
+
+To start with, we load the necessary libraries.
 
 ```{r 'setup-multifactor', message = FALSE}
 library(multifactor)
@@ -49,13 +52,16 @@ split_to_letters <- function(x) unique(
 )
 ```
 
-### Example Dataset: The Quick Brown Fox 
+### Example data set: The Quick Brown Fox 
 
 We will use a toy data set of hierarchically structured data, namely the 
-sentence: 'The quick brown fox jumps over the lazy dog.' This sentence is a 
-pangram, meaning that all 26 letters of the English alphabet are represented. 
-Moreover, we have deconstructed the sentence to three levels; letters, words and
-constituents. 
+sentence:
+
+> The quick brown fox jumps over the lazy dog
+
+This sentence is a _pangram_, meaning that all 26 letters of the English
+alphabet are represented.  Moreover, we have deconstructed the sentence to
+three levels: letters, words and constituents. 
 
 ```{r 'load-qbf'}
 # Load the quick brown fox data set
@@ -70,52 +76,55 @@ word_lvs <- c("the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog")
 cons_lvs <- c("subject", "predicate", "object")
 
 letter2word_df <- as.data.frame(fox$letter2word) %>%
-  mutate(
-    word = factor(word, levels = word_lvs),
-    label = "X"
-  ) %>%
-  arrange(word)
+    mutate(
+        word = factor(word, levels = word_lvs),
+        label = "X"
+    ) %>%
+    arrange(word)
 
 word2constituent_df <- as.data.frame(fox$word2constituent) %>%
-  mutate(
-    word = factor(word, levels = word_lvs),
-    constituent = factor(constituent, levels = cons_lvs),
-    label = "X"
-  ) %>%
-  arrange(constituent, word)
+    mutate(
+        word = factor(word, levels = word_lvs),
+        constituent = factor(constituent, levels = cons_lvs),
+        label = "X"
+    ) %>%
+    arrange(constituent, word)
 
 
 lm1 <- ggplot(letter2word_df) +
-  geom_text(label = "X", x = I(0.5), y = I(0.5)) +
-  ggtitle("Words to letters") +
-  facet_grid(word ~ letter, switch = "y", space = "free_x")
+    geom_text(label = "X", x = I(0.5), y = I(0.5)) +
+    ggtitle("Words to letters") +
+    facet_grid(word ~ letter, switch = "y", space = "free_x")
 
 
 lm2 <- ggplot(word2constituent_df) +
-  geom_text(label = "X", x = I(0.5), y = I(0.5)) +
-  ggtitle("Words to Constituents") +
-  facet_grid(word ~ constituent, switch = "y", space = "free_x")
+    geom_text(label = "X", x = I(0.5), y = I(0.5)) +
+    ggtitle("Words to Constituents") +
+    facet_grid(word ~ constituent, switch = "y", space = "free_x")
 
 d <- "
 AAAAAA
 BBCCCC"
 
 lm1 + lm2 + plot_spacer() +
-  plot_layout(
-    axes = "collect", axis_titles = "collect",
-    nrow = 2L, design = d
-  ) +
-  plot_annotation(tag_levels = "a") &
-  theme_bw() &
-  theme(
-    strip.text.y.left = element_text(angle = 0),
-    panel.spacing = unit(0.1, "lines")
-  )
+    plot_layout(
+        axes = "collect", axis_titles = "collect",
+        nrow = 2L, design = d
+    ) +
+    plot_annotation(tag_levels = "a") &
+    theme_bw() &
+    theme(
+        strip.text.y.left = element_text(angle = 0),
+        panel.spacing = unit(0.1, "lines")
+    )
 ```
 
 
 ```{r}
-#| prep-coverage-plot, message=FALSE, echo=FALSE
+#| lable: 'prep-coverage-plot'
+#| message: false
+#| echo: false
+
 input <- split_to_letters("a pangram is a sentence with all letters")
 
 .mf_as_long <- function(x) bind_rows(
@@ -203,7 +212,7 @@ constituent2sentence <- mutate(
 
 
 pstart <- ggplot() +
-
+    
     ggforce::geom_link(
         data = word2constituent,
         aes(y = from_y, yend = to_y, x = 1.5, xend = 2.5),
@@ -216,7 +225,6 @@ pstart <- ggplot() +
         linewidth = 1,
         show.legend = FALSE
     ) +
-    
     ggforce::geom_diagonal(
         data = letter2word,
         aes(y = from_y, yend = to_y, x = 0, xend = 1.5),
@@ -229,7 +237,6 @@ pstart <- ggplot() +
         linewidth = 1,
         show.legend = FALSE
     ) +
-    
     
     geom_label(
         data = letter2word,
@@ -262,39 +269,46 @@ pstart <- ggplot() +
         show.legend = FALSE,
         size = 8, fill = "white", linewidth = 4/5
     )  +
-
+    
     annotate(
         geom = "text", y = - 14, x = c(0, 1.5, 2.5),
         label = c("letter", "word", "constituent"), size = 10
     ) +
-    scale_colour_manual(aesthetics = c("fill", "colour"), 
-                        values = word_colours, na.value = "gray") +
-  scale_x_continuous(expand = expansion(0, c(0.5, 0.65))) +
-
+    scale_colour_manual(
+        aesthetics = c("fill", "colour"), 
+        values = word_colours, na.value = "gray"
+    ) +
+    scale_x_continuous(expand = expansion(0, c(0.5, 0.65))) +
+    
     theme_void()
-
-
-
 ```
 
 We can convince ourselves this same information is captured in the multifactor 
 object, `fox`. 
 ```{r 'show-data', message = FALSE}
+# View levels
 levels(fox)
 
+# Convert linkmap to matrix
 as.matrix(fox$letter2word)
 ```
 
 # Calculate coverage
 ## Introduction 
-With coverage, we mean the proportion of items in a set that are present. In 
+With _coverage_, we mean the proportion of items in a set that are present. In 
 other words, going back to our example, given some number of letters, we can 
 calculate which words we can make, and how complete they are. 
 
-To demonstrate, let's first consider the graph representation of our dataset: 
+To demonstrate, let's first consider the graph representation of our data set: 
 ```{r}
-#| plot-cov-0, message=FALSE, echo=FALSE,
-#| fig.width=10, fig.height=9.25, out.height = "460px", out.width = "500px"
+#| label: plot-cov-0
+#| message: false
+#| echo: false
+#| fig.width: 10
+#| fig.height: 9.25
+#| out.height: "460px"
+#| out.width: "500px"
+
 pstart
 ```
 
@@ -452,7 +466,7 @@ pdouble <- ggplot() +
         show.legend = FALSE, size = 8
     ) +
   
-  geom_label(
+    geom_label(
         data = distinct(word2constituent,from_y, obs, tot),
         aes(y = from_y + 1.25, label = paste0(obs, "/", tot)), x = 1.5,
         fill = "white", border.colour = "white", alpha = 8/10,
@@ -594,17 +608,15 @@ pthres <- ggplot() +
     scale_alpha_identity() +
     
     theme_void()
-
-
 ```
 
 ## Defining coverage in a path
  
-## weave_coverage()
+## Estimate coverage using `weave_coverage()`
 We can use the `weave_coverage()` function to calculate to what degree the input
 letters cover the words in our data set. This function behaves similarly to 
-`weave()`, in the sense that it takes a multifactor as its first argument, `x`, 
-and its second argument, `.path`, defines the path through that multifactor. It 
+`weave()`, in the sense that it takes a `multifactor` as its first argument, `x`, 
+and its second argument, `.path`, defines the path through that `multifactor`. It 
 also has an additional argument, `.data`. 
 
 For now, let's plug in our input letters: 
@@ -612,13 +624,18 @@ For now, let's plug in our input letters:
 res <- weave_coverage(
   x = fox, .path = letter ~ word ~ constituent, .data = input
 )
-
 ```
 
 ```{r}
-#| 'weave-plot-specify1', message=FALSE, echo=FALSE,
-#| fig.width=10, fig.height=9.25, out.height = "460px", out.width = "500px", 
-#| dev='ragg_png'
+#| label: 'weave-plot-specify1'
+#| message: false
+#| echo: false
+#| fig.width: 10
+#| fig.height: 9.25
+#| out.height: "460px"
+#| out.width: "500px" 
+#| dev: 'ragg_png'
+
 psimple
 ```
 
@@ -642,27 +659,38 @@ weave_coverage(
 )
 ```
 
-```{r }
-#| 'weave-plot-specify2', message=FALSE, echo=FALSE,
-#| fig.width=10, fig.height=9.25, out.height = "460px", out.width = "500px", 
-#| dev='ragg_png'
+```{r}
+#| label: 'weave-plot-specify2'
+#| message: false
+#| echo: false
+#| fig.width: 10
+#| fig.height: 9.25
+#| out.height: "460px"
+#| out.width: "500px" 
+#| dev: 'ragg_png'
+
 pdouble
 ```
 
-### Partial coverage
+### Advanced: partial coverage
 We can similarly define threshold-based filters using relational expressions. 
-For example: `letter ~ word > 0.5 ~ constituent` is equivalent 
-to `letter ~ word : constituent`. 
+For example: `letter ~ word > 0.5 ~ constituent`. 
 ```{r 'weave-code-specify3', message = FALSE}
 weave_coverage(
   x = fox, .path = letter ~ word > 0.5 ~ constituent, .data = input
 )
 ```
 
-```{r }
-#| 'weave-plot-specify3', message=FALSE, echo=FALSE,
-#| fig.width=10, fig.height=9.25, out.height = "460px", out.width = "500px", 
-#| dev='ragg_png'
+```{r}
+#| label: 'weave-plot-specify3'
+#| message: false
+#| echo: false
+#| fig.width: 10
+#| fig.height: 9.25
+#| out.height: "460px"
+#| out.width: "500px" 
+#| dev: 'ragg_png'
+
 pthres
 ```
 

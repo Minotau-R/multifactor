@@ -2,12 +2,26 @@
 % Please edit documentation in R/test_enrich.R
 \name{test_enrich-methods}
 \alias{test_enrich-methods}
-\title{Perform enrichtment tests on relational data}
+\title{Perform enrichment tests on relational data}
 \arguments{
 \item{x}{A linkmap with coverage metadata from \code{weave_coverage()}.}
 
 \item{log_base}{\code{Integer}. Base of logarithm for log-fold (default: 2).}
 }
+\value{
+A data.frame with the enrichment statistics, including the following
+variables:
+\itemize{
+\item expected: Expected percent coverage
+\item observed: Observed percent coverage
+\item fold: Fold effect size
+\item log_fold: Log fold effect size based on \code{log_base} argument
+\item p.value: Uncorrected p-values
+\item p.adj: FDR-adjusted p-values
+}
+}
 \description{
-Perform enrichtment tests on relational data
+\code{test_enrich} allows to test enrichment for the target feature of a
+multifactor or a linkmap output by \code{weave_coverage()} based on the origin
+feature.
 }
