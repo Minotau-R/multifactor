@@ -11,7 +11,7 @@ object(s) to convert to \code{linkmap} or \code{multifactor}.}
 feature names along with \code{x} if the latter is an unnamed list.
 (Default: \code{NULL}).}
 
-\item{edge.names}{\code{Character vector}. A vector of two elements
+\item{edge_names}{\code{Character vector}. A vector of two elements
 specifying the names of the edges in the output \code{linkmap}.
 (Default: \code{NULL}).}
 }
@@ -30,7 +30,7 @@ lst <- lapply(1:3, function(x) sample(letters[seq(3)], 3, replace = TRUE))
 names(lst) <- LETTERS[seq(3)]
 
 # Convert to linkmap
-a2b <- as_linkmap(lst, edge.names = c("a", "b"))
+a2b <- as_linkmap(lst, edge_names = c("a", "b"))
 
 # Create adjacency matrix
 mat <- matrix(sample(c(TRUE, FALSE), 3 * 3, replace = TRUE), nrow = 3)
@@ -38,7 +38,7 @@ rownames(mat) <- LETTERS[seq(3)]
 colnames(mat) <- c("x", "y", "z")
 
 # Convert adjacency matrix to linkmap
-b2c <- as_linkmap(mat, edge.names = c("b", "c"))
+b2c <- as_linkmap(mat, edge_names = c("b", "c"))
 
 # Convert list of lists, matrices or data.frames to multifactor
 mf <- as_multifactor(list(X1 = lst, X2 = mat))

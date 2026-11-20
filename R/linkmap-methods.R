@@ -105,7 +105,8 @@ S7::method(levels, linkmap) <- function(x) x@levels
 #' @param dims length-2 integer vector of matrix dimensions.
 #'     Default: `colnames(x)`
 #' @param dimnames list of dimnames. (Default: `levels(x)`).
-#' @param value_id Name or index of column in metadata to use as matrix values.
+#' @param value_name Name or index of column in metadata to use as matrix
+#' values. (Default: "value")
 #' @param force_pattern `Boolean`. Whether to ignore value and return a sparse
 #'     pattern matrix. (Default: FALSE)
 #' @param ... additional arguments. Not used.
@@ -117,22 +118,24 @@ S7::method(levels, linkmap) <- function(x) x@levels
 #' x <- random_linkmap()
 #' as.matrix(x)
 #'
-`as.matrix.multifactor::linkmap` <- function(x, terms = colnames(x),
-                                             dims = nlevels(x)[terms], dimnames = levels(x)[terms],
-                                             value_id = NULL, force_pattern = is.null(value_id),
-                                             ...) if (force_pattern) {
-  Matrix::sparseMatrix(
-    i = x[[terms[1L]]], j = x[[terms[2L]]],
-    dims = dims, dimnames = dimnames, ...
-  )
-} else {
-  if (!length(value_id)) value_id <- 1L
-  value <- x@metadata[[value_id]]
+`as.matrix.multifactor::linkmap` <- function(
+    x, terms = colnames(x), dims = nlevels(x)[terms],
+    dimnames = levels(x)[terms],
+    value_name = "value", force_pattern = FALSE, ...
+) if (all(value_name %in% colnames(x@metadata), !force_pattern)) {
+  value <- x@metadata[[value_name]]
   Matrix::sparseMatrix(
     i = x[[terms[1L]]], j = x[[terms[2L]]], x = value,
     dims = dims, dimnames = dimnames, ...
   )
+} else {
+  Matrix::sparseMatrix(
+    i = x[[terms[1L]]], j = x[[terms[2L]]],
+    dims = dims, dimnames = dimnames, ...
+  )
 }
+
+
 
 
 #' @title Convert a linkmap to a data.frame
@@ -148,7 +151,7 @@ S7::method(levels, linkmap) <- function(x) x@levels
 #' @export
 #'
 `as.data.frame.multifactor::linkmap` <- function(
-  x, row.names, optional, ...
+    x, row.names, optional, ...
 ) cbind(S7::S7_data(x), x@metadata)
 
 

@@ -50,7 +50,6 @@ random_multifactor <- function(layout = NULL, n_features = 10, sparseness = 0.75
   return(res)
 }
 
-
 .random_multifactor.layout <- function(layout, n_features, sparseness) {
   stopifnot("'layout' must be an igraph object." = inherits(layout, "igraph"))
   el <- igraph::as_edgelist(layout)
@@ -92,7 +91,6 @@ trade_posts <- function(raw.data = FALSE) {
 
   multifactor(out, levels = lapply(trade_goods, `[[`, "name"))
 }
-
 
 #' @importFrom utils data
 .load_trade_goods <- function() local({
@@ -168,12 +166,12 @@ random_linkmap <- function(x = list(lower = letters, UPPER = LETTERS),
   if (NCOL(l <- data.frame(l)) == 1L) {
     colnames(l) <- l_id
   } else {
-    colnames(l) <- c(l_id, paste(l_id, colnames(l)[-1], sep = "_"))
+    colnames(l) <- c(l_id, paste(l_id, colnames(l)[-1L], sep = "_"))
   }
   if (NCOL(r <- data.frame(r)) == 1L) {
     colnames(r) <- r_id
   } else {
-    colnames(r) <- c(r_id, paste(r_id, colnames(r)[-1], sep = "_"))
+    colnames(r) <- c(r_id, paste(r_id, colnames(r)[-1L], sep = "_"))
   }
 
   ind <- expand.grid(seq_len(NROW(l)), seq_len(NROW(r)))
@@ -186,13 +184,13 @@ random_linkmap <- function(x = list(lower = letters, UPPER = LETTERS),
     r[ind[["Var2"]], , drop = FALSE]
   )
   # Rearrange columns
-  if (NCOL(l) > 1) {
-    r_idx <- 1 + NCOL(l)
+  if (NCOL(l) > 1L) {
+    r_idx <- 1L + NCOL(l)
     if (NCOL(r) == 1L) {
-      col.order <- c(1, r_idx, seq(from = 2, to = NCOL(l)))
+      col.order <- c(1L, r_idx, seq(from = 2L, to = NCOL(l)))
     } else {
       col.order <- c(
-        1, r_idx, seq(from = 2, to = NCOL(l)),
+        1L, r_idx, seq(from = 2L, to = NCOL(l)),
         seq(from = r_idx + 1L, to = NCOL(out))
       )
     }

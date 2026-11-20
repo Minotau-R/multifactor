@@ -37,6 +37,8 @@ list methods (e.g., \code{[}, \code{[[}).
 \item{\code{levels}}{\verb{Named list of character vectors}. Accessed through \code{levels(x)}}
 
 \item{\code{map}}{\verb{(sparse) Matrix} specifying which elements contain which levels.}
+
+\item{\code{linkmap}}{\code{linkmap} form of \code{map}.}
 }}
 
 \examples{
