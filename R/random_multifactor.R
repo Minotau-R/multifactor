@@ -24,10 +24,6 @@
 #' # Make a random multifactor with the trading goods from the vignettes
 #' trade_posts()
 #'
-#' # Playing cards
-#' draw_cards(5)
-#' poker_scores()
-#'
 #' @seealso [multifactor()]
 #' @seealso [linkmap()]
 #'

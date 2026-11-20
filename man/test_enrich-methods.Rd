@@ -12,8 +12,9 @@
 A data.frame with the enrichment statistics, including the following
 variables:
 \itemize{
-\item expected: Expected percent coverage
-\item observed: Observed percent coverage
+\item n_hits: number of unique features in 'from' observed
+\item expected: Expected proportion coverage
+\item observed: Observed proportion coverage
 \item fold: Fold effect size
 \item log_fold: Log fold effect size based on \code{log_base} argument
 \item p.value: Uncorrected p-values

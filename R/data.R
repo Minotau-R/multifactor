@@ -12,41 +12,6 @@
 #'
 "trade_goods"
 
-#' Basic names of entities in a card deck.
-#' @name playing_cards
-#' @rdname playing_cards
-#' @format `playing_cards`: A list with two character vectors; contains the
-#'     four `suits` and thirteen `ranks` of a standard poker deck. Used in the
-#'     vignette.
-#' @source `playing_cards`: Manual input.
-#' @usage data("playing_cards", package = "multifactor")
-#' @keywords datasets
-#'
-"playing_cards"
-
-
-#' Small data set of animals.
-#' @name animal_groups
-#' @rdname animals
-#' @format `animal_groups`: A multifactor of animals as well as associated
-#'     `emoji`.
-#' @source `animal_groups`: Manually curated.
-#' @usage data("animals", package = "multifactor")
-#' @keywords datasets
-#'
-"animal_groups"
-
-#' Small data set of animals.
-#' @name animal_traits
-#' @rdname animals
-#' @format `animal_traits`: A multifactor of animals as well as associated
-#'     `emoji`.
-#' @source `animal_traits`: Manually curated.
-#' @usage data("animals", package = "multifactor")
-#' @keywords datasets
-#'
-"animal_traits"
-
 #' Example dataset using a famous pangram.
 #' @name quickbrownfox
 #' @format `quickbrownfox`: A multifactor of letters, words and constituents
