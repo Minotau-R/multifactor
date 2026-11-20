@@ -56,8 +56,6 @@ reference:
   - random_multifactor
   - random_linkmap
   - trade_goods
-  - playing_cards
-  - animal_groups
   - quickbrownfox
 - title: Utils
 - contents:
