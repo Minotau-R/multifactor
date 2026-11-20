@@ -110,6 +110,7 @@ linkmap <- S7::new_class(
 #' list methods (e.g., `[`, `[[`).
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
 #' @slot map `(sparse) Matrix` specifying which elements contain which levels.
+#' @slot linkmap `linkmap` form of `map`.
 #' @param x a `linkmap`, or named list of `linkmap` objects.
 #' @param levels Optional. A `named list of character vectors`, to be used as
 #'     levels.
@@ -151,6 +152,11 @@ multifactor <- S7::new_class(
     ),
     map = S7::new_property(
       getter = function(self) .map_multifactor(self, mode = "counts")
+    ),
+    linkmap = S7::new_property(
+      getter = function(self) .as_linkmap_S4Matrix(
+        .map_multifactor(self, mode = "counts"), c("linkmap", "feature")
+        )
     ),
     metadata = S7::new_property(
       getter = function(self) Reduce(

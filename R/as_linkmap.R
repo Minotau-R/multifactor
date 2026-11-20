@@ -13,7 +13,7 @@
 #'   feature names along with \code{x} if the latter is an unnamed list.
 #'   (Default: \code{NULL}).
 #'
-#' @param edge.names \code{Character vector}. A vector of two elements
+#' @param edge_names \code{Character vector}. A vector of two elements
 #'   specifying the names of the edges in the output \code{linkmap}.
 #'   (Default: \code{NULL}).
 #'
@@ -28,7 +28,7 @@
 #' names(lst) <- LETTERS[seq(3)]
 #'
 #' # Convert to linkmap
-#' a2b <- as_linkmap(lst, edge.names = c("a", "b"))
+#' a2b <- as_linkmap(lst, edge_names = c("a", "b"))
 #'
 #' # Create adjacency matrix
 #' mat <- matrix(sample(c(TRUE, FALSE), 3 * 3, replace = TRUE), nrow = 3)
@@ -36,7 +36,7 @@
 #' colnames(mat) <- c("x", "y", "z")
 #'
 #' # Convert adjacency matrix to linkmap
-#' b2c <- as_linkmap(mat, edge.names = c("b", "c"))
+#' b2c <- as_linkmap(mat, edge_names = c("b", "c"))
 #'
 #' # Convert list of lists, matrices or data.frames to multifactor
 #' mf <- as_multifactor(list(X1 = lst, X2 = mat))
@@ -45,7 +45,7 @@ NULL
 
 S7::method(as_linkmap, linkmap) <- function(x) x
 
-S7::method(as_linkmap, S7::class_data.frame) <- function(x, edge.names = NULL) {
+S7::method(as_linkmap, S7::class_data.frame) <- function(x, edge_names = NULL) {
   if (NCOL(x) >= 3L) {
     metadata <- x[, -seq_len(2L), drop = FALSE]
     x <- x[, seq_len(2L)]
@@ -53,8 +53,8 @@ S7::method(as_linkmap, S7::class_data.frame) <- function(x, edge.names = NULL) {
     metadata <- data.frame(row.names = seq_len(NROW(x)))
   }
   # Assign custom edge names
-  if (!is.null(edge.names)) {
-    colnames(x) <- edge.names
+  if (!is.null(edge_names)) {
+    colnames(x) <- edge_names
   }
   # Convert to linkmap
   x <- linkmap(x, metadata)
@@ -62,7 +62,7 @@ S7::method(as_linkmap, S7::class_data.frame) <- function(x, edge.names = NULL) {
 }
 
 S7::method(as_linkmap, S7::class_list) <- function(
-  x, y = NULL, edge.names = NULL
+  x, y = NULL, edge_names = NULL
 ) {
   # Use list names
   if (is.null(y)) {
@@ -74,44 +74,72 @@ S7::method(as_linkmap, S7::class_list) <- function(
     y = rep(y, lengths(x))
   )
   # Assign custom edge names
-  if (!is.null(edge.names)) {
-    names(x2y) <- edge.names
+  if (!is.null(edge_names)) {
+    names(x2y) <- edge_names
   }
   # Convert to linkmap
   x2y <- linkmap(x2y)
   return(x2y)
 }
 
-S7::method(as_linkmap, S7::class_logical) <- function(x, edge.names = NULL) {
-  # Check that x is a matrix
-  if (!is.matrix(x)) {
-    stop("'x' must be a matrix.", call. = FALSE)
+S7::method(
+  as_linkmap, S7::as_class(methods::getClass("Matrix", where = "Matrix"))
+) <- function(
+    x, edge_names = names(dimnames(x)), values_to = "value"
+    ) .as_linkmap_S4Matrix( x, edge_names, values_to )
+
+S7::method( as_linkmap, S7::class_any ) <-
+  function(x, edge_names = NULL, values_to = "value") {
+    stopifnot("No method for input class x." = is.matrix(x))
+
+    i <- which(x > 0L, arr.ind = TRUE)
+    res <- data.frame(
+      y = rownames(x)[i[, 1]],
+      x = colnames(x)[i[, 2]],
+      value = x[i]
+    )
+
+    colnames(res)[3] <- values_to
+    if(!is.null(edge_names)) {
+      colnames(res)[c(1L, 2L)] <- edge_names
+    }
+    as_linkmap(res)
   }
-  if (is.null(rownames(x)) || is.null(colnames(x))) {
-    stop("'x' must have rownames and colnames.", call. = FALSE)
+
+.as_linkmap_S4Matrix <- function(
+    x, edge_names = names(dimnames(x)), values_to = "value"
+) {
+  mc <- class(x)
+  i <- Matrix::which(x > 0L, arr.ind = TRUE)
+
+  # if pattern matrix:
+  if(grepl("^(n|l)..Matrix$", mc)) {
+    res <- data.frame(
+      y = rownames(x)[i[, 1]],
+      x = colnames(x)[i[, 2]]
+    )
+  } else {
+    res <- data.frame(
+      y = rownames(x)[i[, 1]],
+      x = colnames(x)[i[, 2]],
+      value = x[i]
+    )
+    colnames(res)[3] <- values_to
   }
-  # Find link indices
-  idx <- which(x, arr.ind = TRUE)
-  # Find link pairs
-  x2y <- data.frame(
-    x = rownames(x)[idx[, 2]],
-    y = colnames(x)[idx[, 1]]
-  )
-  # Assign custom edge names
-  if (!is.null(edge.names)) {
-    names(x2y) <- edge.names
+
+  if(!is.null(edge_names)) {
+    colnames(res)[c(1L, 2L)] <- edge_names
   }
-  # Convert to linkmap
-  x2y <- linkmap(x2y)
-  return(x2y)
+  as_linkmap(res)
 }
 
-S7::method(as_multifactor, S7::class_any) <- function(x, edge.names = NULL) {
-  if (is.null(edge.names)) {
-    edge.names <- lapply(seq_along(x), function(i) letters[c(i, i + 1)])
+
+S7::method(as_multifactor, S7::class_any) <- function(x, edge_names = NULL) {
+  if (is.null(edge_names)) {
+    edge_names <- lapply(seq_along(x), function(i) letters[c(i, i + 1)])
   }
   # Convert each element to linkmap
-  mf <- mapply(as_linkmap, x = x, edge.names = edge.names, SIMPLIFY = FALSE)
+  mf <- mapply(as_linkmap, x = x, edge_names = edge_names, SIMPLIFY = FALSE)
   # Convert to multifactor
   mf <- multifactor(mf)
   return(mf)
