@@ -13,7 +13,7 @@ Description: An S7 framework to organize and manage multiple sets of factors,
 Depends: 
     R (>= 4.1.0)
 Imports:
-    S7,
+    S7 (>= 1.0.0),
     rlang,
     dplyr,
     generics,
