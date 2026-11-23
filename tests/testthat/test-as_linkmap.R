@@ -30,7 +30,7 @@ test_that("utils", {
 })
 
 
-test_that("as.matrix and as_linkmap return each other" {
+test_that("as.matrix and as_linkmap return each other", {
   x <- random_multifactor()@linkmap
   expect_identical(as_linkmap(as.matrix(x)), x)
 })
