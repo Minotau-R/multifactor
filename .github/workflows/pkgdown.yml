@@ -19,6 +19,12 @@ jobs:
           cont: ghcr.io/bioconductor/bioconductor_docker:devel
           rspm: ~
     steps:
+    - name: Install emoji font
+      run: |
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+          fonts-noto-color-emoji fontconfig
+        fc-cache -fv
     - uses: neurogenomics/rworkflows@master
       with:
         run_bioccheck: ${{ false }}
