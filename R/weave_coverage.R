@@ -235,13 +235,16 @@ S7::method(weave_coverage, multifactor) <- function(
   unit_term <- all_terms[[1L]]
   set_term <- all_terms[[2L]]
 
+  if(colnames(x)[2] == unit_term) {
+    x <- rev(x)
+  }
+
   if (length(.data)) {
     unit_obs <- x[x[[unit_term]] %in% .data, ]
   } else {
     unit_obs <- x
   }
-  res <- .calc_coverage_cont_table(x, unit_obs, set_term, metric)
-  res
+  .calc_coverage_cont_table(x, unit_obs, set_term, metric)
 }
 
 #' @importFrom stats reformulate
