@@ -174,7 +174,7 @@ S7::method(weave_coverage, multifactor) <- function(
 .weave_coverage_by_args <- function(x, terms_list, cov_exprs, .data) {
 
   lm <- .weave_full_path(x, terms_list)
-  from_to <- terms_list[c(1, length(terms_list))]
+  from_to <- terms_list[c(1L, length(terms_list))]
   lm <- .linkmap_add_coverage(
     lm, from_to, .data, .coverage_metrics
   )
@@ -230,15 +230,12 @@ S7::method(weave_coverage, multifactor) <- function(
 #' with optional .data character vector
 #' @noRd
 .linkmap_add_coverage <- function(x, all_terms, .data = NULL, metric) {
-
-  x <- as.data.frame(x)
   unit_term <- all_terms[[1L]]
   set_term <- all_terms[[2L]]
-
   if(colnames(x)[2] == unit_term) {
-    x <- rev(x)
+    x <- `rev.multifactor::linkmap`(x)
   }
-
+  x <- as.data.frame(x)
   if (length(.data)) {
     unit_obs <- x[x[[unit_term]] %in% .data, ]
   } else {
