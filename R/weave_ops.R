@@ -4,7 +4,12 @@ method(`%*%`, list(linkmap, linkmap)) <- function(x, y) {
         `as.matrix.multifactor::linkmap`(x, term_list[[1]]),
         `as.matrix.multifactor::linkmap`(y, term_list[[2]])
     )
-    as_linkmap(res)
+    res <- as_linkmap(res)
+    levels(res) <- c(
+        levels(x)[term_list[[1L]][1L]],
+        levels(y)[term_list[[2L]][2L]]
+        )
+    res
 }
 
 .weaveops_get_terms <- function(x, y) {
