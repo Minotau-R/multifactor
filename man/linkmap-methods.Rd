@@ -32,4 +32,12 @@ print(x)
 levels(x)
 nlevels(x)
 
+# Matrix operator can be used as shorthand for a weave between two linkmaps
+fox <- quickbrownfox()
+letter2word      <- fox$letter2word
+word2constituent <- fox$word2constituent
+
+letter2word \%*\% word2constituent
+word2constituent \%*\% letter2word
+
 }

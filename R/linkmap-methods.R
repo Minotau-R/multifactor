@@ -21,6 +21,14 @@
 #' levels(x)
 #' nlevels(x)
 #'
+#' # Matrix operator can be used as shorthand for a weave between two linkmaps
+#' fox <- quickbrownfox()
+#' letter2word      <- fox$letter2word
+#' word2constituent <- fox$word2constituent
+#'
+#' letter2word %*% word2constituent
+#' word2constituent %*% letter2word
+#'
 #' @param x,object `linkmap` on which the method should be applied.
 #' @returns A `linkmap`
 NULL
@@ -53,6 +61,14 @@ S7::method(print, linkmap) <- function(x, n = 10L, show_metadata = FALSE, ...) {
   }
 }
 
+S7::method(rev, linkmap) <- function (x) `rev.multifactor::linkmap`(x)
+
+#' @export
+#'
+`rev.multifactor::linkmap` <- function(x) {
+  S7::S7_data(x) <- rev(S7::S7_data(x))
+  x
+}
 
 #' @param use.names `Boolean scalar` Should names be provided.
 #'     (Default: `TRUE`)
