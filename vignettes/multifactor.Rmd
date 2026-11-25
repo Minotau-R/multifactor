@@ -1,7 +1,5 @@
 ---
 title: "Getting started with multifactor"
-resource_files:
-  - images/plot-linkmap.png
 output: 
   rmarkdown::html_document
 date: "`r format(Sys.Date(), '%d %B %Y')`"
@@ -72,6 +70,7 @@ require_font(
   "Noto Color Emoji",
   repositories = "Google Fonts", verbose = FALSE
 )
+emoji_family <- "Noto Color Emoji"
 
 e <- tapply(trade_posts(raw.data = TRUE), ~group, `[[<-`, "group", value = NULL)
 
@@ -184,24 +183,21 @@ p <- ggplot() +
       geom_text(data = filter(x, header), aes(label = name), size = 4),
       geom_text(
         data = filter(x, !header), aes(label = emoji), size = 5,
-        family = "emoji"
+        family = emoji_family
       )
     )
   ) +
   geom_tile(data = first_linkmap, aes(fill = header), colour = "black", linewidth = 1 / 2) +
   geom_text(data = filter(first_linkmap, header), aes(label = name), size = 4) +
-  geom_text(data = filter(first_linkmap, !header), aes(label = emoji), size = 5, family = "emoji") +
+  geom_text(
+    data = filter(first_linkmap, !header), aes(label = emoji),
+    size = 5, family = emoji_family
+  ) +
   scale_fill_manual(values = c("TRUE" = "lightgray", "FALSE" = "white")) +
   guides(fill = "none") +
   theme_void()
 
-# Doesn't render on github.
-# Uncomment following two lines and run locally to update fig.
-
-# pngfile <- file.path("images", "plot-linkmap.png")
-# ggsave(pngfile, p, device = ragg::agg_png)
-
-knitr::include_graphics("images/plot-linkmap.png")
+p
 ```
 
 ## multifactor S7 class
@@ -270,7 +266,7 @@ a <- ggplot() +
       geom_text(data = filter(x, header), aes(label = name), size = 4),
       geom_text(
         data = filter(x, !header), aes(label = emoji), size = 5,
-        family = "emoji"
+        family = emoji_family
       )
     )
   ) +
@@ -284,7 +280,7 @@ a <- ggplot() +
     ) +
   geom_text(
     data = filter(first_linkmap, !header), aes(label = emoji), 
-    size = 5, family = "emoji"
+    size = 5, family = emoji_family
     ) +
   
   ggforce::geom_mark_rect(
