@@ -651,13 +651,15 @@ last step of the path. However, we can specify conditional filtering steps.
 
 ### Complete coverage
 When defining a path, we can use the `:` operator as shorthand for complete 
-coverage (`>= 1`). For example: `letter ~ word ~ constituent >= 1` is equivalent 
-to `letter ~ word : constituent`. 
+coverage (`>= 1`). For example: `letter ~ word >= 1 ~ constituent` is equivalent 
+to `letter : word ~ constituent`. 
 ```{r 'weave-code-specify2', message = FALSE}
 weave_coverage(
-  x = fox, .path = letter ~ word : constituent, .data = input
+  x = fox, .path = letter : word ~ constituent, .data = input
 )
 ```
+We can use `letter : word` to indicate we only want to consider words that are 
+fully accounted for in our data. 
 
 ```{r}
 #| label: 'weave-plot-specify2'

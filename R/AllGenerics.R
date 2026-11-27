@@ -56,7 +56,24 @@ as_multifactor <- S7::new_generic("as_multifactor", "x")
 #' # Available methods:
 #' as_path_frame
 #'
-as_path_frame <- S7::new_generic("path_frame", "x")
+as_path_frame <- S7::new_generic("path_frame", "x", function(x, ...) {
+  x <- .catch_deparse_path({{x}})
+  S7::S7_dispatch()
+})
+
+#' @importFrom rlang is_call_simple call_name
+#' @description
+#' This intercepts .path formula notation where all coverage steps use ':'.
+#' It prepends '~' to make a valid R formula.
+#' @noRd
+.catch_deparse_path <- function(.path) {
+  if( rlang::is_call_simple(x <- rlang::enquo(.path)) ) {
+    if( rlang::call_name(x) == ":" ) {
+      .path <- stats::as.formula(paste0(deparse(x, 500L), collapse = ""))
+    }
+  }
+  force(.path)
+}
 
 #' Weave a path through an object
 #' @rdname weave-generic
@@ -164,6 +181,6 @@ select_path <- S7::new_generic("select_path", "x", function(x, .path, ...) {
 #' # Available methods:
 #' test_enrich
 #'
-test_enrich <- S7::new_generic("test_enrich", "x", function(
-    x, ..., .data = NULL
-) { S7::S7_dispatch() })
+test_enrich <- S7::new_generic(
+  "test_enrich", "x", function(x, ..., .data = NULL) { S7::S7_dispatch() }
+  )

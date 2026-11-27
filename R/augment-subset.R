@@ -103,9 +103,12 @@ S7::method(augment, multifactor) <-
     if (res_name == "") {
       res_name <- .linkmap2name(res)
     }
+    rev_name <- .rev2name(res_name)
 
     if (res_name %in% old_names) {
       x[[res_name]] <- res
+    } else if (rev_name %in% old_names) {
+      x[[rev_name]] <- `rev.multifactor::linkmap`(res)
     } else {
       x <- c(x, res)
     }
