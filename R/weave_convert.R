@@ -7,6 +7,8 @@
 #'     names of the desired combination of feature types.
 #' @param .data `A table`. A `data.frame`, `matrix`, other object with rows and
 #'     columns. Should have a `cbind` method.
+#' @param .aggregate `Function` detailing how 'many-to-one' should be handled.
+#'     (Default = max).
 #' @param .transform `An expression` detailing whether numerical values should
 #'     be transformed in addition to being linked to other feature types.
 #'     Leaving this at `NULL` indicates no transformation (Default).
@@ -33,7 +35,7 @@
 #' @export
 #'
 weave_convert <- function(
-    x, .path, .data, .transform = NULL, .index = "row.names"
+    x, .path, .data, .aggregate = max, .transform = NULL, .index = "row.names"
     ) {
 
   stopifnot("Transformations are not suported yet" = is.null(.transform))

@@ -39,7 +39,7 @@ Perform enrichtment analysis from a weave
 x <- quickbrownfox()
 .data <- c("t", "h", "e", "f", "o", "x")
 .path1 <- letter ~ word ~ constituent
-.path2 <- letter ~ word : constituent
+.path2 <- letter : word ~ constituent
 .path3 <- letter ~ word > 0.5 ~ constituent
 .path4 <- letter : word ~ constituent > 0.25
 

@@ -176,3 +176,8 @@ S7::method(levels, linkmap) <- function(x) x@levels
 .colnames2name <- function(x) paste(x, collapse = "2")
 
 .linkmap2name <- function(x) paste(names(x), collapse = "2")
+
+.rev2name <- function(x) paste(
+  rev(strsplit(x, "2", fixed = TRUE)[[1L]]), collapse = "2"
+  )
+

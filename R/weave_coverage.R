@@ -24,7 +24,7 @@
 #' x <- quickbrownfox()
 #' .data <- c("t", "h", "e", "f", "o", "x")
 #' .path1 <- letter ~ word ~ constituent
-#' .path2 <- letter ~ word : constituent
+#' .path2 <- letter : word ~ constituent
 #' .path3 <- letter ~ word > 0.5 ~ constituent
 #' .path4 <- letter : word ~ constituent > 0.25
 #'
@@ -88,14 +88,6 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
-#' @noRd
-#' @description
-#' Returns a boolean answering the question:
-#' Does this coverage calculation need a 'background' weave (without thresholds)
-#' to properly find the background set size?
-#'
-.check_needs_backweave <-
-  function(pf) sum(.check_pf_cov_bool(pf)[-NROW(pf)]) >= 1L
 
 #' @importFrom S7 prop prop<-
 .coverage_reduce_loop <- function(x, pf, terms_pf, .data, metric) {
@@ -115,6 +107,15 @@ S7::method(weave_coverage, multifactor) <- function(
   res
 }
 
+#' @noRd
+#' @description
+#' Returns a boolean answering the question:
+#' Does this coverage calculation need a 'background' weave (without thresholds)
+#' to properly find the background set size?
+#'
+.check_needs_backweave <-
+  function(pf) sum(.check_pf_cov_bool(pf)[-NROW(pf)]) >= 1L
+
 .backweave_adjust_res <- function(res, x_bw, terms_pf) {
   to_from <- c(tail(terms_pf, 1L), terms_pf[1L])
   x_bw <- as.data.frame(x_bw)
@@ -129,23 +130,30 @@ S7::method(weave_coverage, multifactor) <- function(
   res[["set_count"]] <- unlist(
     tapply(
       res, stats::reformulate(to_from[1]),
-      function(ii) rep.int(
-        sum(ii[["observed"]]), times = unique(ii[["set_size"]])
-      ),
+      function(ii) {
+        n_obs <- sum(ii[["observed"]])
+        times <- unique(ii[["set_size"]])
+        if(length(times) == 0L) {
+          rep.int(n_obs, 0L)
+        } else {
+          rep.int(n_obs, times)
+        }
+      },
       simplify = FALSE), FALSE, FALSE
   )
   res[["coverage"]] <- res[["set_count"]] / res[["set_size"]]
   res
 }
 
+
 .coverage_for_loop <- function(x, pf, terms_pf, .data) {
   terms_list <- .coverage_get_terms_list(terms_pf, .check_pf_cov_bool(pf))
-  cov_exprs <- .get_coverage_exprs(pf)
+  cov_exprs <- .get_coverage_exprs_only(pf)
 
   for(i in seq_along(terms_list)) {
     x <- .weave_coverage_by_args(x, terms_list[[i]], cov_exprs[[i]], .data)
   }
-  res <- x[[paste(.pf_from_to(pf), collapse = "2")]]
+  res <- x[[.rows_with_col(x@map, .pf_from_to(pf))]]
   as.data.frame(res)
 }
 

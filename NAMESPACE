@@ -92,10 +92,12 @@ importFrom(igraph,
   shortest_paths
 )
 importFrom(rlang,
+  call_name,
   check_dots_empty0,
   dots_list,
   f_lhs,
   f_rhs,
+  is_call_simple,
   is_missing
 )
 importFrom(stats,

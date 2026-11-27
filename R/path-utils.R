@@ -92,7 +92,12 @@ NULL
 
   stack <- grepl("+", to, fixed = TRUE) | grepl("+", from, fixed = TRUE)
 
-  data.frame(from, to, cov_operator, cov_value, stack)
+  res <- data.frame(from, to, cov_operator, cov_value, stack)
+  # fix case of all ':' thus no '~' operators in call:
+  if(res[1L,1L] == "") {
+    res <- res[-1L, ]
+  }
+  res
 }
 
 .pf_as_full_path_list <-
